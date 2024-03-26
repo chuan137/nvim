@@ -1,0 +1,17 @@
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--   callback = function()
+--     -- get pwd
+--     local pwd = vim.fn.getcwd()
+--     -- get current buffer name
+--     local buffer_name = vim.fn.expand("%:p")
+--     -- set buffer name
+--     -- if file_name is under pwd, set buffer name to relative path
+--     -- else set buffer name to absolute path
+--     if vim.startswith(buffer_name, pwd) then
+--       vim.api.nvim_buf_set_name(0, buffer_name:sub(#pwd + 2))
+--     else
+--       vim.api.nvim_buf_set_name(0, vim.fn.expand("%"))
+--     end
+--   end,
+--   group = vim.api.nvim_create_augroup("set_buffer_name", { clear = true }),
+-- })
