@@ -1,3 +1,13 @@
 return {
-  { 'echasnovski/mini.comment', version = '*', opts = {} },
+  {
+    'echasnovski/mini.bracketed',
+    event = 'VeryLazy',
+  },
+
+  {
+    'echasnovski/mini.comment',
+    version = '*',
+    event = 'VeryLazy',
+    opts = {},
+  },
 }

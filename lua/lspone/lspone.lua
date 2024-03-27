@@ -1,19 +1,36 @@
+local lspone_config = require('lspone.config')
 local has_lualine, _ = pcall(require, 'lualine')
 
 return {
+  { 'neovim/nvim-lspconfig' },
+
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v3.x',
-    config = function()
-      require('lspone.config')
+    config = lspone_config.setup,
+  },
+
+  {
+    'williamboman/mason-lspconfig.nvim',
+    dependencies = { 'williamboman/mason.nvim' },
+    event = 'BufReadPost',
+    opts = lspone_config.mason_opts,
+    config = function(_, opts)
+      require('mason').setup({})
+      require('mason-lspconfig').setup(opts)
     end,
   },
-  { 'williamboman/mason.nvim' },
-  { 'williamboman/mason-lspconfig.nvim' },
-  { 'neovim/nvim-lspconfig' },
-  { 'hrsh7th/cmp-nvim-lsp' },
-  { 'hrsh7th/nvim-cmp' },
-  { 'L3MON4D3/LuaSnip' },
+
+  {
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+      'L3MON4D3/LuaSnip',
+    },
+    cmd = 'CmpStatus',
+    event = 'InsertEnter',
+    opts = lspone_config.cmp_opts,
+  },
 
   {
     'stevearc/conform.nvim',
@@ -21,10 +38,9 @@ return {
     cmd = 'ConformInfo',
     keys = {
       {
+	      -- stylua: ignore start
         '<F3>',
-        function()
-          require('conform').format({ async = true, lsp_fallback = true })
-        end,
+        function() require('conform').format({ async = true, lsp_fallback = true }) end,
         mode = '',
         desc = 'Format buffer',
       },
@@ -43,7 +59,6 @@ return {
   {
     'zbirenbaum/copilot.lua',
     enabled = vim.g.lspone_enable_copilot,
-    event = 'InsertEnter',
     config = function()
       require('copilot').setup({
         panel = {
@@ -70,7 +85,7 @@ return {
             accept = false, -- use <tab> to accept completion, integrated into nvim-cmp mapping
             accept_word = false,
             accept_line = '<C-l>',
-            next = '<M-]>',
+            next = '<M-Space>',
             prev = false,
           },
         },

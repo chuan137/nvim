@@ -18,32 +18,51 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+  -- Load your own plugins
+  { import = 'plugins' },
+
+  { -- Load lspone to setup lsp, cmp, formatting and etc
+    import = 'lspone.lspone',
+    init = function()
+      vim.g.lspone_enable_conform = true
+      vim.g.lspone_enable_copilot = true
+    end,
+  },
+
+  { -- Load LazyVim without importing the plugins.
+    -- We will use the commands from the LazyVim package, but not keymaps.
+    'LazyVim/LazyVim',
+    version = false,
+    opts = {
+      defaults = {
+        keymaps = false,
+      },
+      news = {
+        lazyvim = false,
+        neovim = false,
+      },
+      colorscheme = function()
+        local has_tokyonight, tokyonight = pcall(require, 'tokyonight')
+        if has_tokyonight then
+          tokyonight.load()
+        else
+          vim.cmd.colorscheme('habamax')
+        end
+      end,
+    },
+    config = function(_, opts)
+      require('lazyvim').setup(opts)
+    end,
+  },
+}, { -- Lazy options
   change_detection = { enabled = false },
+  install = {
+    colorscheme = { 'nvchad', 'habamax' },
+  },
   defaults = {
+    lazy = false,
     version = '*', -- try installing the latest stable version for plugins that support semver
     -- version = false, -- always use the latest git commit
-  },
-  spec = {
-    -- Load plugins from lspone
-    {
-      import = 'lspone.lspone',
-      init = function()
-        vim.g.lspone_enable_conform = true
-        vim.g.lspone_enable_copilot = true
-      end,
-    },
-
-    -- Load the LazyVim configuration without importing its plugins.
-    -- We can reuse the autocmds defined provided by LazyVim
-    {
-      'LazyVim/LazyVim',
-      version = false,
-      config = function()
-        require('lazyvim.config.autocmds')
-      end,
-    },
-
-    { import = 'plugins' },
   },
   performance = {
     rtp = {
