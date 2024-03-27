@@ -43,8 +43,11 @@ require('lazy').setup({
       },
       colorscheme = function()
         local has_tokyonight, tokyonight = pcall(require, 'tokyonight')
+        local has_gruvbox = vim.g.gruvbox_material_background ~= nil
         if has_tokyonight then
           tokyonight.load()
+        elseif has_gruvbox then
+          vim.cmd.colorscheme('gruvbox-material')
         else
           vim.cmd.colorscheme('habamax')
         end
