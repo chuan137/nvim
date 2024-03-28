@@ -1,4 +1,4 @@
-local lspone_config = require('lspone.config')
+local lspone = require('lspone')
 local has_lualine, _ = pcall(require, 'lualine')
 
 return {
@@ -7,14 +7,14 @@ return {
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v3.x',
-    config = lspone_config.setup,
+    config = lspone.setup,
   },
 
   {
     'williamboman/mason-lspconfig.nvim',
     dependencies = { 'williamboman/mason.nvim' },
     event = 'BufReadPost',
-    opts = lspone_config.mason_opts,
+    opts = lspone.mason_opts,
     config = function(_, opts)
       require('mason').setup({})
       require('mason-lspconfig').setup(opts)
@@ -29,7 +29,7 @@ return {
     },
     cmd = 'CmpStatus',
     event = 'InsertEnter',
-    opts = lspone_config.cmp_opts,
+    opts = lspone.cmp_opts,
   },
 
   {

@@ -22,7 +22,9 @@ require('lazy').setup({
   { import = 'plugins' },
 
   { -- Load lspone to setup lsp, cmp, formatting and etc
-    import = 'lspone.lspone',
+    'lspone',
+    dev = true,
+    import = 'lspone.plugins',
     init = function()
       vim.g.lspone_enable_conform = true
       vim.g.lspone_enable_copilot = true
