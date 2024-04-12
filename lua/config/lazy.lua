@@ -29,6 +29,17 @@ require('lazy').setup({
       vim.g.lspone_enable_conform = true
       vim.g.lspone_enable_copilot = true
     end,
+    -- opts = {
+    --   lsp = {
+    --     handlers = {
+    --       gopls = function()
+    --       end,
+    --     },
+    --   },
+    -- },
+    config = function()
+      require('lspone').setup()
+    end,
   },
 
   { -- Load LazyVim without importing the plugins.

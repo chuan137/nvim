@@ -1,20 +1,25 @@
-local opt = vim.opt
-local o = vim.o
 local fn = vim.fn
+local o = vim.o
+local opt = vim.opt
 
 opt.mouse = 'a'
+
+opt.conceallevel = 0
+opt.list = true
+opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+opt.pumblend = 12
+
 opt.number = true
 opt.numberwidth = 1
 opt.relativenumber = true
-opt.undofile = true
 
 -- Decrease update time
 opt.timeout = true
-opt.timeoutlen = 500
+opt.timeoutlen = 300
 opt.updatetime = 250
 
 -- Movement
-opt.scrolloff = 99
+opt.scrolloff = 3
 opt.whichwrap = o.whichwrap .. '<,>,h,l'
 
 -- Status
@@ -26,9 +31,9 @@ opt.showtabline = 0
 opt.expandtab = true
 opt.smarttab = true
 opt.smartindent = true
-opt.shiftwidth = 2
-opt.softtabstop = 2
-opt.tabstop = 2
+-- opt.shiftwidth = 2
+-- opt.softtabstop = 2
+-- opt.tabstop = 2
 opt.linebreak = true
 opt.showbreak = string.rep(' ', 3)
 opt.breakindent = true
@@ -58,9 +63,7 @@ opt.diffopt = {
   'hiddenoff',
   'algorithm:minimal',
 }
-opt.conceallevel = 0
 
-opt.pumblend = 12
 opt.clipboard = 'unnamedplus'
 opt.formatoptions = opt.formatoptions
   - 't' -- wrap with text width
@@ -84,3 +87,6 @@ opt.shada = "!,'1000,f1,<1000,s100,:1000,/1000,h"
 
 -- Sessions
 -- opt.sessionoptions = "buffers,curdir,folds,help,winsize,winpos"
+
+-- UI
+
