@@ -58,6 +58,7 @@ return {
 
   {
     'zbirenbaum/copilot.lua',
+    event = 'VeryLazy',
     enabled = vim.g.lspone_enable_copilot,
     config = function()
       require('copilot').setup({
