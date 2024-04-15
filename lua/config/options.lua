@@ -90,3 +90,6 @@ opt.shada = "!,'1000,f1,<1000,s100,:1000,/1000,h"
 
 -- UI
 
+-- Set grep program to rg
+opt.grepprg = 'rg --vimgrep --smart-case'
+opt.grepformat = '%f:%l:%c:%m'
