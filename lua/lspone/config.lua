@@ -1,37 +1,18 @@
 local M = {}
 
-M.setup = function()
-  local lsp_zero = require('lsp-zero')
-
-  lsp_zero.extend_lspconfig()
-
-  lsp_zero.on_attach(function(_, bufnr)
-    local exclude_keymaps = {}
-    if vim.g.lspone_enable_conform then
-      exclude_keymaps = { '<F3>' }
-    end
-    lsp_zero.default_keymaps({ buffer = bufnr, exclude = exclude_keymaps })
-  end)
-
-  lsp_zero.set_sign_icons({
-    error = '✘',
-    warn = '▲',
-    hint = '⚑',
-    info = '»',
-  })
-end
-
 ---
 --- Lsp Serveres
 ---
 M.mason_opts = function()
   local lsp_zero = require('lsp-zero')
+  local lspconfig = require('lspconfig')
 
   return {
     ensure_installed = {
       'gopls',
       'lua_ls',
       'pyright',
+      'ruff_lsp',
     },
 
     handlers = {
@@ -46,19 +27,25 @@ M.mason_opts = function()
         -- Alternatively, we can use the lsp_zero.configure() api to store the
         -- server config, and reuse it later in project local setups.
         -- lsp_zero.configure('pyright', { ... })
-        require('lspconfig').pyright.setup({
+        lspconfig.pyright.setup({
           settings = {
-            -- pyright = {
-            --   disableOrganizeImports = true,
-            -- },
+            pyright = {
+              -- Using Ruff's import organizer
+              disableOrganizeImports = true,
+              -- autoImportCompletion = true,
+            },
             python = {
               analysis = {
-                autoImportCompletions = true,
                 autoSearchPaths = true,
-                diagnosticMode = 'workspace', -- openFilesOnly, workspace
-                typeCheckingMode = 'basic', -- off, basic, strict
+                diagnosticMode = 'workspace',
+                useLibraryCodeForTypes = true,
+                typeCheckingMode = 'basic',
                 diagnosticSeverityOverrides = {
-                  reportUndefinedVariable = false,
+                  reportOptionalIterable = 'none',
+                  reportOptionalSubscript = 'none',
+                  reportOptionalMemberAccess = 'none',
+                  -- reportUnusedVariable = "error",
+                  -- reportUndefinedVariable = "none",
                 },
               },
             },
@@ -74,6 +61,22 @@ M.mason_opts = function()
         })
       end,
 
+      ruff_lsp = function()
+        lspconfig.ruff_lsp.setup({
+          on_attach = function(client, bufnr)
+            -- Use Pyright's hover provider
+            client.server_capabilities.hoverProvider = false
+          end,
+          init_options = {
+            settings = {
+              lint = {
+                enable = true,
+                args = { '--extend-ignore', 'F841' },
+              },
+            },
+          },
+        })
+      end,
     },
   }
 end
@@ -82,9 +85,11 @@ end
 --- Autocompletion config
 ---
 M.cmp_opts = function()
+  local lsp_zero = require('lsp-zero')
+
   local cmp = require('cmp')
-  local cmp_action = require('lsp-zero').cmp_action()
-  local cmp_format = require('lsp-zero').cmp_format()
+  local cmp_action = lsp_zero.cmp_action()
+  local cmp_format = lsp_zero.cmp_format()
   local has_luasnip, luasnip = pcall(require, 'luasnip')
   local has_copilot, copilot_suggestion = pcall(require, 'copilot.suggestion')
 
@@ -147,6 +152,77 @@ M.cmp_opts = function()
   }
 end
 
-return M
+M.copilot_opts = {
+  panel = {
+    enabled = false,
+    auto_refresh = true,
+    keymap = {
+      jump_prev = '[[',
+      jump_next = ']]',
+      accept = '<CR>',
+      refresh = 'gr',
+      open = '<M-CR>',
+    },
+    layout = {
+      position = 'bottom', -- | top | left | right
+      ratio = 0.4,
+    },
+  },
+  suggestion = {
+    enabled = true,
+    auto_trigger = true,
+    debounce = 75,
+    keymap = {
+      dismiss = false, -- use <c-e> to dismiss completion, integrated into nvim-cmp mapping
+      accept = false, -- use <tab> to accept completion, integrated into nvim-cmp mapping
+      accept_word = false,
+      accept_line = '<C-l>',
+      next = '<M-Space>',
+      prev = false,
+    },
+  },
+  filetypes = {
+    yaml = true,
+    markdown = true,
+    help = true,
+    gitcommit = true,
+    gitrebase = true,
+    hgcommit = true,
+    svn = true,
+    cvs = true,
+    ['.'] = true,
+  },
+  server_opts_overrides = {},
+}
 
--- vim: ts=2 sts=2 sw=2 et
+M.treesitter_opts = {
+  ensure_installed = { 'bash', 'c', 'html', 'go', 'lua', 'markdown', 'python', 'vim', 'vimdoc' },
+  -- Autoinstall languages that are not installed
+  auto_install = true,
+  autotag = { enable = true },
+  highlight = {
+    enable = true,
+    -- disable = function(_, bufnr) return utils.is_big_file(bufnr) end,
+    -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+    --  If you are experiencing weird indenting issues, add the language to
+    --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+    additional_vim_regex_highlighting = { 'ruby' },
+  },
+  indent = { enable = true, disable = { 'ruby' } },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = '<C-space>',
+      node_incremental = '<C-space>',
+      scope_incremental = '<C-s>',
+      node_decremental = '<M-space>',
+    },
+  },
+  matchup = {
+    enable = true,
+    enable_quotes = true,
+    -- disable = function(_, bufnr) return utils.is_big_file(bufnr) end,
+  },
+}
+
+return M

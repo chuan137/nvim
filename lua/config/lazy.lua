@@ -38,7 +38,7 @@ require('lazy').setup({
     --   },
     -- },
     config = function()
-      require('lspone').setup()
+      require('lspone.autocmds')
     end,
   },
 
