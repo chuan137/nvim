@@ -29,14 +29,6 @@ require('lazy').setup({
       vim.g.lspone_enable_conform = true
       vim.g.lspone_enable_copilot = true
     end,
-    -- opts = {
-    --   lsp = {
-    --     handlers = {
-    --       gopls = function()
-    --       end,
-    --     },
-    --   },
-    -- },
     config = function()
       require('lspone.autocmds')
     end,
@@ -95,5 +87,3 @@ require('lazy').setup({
     },
   },
 })
-
--- vim: ts=2 sts=2 sw=2 et

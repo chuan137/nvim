@@ -41,12 +41,12 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- clear cmdline after 3 seconds
--- vim.api.nvim_create_autocmd('CmdlineLeave', {
---   desc = 'clear cmdline after 3 seconds',
---   group = vim.api.nvim_create_augroup('ClearCmdlineOnLeave', { clear = true }),
---   callback = function()
---     vim.fn.timer_start(3000, function()
---       vim.cmd('echon ""')
---     end)
---   end,
--- })
+vim.api.nvim_create_autocmd('CmdlineLeave', {
+  desc = 'clear cmdline after 3 seconds',
+  group = vim.api.nvim_create_augroup('ClearCmdlineOnLeave', { clear = true }),
+  callback = function()
+    vim.fn.timer_start(3000, function()
+      vim.cmd('echon ""')
+    end)
+  end,
+})

@@ -6,9 +6,9 @@ vim.g.root_spec = { 'lsp', { '.git', 'lua' }, 'cwd' }
 
 require('config.lazy')
 require('config.options')
-require('config.commands')
+require('config.autocmds')
 
 -- load keymaps after plugins and commands
-require('config.keymaps').setup()
+require('config.mappings')
 
 -- vim: ts=2 sts=2 sw=2 et
