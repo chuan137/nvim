@@ -9,9 +9,9 @@ opt.list = true
 opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 opt.pumblend = 12
 
-opt.number = true
-opt.numberwidth = 1
-opt.relativenumber = true
+-- opt.number = true
+-- opt.numberwidth = 1
+-- opt.relativenumber = true
 
 -- Decrease update time
 opt.timeout = true
@@ -19,7 +19,7 @@ opt.timeoutlen = 300
 opt.updatetime = 250
 
 -- Movement
-opt.scrolloff = 3
+opt.scrolloff = 3  -- Lines of context at the top and bottom of the screen
 opt.whichwrap = o.whichwrap .. '<,>,h,l'
 
 -- Status
@@ -65,17 +65,18 @@ opt.diffopt = {
 }
 
 opt.clipboard = 'unnamedplus'
-opt.formatoptions = opt.formatoptions
-  - 't' -- wrap with text width
-  + 'c' -- wrap comments
-  - 'r' -- insert comment after enter
-  - 'o' -- insert comment after o/O
-  - 'q' -- allow formatting of comments with gq
-  - 'a' -- format paragraphs
-  + 'n' -- recognized numbered lists
-  - '2' -- use indent of second line for paragraph
-  + 'l' -- long lines are not broken
-  + 'j' -- remove comment when joining lines
+opt.formatoptions = "jcroqlnt" -- tcqj
+-- opt.formatoptions = opt.formatoptions
+--   - 't' -- wrap with text width
+--   + 'c' -- wrap comments
+--   - 'r' -- insert comment after enter
+--   - 'o' -- insert comment after o/O
+--   - 'q' -- allow formatting of comments with gq
+--   - 'a' -- format paragraphs
+--   + 'n' -- recognized numbered lists
+--   - '2' -- use indent of second line for paragraph
+--   + 'l' -- long lines are not broken
+--   + 'j' -- remove comment when joining lines
 opt.syntax = 'off'
 opt.spell = false
 

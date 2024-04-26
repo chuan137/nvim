@@ -1,9 +1,20 @@
 local M = {}
 
+local function map(mode, lhs, rhs, opts)
+    local options = { noremap = true, silent = true }
+    if opts then
+        if opts.desc then
+            opts.desc = "keymaps.lua: " .. opts.desc
+        end
+        options = vim.tbl_extend('force', options, opts)
+    end
+    vim.keymap.set(mode, lhs, rhs, options)
+end
+
 -- stylua: ignore start
-local i = function(...) vim.keymap.set("i", ...) end
-local n = function(...) vim.keymap.set("n", ...) end
-local x = function(...) vim.keymap.set("x", ...) end
+local i = function(...) map("i", ...) end
+local n = function(...) map("n", ...) end
+local x = function(...) map("x", ...) end
 -- stylua: ignore end
 
 -- =============================================================================
@@ -14,6 +25,7 @@ i('<C-j>', '<esc>', { desc = 'Escape' })
 
 n('<Esc>', '<cmd>noh<cr><esc>', { desc = 'Clear hlsearch' })
 n('<leader><tab>', '<C-^>', { desc = 'Switch to last buffer' })
+n('<leader>w', '<c-w>', { desc = 'Window' })
 
 n('Y', 'y$', { desc = 'Yank to end of line' })
 n('n', 'nzzzv', { desc = 'Center line after search' })
@@ -34,19 +46,11 @@ n('<leader>d', '"_d', { desc = 'Delete without yanking' })
 x('<leader>d', '"_d', { desc = 'Delete without yanking' })
 x('<leader>p', '"_dP', { desc = 'Paste without yanking' })
 
--- lsp
-n('[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', { desc = 'Previous diagnostic' })
-n(']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', { desc = 'Next diagnostic' })
--- n('<leader>x', '<cmd>lua vim.diagnostic.open_float(0, { scope = "line" })<cr>', { desc = 'Open diagnostics' })
--- n('<leader>q', '<cmd>lua vim.diagnostic.setqflist()<cr>', { desc = 'Set quickfix list' })
--- n('<leader>Q', '<cmd>lua vim.diagnostic.setloclist()<cr>', { desc = 'Set location list' })
--- n(']q', '<cmd>cnext<cr>', { desc = 'Next quickfix' })
--- n('[q', '<cmd>cprev<cr>', { desc = 'Previous quickfix' })
-   
--- window
-n('<leader>w', '<c-w>', { desc = 'Window' })
+-- register
+n('gl', '`.', { desc = 'Jump to last edit' })
 
 -- trouble
+-- stylua: ignore start
 n('<leader>xx', function() require("trouble").toggle() end, { desc = 'Trouble' })
 n('<leader>xw', function() require("trouble").toggle("workspace_diagnostics") end, { desc = 'Workspace diagnostics' })
 n('<leader>xd', function() require("trouble").toggle("document_diagnostics") end, { desc = 'Document diagnostics' })
@@ -56,13 +60,13 @@ n('<leader>xl', function() require("trouble").toggle("loclist") end, { desc = 'L
 -- n('<leader>xJ', function() require("trouble").open { mode = "jumps" } end, { desc = 'Jumps' })
 -- n(']x', function() require("trouble").next({ jump = true }) end, { desc = 'Next trouble' })
 -- n('[x', function() require("trouble").previous({ jump = true }) end, { desc = 'Previous trouble' })
+-- stylua: ignore end
 
-   
 -- =============================================================================
 -- Plugin mappings
 -- =============================================================================
 M.any_jump = {
-  { 'gl', '<cmd>AnyJump<cr>', desc = 'AnyJump' },
+  { 'gj', '<cmd>AnyJump<cr>', desc = 'AnyJump' },
   { 'gh', '<cmd>AnyJumpBack<cr>', desc = 'AnyJumpBack' },
 }
 
@@ -115,11 +119,11 @@ M.gitsigns = {
   { '<leader>gh', '<cmd>Gitsigns stage_hunk<cr>', desc = 'Stage hunk', mode = { 'n', 'v' } },
   { '<leader>gu', '<cmd>Gitsigns undo_stage_hunk<cr>', desc = 'Undo stage hunk', mode = { 'n', 'v' } },
   { '<leader>gb', '<cmd>Gitsigns blame_line<cr>', desc = 'Blame line' },
-  { '<leader>gg', '<cmd>Gitsigns preview_hunk<cr>', desc = 'Preview hunk' },
+  { '<leader>go', '<cmd>Gitsigns preview_hunk<cr>', desc = 'Preview hunk' },
 }
 
 M.neogit = {
-  { '<leader>go', '<cmd>Neogit<cr>', desc = 'Neogit' },
+  { '<leader>gg', '<cmd>Neogit<cr>', desc = 'Neogit' },
 }
 
 M.whichkey = {
