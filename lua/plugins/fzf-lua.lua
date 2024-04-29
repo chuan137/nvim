@@ -35,6 +35,7 @@ return {
           scrollbar = { 'bg', 'NormalFloat' },
           separator = { 'fg', 'Comment' },
           ['bg+'] = { 'bg', 'NormalFloat' },
+          ['fg+'] = { 'fg', 'NormalFloat' },
         },
         fzf_opts = {
           ['--info'] = 'default',

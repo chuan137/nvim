@@ -47,15 +47,8 @@ require('lazy').setup({
         neovim = false,
       },
       colorscheme = function()
-        local has_tokyonight, tokyonight = pcall(require, 'tokyonight')
-        local has_gruvbox = vim.g.gruvbox_material_background ~= nil
-        if has_tokyonight then
-          tokyonight.load()
-        elseif has_gruvbox then
-          vim.cmd.colorscheme('gruvbox-material')
-        else
-          vim.cmd.colorscheme('habamax')
-        end
+        vim.cmd.colorscheme('base16-decaf')
+        -- vim.cmd.colorscheme('base16-tomorrow-night-eighties')
       end,
     },
     config = function(_, opts)
@@ -64,9 +57,6 @@ require('lazy').setup({
   },
 }, { -- Lazy options
   change_detection = { enabled = false },
-  install = {
-    colorscheme = { 'nvchad', 'habamax' },
-  },
   defaults = {
     lazy = false,
     version = '*', -- try installing the latest stable version for plugins that support semver
