@@ -1,5 +1,6 @@
 return {
   'folke/trouble.nvim',
+  event = 'User LspOneFile',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   opts = {
     -- your configuration comes here
