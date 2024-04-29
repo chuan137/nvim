@@ -1,5 +1,3 @@
-local mappings = require('config.mappings')
-
 return {
 
   {
@@ -8,7 +6,7 @@ return {
       { 'nvim-tree/nvim-web-devicons' },
     },
     cmd = 'FzfLua',
-    keys = mappings.fzflua,
+    keys = require('config.keymaps').fzflua,
     opts = function()
       local actions = require('fzf-lua.actions')
 

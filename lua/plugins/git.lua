@@ -1,6 +1,7 @@
+local keymaps = require('config.keymaps')
+
 return {
 
-  -- fugitive and rhubarb
   {
     'tpope/vim-fugitive',
     event = 'VeryLazy',
@@ -13,7 +14,7 @@ return {
   {
     'TimUntersberger/neogit',
     lazy = true,
-    keys = require('config.mappings').neogit,
+    keys = keymaps.neogit,
     cmd = 'Neogit',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -37,7 +38,7 @@ return {
           wk.register({ [l] = { name = desc } })
         end
 
-        local mappings = require('config.mappings').gitsigns
+        local mappings = keymaps.gitsigns
         for _, m in ipairs(mappings) do
           map(m.mode or 'n', m[1], m[2], m.desc)
         end

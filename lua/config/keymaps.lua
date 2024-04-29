@@ -1,14 +1,14 @@
 local M = {}
 
 local function map(mode, lhs, rhs, opts)
-    local options = { noremap = true, silent = true }
-    if opts then
-        if opts.desc then
-            opts.desc = "keymaps.lua: " .. opts.desc
-        end
-        options = vim.tbl_extend('force', options, opts)
-    end
-    vim.keymap.set(mode, lhs, rhs, options)
+  local options = { noremap = true, silent = true }
+  if opts then
+    -- if opts.desc then
+    --   opts.desc = "keymaps.lua: " .. opts.desc
+    -- end
+    options = vim.tbl_extend('force', options, opts)
+  end
+  vim.keymap.set(mode, lhs, rhs, options)
 end
 
 -- stylua: ignore start
@@ -37,6 +37,8 @@ n('J', 'mzJ`z', { desc = 'Join lines without moving cursor' })
 -- Scroll up/down
 n('<C-y>', '<C-y>k', { desc = 'Scroll up' })
 n('<C-e>', '<C-e>j', { desc = 'Scroll down' })
+n('<C-k>', '<C-y>k', { desc = 'Scroll up' })
+n('<C-j>', '<C-e>j', { desc = 'Scroll down' })
 
 -- quit previous window; useful for closing quickfix or diff windows
 n('<M-q>', '<cmd>wincmd p | q<cr>', { desc = 'Quit previous window' })
@@ -62,16 +64,21 @@ n('<leader>xl', function() require("trouble").toggle("loclist") end, { desc = 'L
 -- n('[x', function() require("trouble").previous({ jump = true }) end, { desc = 'Previous trouble' })
 -- stylua: ignore end
 
+-- window
+-- minimize window
+n('<leader>w0', '<cmd>vertical resize 1<cr>', { desc = 'minimize window vertically' })
+n('<leader>w)', '<cmd>resize 1<cr>', { desc = 'minimize window' })
+
 -- =============================================================================
 -- Plugin mappings
 -- =============================================================================
 M.any_jump = {
-  { 'gj', '<cmd>AnyJump<cr>', desc = 'AnyJump' },
+  { 'gj', '<cmd>AnyJump<cr>',     desc = 'AnyJump' },
   { 'gh', '<cmd>AnyJumpBack<cr>', desc = 'AnyJumpBack' },
 }
 
 M.fzflua = {
-  { '<F1>', '<cmd>FzfLua helptags<cr>', desc = 'Help tags' },
+  { '<F1>', '<cmd>FzfLua helptags<cr>',         desc = 'Help tags' },
   { '<F4>', '<cmd>FzfLua lsp_code_actions<cr>', desc = 'Code Actions' },
   -- { '<leader>/', '<cmd>FzfLua live_grep_glob<cr>', desc = 'Live grep' },
   {
@@ -80,9 +87,9 @@ M.fzflua = {
     desc = 'Live grep',
   },
 
-  { '<leader>fb', '<cmd>FzfLua buffers<cr>', desc = 'Find buffers' },
-  { '<leader>fc', '<cmd>FzfLua grep_cword<cr>', desc = 'Grep current word' },
-  { '<leader>fd', '<cmd>FzfLua lsp_document_diagnostics<cr>', desc = 'Document diagnostics' },
+  { '<leader>fb', '<cmd>FzfLua buffers<cr>',                   desc = 'Find buffers' },
+  { '<leader>fc', '<cmd>FzfLua grep_cword<cr>',                desc = 'Grep current word' },
+  { '<leader>fd', '<cmd>FzfLua lsp_document_diagnostics<cr>',  desc = 'Document diagnostics' },
   { '<leader>fD', '<cmd>FzfLua lsp_workspace_diagnostics<cr>', desc = 'Workspace diagnostics' },
   -- { '<leader>ff', '<cmd>FzfLua files<cr>', desc = 'Find files' },
   {
@@ -91,10 +98,10 @@ M.fzflua = {
     desc = 'Find files',
   },
 
-  { '<leader>fg', '<cmd>FzfLua git_files<cr>', desc = 'Git files' },
-  { '<leader>fk', '<cmd>FzfLua lsp_document_symbols<cr>', desc = 'Document symbols' },
+  { '<leader>fg', '<cmd>FzfLua git_files<cr>',             desc = 'Git files' },
+  { '<leader>fk', '<cmd>FzfLua lsp_document_symbols<cr>',  desc = 'Document symbols' },
   { '<leader>fK', '<cmd>FzfLua lsp_workspace_symbols<cr>', desc = 'Workspace symbols' },
-  { '<leader>fp', '<cmd>FzfLua commands<cr>', desc = 'Commands' },
+  { '<leader>fp', '<cmd>FzfLua commands<cr>',              desc = 'Commands' },
   {
     '<leader>fo',
     function()
@@ -109,17 +116,17 @@ M.fzflua = {
     '<cmd>lua require("fzf-lua").grep_cword { cwd = require("lazyvim.util").root.get() }<cr>',
     desc = 'Grep current word',
   },
-  { '<leader>fx', '<cmd>FzfLua resume<cr>', desc = 'Resume last command' },
+  { '<leader>fx', '<cmd>FzfLua resume<cr>',      desc = 'Resume last command' },
   { '<leader>fz', '<cmd>FzfLua grep_curbuf<cr>', desc = 'Grep current buffer' },
 }
 
 M.gitsigns = {
-  { ']g', '<cmd>Gitsigns next_hunk<cr>', desc = 'Next hunk' },
-  { '[g', '<cmd>Gitsigns prev_hunk<cr>', desc = 'Previous hunk' },
-  { '<leader>gh', '<cmd>Gitsigns stage_hunk<cr>', desc = 'Stage hunk', mode = { 'n', 'v' } },
+  { ']g',         '<cmd>Gitsigns next_hunk<cr>',       desc = 'Next hunk' },
+  { '[g',         '<cmd>Gitsigns prev_hunk<cr>',       desc = 'Previous hunk' },
+  { '<leader>gh', '<cmd>Gitsigns stage_hunk<cr>',      desc = 'Stage hunk',      mode = { 'n', 'v' } },
   { '<leader>gu', '<cmd>Gitsigns undo_stage_hunk<cr>', desc = 'Undo stage hunk', mode = { 'n', 'v' } },
-  { '<leader>gb', '<cmd>Gitsigns blame_line<cr>', desc = 'Blame line' },
-  { '<leader>go', '<cmd>Gitsigns preview_hunk<cr>', desc = 'Preview hunk' },
+  { '<leader>gb', '<cmd>Gitsigns blame_line<cr>',      desc = 'Blame line' },
+  { '<leader>go', '<cmd>Gitsigns preview_hunk<cr>',    desc = 'Preview hunk' },
 }
 
 M.neogit = {

@@ -1,5 +1,5 @@
 return {
   "pechorin/any-jump.vim",
   lazy = true,
-  keys = require('config.mappings').any_jump,
+  keys = require('config.keymaps').any_jump,
 }
