@@ -1,5 +1,4 @@
 local M = {}
-local utils = require('lspone.utils')
 
 ---
 --- Lsp Serveres
@@ -194,9 +193,6 @@ M.copilot_opts = {
     ['.'] = true,
   },
   server_opts_overrides = {},
-}
-
-M.treesitter_opts = {
 }
 
 return M
