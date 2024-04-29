@@ -3,7 +3,8 @@ return {
     'rebelot/heirline.nvim',
     -- You can optionally lazy-load heirline on UiEnter
     -- to make sure all required plugins and colorschemes are loaded before setup
-    event = 'UiEnter',
+    -- event = 'UiEnter',
+    event = 'User LspOneFile',
     dependencies = { 'Zeioth/heirline-components.nvim' },
     opts = function()
       local lib = require('heirline-components.all')
