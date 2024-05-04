@@ -1,9 +1,6 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- LazyRoot
-vim.g.root_spec = { 'lsp', { '.git', 'lua' }, 'cwd' }
-
 require('config.lazy')
 require('config.options')
 require('config.autocmds')
