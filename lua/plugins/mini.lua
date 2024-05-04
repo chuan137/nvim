@@ -78,6 +78,10 @@ return {
   {
     'echasnovski/mini.files',
     event = 'VeryLazy',
+    keys = {
+      -- { '<leader>e', '<cmd>lua MiniFiles.open()<cr>', 'Open Mini Explorer' },
+      { '<leader>e', '<cmd>lua MiniFiles.open(vim.fn.expand("%:p"))<cr>', desc = 'Open Mini Explorer' },
+    },
     config = function()
       require('mini.files').setup()
     end,
