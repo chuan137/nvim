@@ -47,6 +47,7 @@ require('lazy').setup({
         neovim = false,
       },
       colorscheme = function()
+        -- vim.cmd.colorscheme('base16-one-light')
         vim.cmd.colorscheme('base16-decaf')
         -- vim.cmd.colorscheme('base16-tomorrow-night-eighties')
       end,
