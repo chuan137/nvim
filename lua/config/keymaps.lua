@@ -1,20 +1,12 @@
 local M = {}
 
-local function map(mode, lhs, rhs, opts)
-  local options = { noremap = true, silent = true }
-  if opts then
-    -- if opts.desc then
-    --   opts.desc = "keymaps.lua: " .. opts.desc
-    -- end
-    options = vim.tbl_extend('force', options, opts)
-  end
-  vim.keymap.set(mode, lhs, rhs, options)
-end
+local map = vim.keymap.set
 
 -- stylua: ignore start
 local i = function(...) map("i", ...) end
 local n = function(...) map("n", ...) end
 local x = function(...) map("x", ...) end
+local function nn(lhs, rhs, desc) n(lhs, rhs, { noremap = true, desc = desc }) end
 -- stylua: ignore end
 
 -- =============================================================================
@@ -69,6 +61,9 @@ n('<leader>xl', function() require("trouble").toggle("loclist") end, { desc = 'L
 n('<leader>w0', '<cmd>vertical resize 1<cr>', { desc = 'minimize window vertically' })
 n('<leader>w)', '<cmd>resize 1<cr>', { desc = 'minimize window' })
 
+-- buffer
+nn('<leader>b', ':b<space>', { desc = 'Switch buffer' })
+
 -- =============================================================================
 -- Plugin mappings
 -- =============================================================================
@@ -77,31 +72,34 @@ M.any_jump = {
   { 'gh', '<cmd>AnyJumpBack<cr>', desc = 'AnyJumpBack' },
 }
 
-M.fzflua = {
-  { '<F1>', '<cmd>FzfLua helptags<cr>',         desc = 'Help tags' },
-  { '<F4>', '<cmd>FzfLua lsp_code_actions<cr>', desc = 'Code Actions' },
-  -- { '<leader>/', '<cmd>FzfLua live_grep_glob<cr>', desc = 'Live grep' },
-  {
-    '<leader>/',
-    '<cmd>lua require("fzf-lua").live_grep_glob { cwd = require("lazyvim.util").root.get() }<cr>',
-    desc = 'Live grep',
-  },
+local function fzf_live_grep()
+  -- require('fzf-lua').live_grep_glob {}
+  require('fzf-lua').live_grep_glob { cwd = require('lazyvim.util').root.get() }
+end
 
+local function fzf_find_files()
+  -- require('fzf-lua').files {}
+  require('fzf-lua').files { cwd = require('lazyvim.util').root.get() }
+end
+
+local function fzf_grep_cword()
+  require('fzf-lua').grep_cword { cwd = require('lazyvim.util').root.get() }
+end
+
+M.fzflua = {
+  { '<F1>',       '<cmd>FzfLua helptags<cr>',                  desc = 'Help tags' },
+  -- { '<F4>',       '<cmd>FzfLua lsp_code_actions<cr>',          desc = 'Code Actions' },
+  { '<leader>/',  fzf_live_grep,                               desc = 'Live grep (root)' },
+  { '<leader>f.', '<cmd>FzfLua resume<cr>',                    desc = 'Resume last command' },
   { '<leader>fb', '<cmd>FzfLua buffers<cr>',                   desc = 'Find buffers' },
-  { '<leader>fc', '<cmd>FzfLua grep_cword<cr>',                desc = 'Grep current word' },
+  { '<leader>fc', fzf_grep_cword,                              desc = 'Grep current word (root)' },
   { '<leader>fd', '<cmd>FzfLua lsp_document_diagnostics<cr>',  desc = 'Document diagnostics' },
   { '<leader>fD', '<cmd>FzfLua lsp_workspace_diagnostics<cr>', desc = 'Workspace diagnostics' },
-  -- { '<leader>ff', '<cmd>FzfLua files<cr>', desc = 'Find files' },
-  {
-    '<leader>ff',
-    '<cmd>lua require("fzf-lua").files({ cwd = require("lazyvim.util").root.get() })<cr>',
-    desc = 'Find files',
-  },
-
-  { '<leader>fg', '<cmd>FzfLua git_files<cr>',             desc = 'Git files' },
-  { '<leader>fk', '<cmd>FzfLua lsp_document_symbols<cr>',  desc = 'Document symbols' },
-  { '<leader>fK', '<cmd>FzfLua lsp_workspace_symbols<cr>', desc = 'Workspace symbols' },
-  { '<leader>fp', '<cmd>FzfLua commands<cr>',              desc = 'Commands' },
+  { '<leader>ff', fzf_find_files,                              desc = 'Find files (root)', },
+  { '<leader>fg', '<cmd>FzfLua git_files<cr>',                 desc = 'Git files' },
+  { '<leader>fk', '<cmd>FzfLua lsp_document_symbols<cr>',      desc = 'Document symbols' },
+  { '<leader>fK', '<cmd>FzfLua lsp_workspace_symbols<cr>',     desc = 'Workspace symbols' },
+  { '<leader>fp', '<cmd>FzfLua commands<cr>',                  desc = 'Commands' },
   {
     '<leader>fo',
     function()
@@ -111,13 +109,8 @@ M.fzflua = {
     end,
     desc = 'Recently opened files',
   },
-  {
-    '<leader>fw',
-    '<cmd>lua require("fzf-lua").grep_cword { cwd = require("lazyvim.util").root.get() }<cr>',
-    desc = 'Grep current word',
-  },
-  { '<leader>fx', '<cmd>FzfLua resume<cr>',      desc = 'Resume last command' },
-  { '<leader>fz', '<cmd>FzfLua grep_curbuf<cr>', desc = 'Grep current buffer' },
+  { '<leader>fv', '<cmd>FzfLua grep_curbuf<cr>', desc = 'Grep current buffer' },
+  { '<leader>fx', '<cmd>FzfLua grep_cword<cr>',  desc = 'Grep current word' },
 }
 
 M.gitsigns = {
