@@ -27,13 +27,12 @@ return {
         },
         -- Make stuff better combine with the editor.
         fzf_colors = {
-          bg = { 'bg', 'NormalFloat' },
           gutter = { 'bg', 'NormalFloat' },
           info = { 'fg', 'Conditional' },
           scrollbar = { 'bg', 'NormalFloat' },
           separator = { 'fg', 'Comment' },
           ['bg+'] = { 'bg', 'NormalFloat' },
-          ['fg+'] = { 'fg', 'NormalFloat' },
+          ['fg+'] = { 'fg', 'NormalFloat', "bold", "underline" },
         },
         fzf_opts = {
           ['--info'] = 'default',
@@ -76,6 +75,12 @@ return {
           include_current_session = true,
         },
       }
+    end,
+    config = function(_, opts)
+      vim.cmd [[
+        hi link FzfLuaHeaderBind FzfLuaHeader
+      ]]
+      require('fzf-lua').setup(opts)
     end,
   },
 }
