@@ -11,14 +11,20 @@ return {
         function()
           require('conform').format({ async = true, lsp_fallback = true })
         end,
-        desc = 'Conform Format buffer',
+        mode = '',
+        desc = 'Conform: Format buffer',
       },
     },
+    init = function()
+      -- If you want the formatexpr, here is the place to set it
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    end,
     opts = {
       formatters_by_ft = {
         lua = { 'stylua' },
+        -- use ruff_lsp for python
         -- Conform will run multiple formatters sequentially
-        python = { 'isort', 'black' },
+        -- python = { 'isort', 'ruff_format' },
         -- Use a sub-list to run only the first available formatter
         javascript = { { 'prettierd', 'prettier' } },
       },
@@ -52,7 +58,9 @@ return {
       'williamboman/mason.nvim',
       'neovim/nvim-lspconfig',
       'hrsh7th/cmp-nvim-lsp',
+      'folke/neodev.nvim',
     },
+    -- lazy = false,
     event = 'User LspOneFile',
     opts = lspone_config.mason_opts,
     config = function(_, opts)
