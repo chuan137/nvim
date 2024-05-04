@@ -50,3 +50,27 @@ vim.api.nvim_create_autocmd('CmdlineLeave', {
     end)
   end,
 })
+
+vim.api.nvim_create_autocmd('BufReadPost', {
+  group = vim.api.nvim_create_augroup('SearchDefsRefs', { clear = true }),
+  --   pattern = '*',
+  callback = function()
+    -- search <cword> using grep
+    local function search_def()
+
+    end
+    vim.keymap.set('n', 'gk', search_def, { buffer = 0 })
+  end,
+})
+
+-- load file into buffer
+--local bufnr = vim.api.nvim_create_buf(true, false)
+-- vim.api.nvim_buf_set_name(bufnr, './file')
+-- vim.api.nvim_buf_call(bufnr, vim.cmd.edit)
+vim.api.nvim_create_user_command('LoadFile',
+  function(opts)
+    local file = opts.args
+    local bufnr = vim.api.nvim_create_buf(true, false)
+    vim.api.nvim_buf_set_name(bufnr, file)
+    vim.api.nvim_buf_call(bufnr, vim.cmd.edit)
+  end, { nargs = 1, complete = 'file'})
