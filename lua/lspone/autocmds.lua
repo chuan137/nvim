@@ -27,23 +27,3 @@ autocmd({ 'UIEnter', 'BufReadPost', 'BufNewFile' }, {
     end
   end,
 })
-
--- autocmd('LspAttach', {
---   group = augroup('lspone_attach', { clear = true }),
---   callback = function(args)
---     local config = require('lspone.config')
---     local function map(mode, key, cmd, desc)
---       vim.keymap.set(mode, key, cmd, { buffer = args.buf, desc = "Lsp: " .. desc })
---     end
---
---     for _, keymap in ipairs(config.keymaps) do
---       map(keymap[1], keymap[2], keymap[3], keymap[4])
---     end
---
---     -- if vim.lsp.buf.range_code_action then
---     --   map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>', 'Execute code action')
---     -- else
---     --   map('x', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Execute code action')
---     -- end
---   end,
--- })

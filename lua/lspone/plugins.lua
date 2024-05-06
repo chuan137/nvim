@@ -22,8 +22,8 @@ return {
     opts = {
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- use ruff_lsp for python
         -- Conform will run multiple formatters sequentially
+        -- use ruff_lsp for python formatting
         -- python = { 'isort', 'ruff_format' },
         -- Use a sub-list to run only the first available formatter
         javascript = { { 'prettierd', 'prettier' } },
@@ -32,42 +32,26 @@ return {
   },
 
   {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
-    lazy = true,
-    init = function()
-      -- Disable automatic setup, we are doing it manually
-      vim.g.lsp_zero_extend_cmp = 0
-      vim.g.lsp_zero_extend_lspconfig = 0
-    end,
-    config = function()
-      local lsp_zero = require('lsp-zero')
-
-      lsp_zero.set_sign_icons({
-        error = '✘',
-        warn = '▲',
-        hint = '⚑',
-        info = '»',
-      })
-    end,
-  },
-
-  {
-    'williamboman/mason-lspconfig.nvim',
+    'neovim/nvim-lspconfig',
     dependencies = {
-      'williamboman/mason.nvim',
-      'neovim/nvim-lspconfig',
+      --  with opts = {} to trigger the default config, otherwise mason's bin is not added to the path
+      { 'williamboman/mason.nvim', opts = {} },
       'hrsh7th/cmp-nvim-lsp',
       'folke/neodev.nvim',
     },
-    -- lazy = false,
     event = 'User LspOneFile',
-    opts = lspone_config.mason_opts,
-    config = function(_, opts)
-      local lsp_zero = require('lsp-zero')
-      lsp_zero.extend_lspconfig()
-      require('mason').setup({})
-      require('mason-lspconfig').setup(opts)
+    config = function()
+      local lspconfig = require('lspconfig')
+      local on_attach = lspone_config.on_attach
+      local capabilities = lspone_config.capabilities
+      local handlers = lspone_config.lsphandler_diagno_no_virtual_text
+
+      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+      require('neodev').setup({})
+      lspconfig.lua_ls.setup({ on_attach = on_attach, capabilities = capabilities, handlers = handlers })
+      lspone_config.pyright.setup({ on_attach = on_attach, capabilities = capabilities, handlers = handlers })
+      lspone_config.ruff_lsp.setup({ on_attach = on_attach, capabilities = capabilities, handlers = handlers })
     end,
   },
 
@@ -75,13 +59,14 @@ return {
     'hrsh7th/nvim-cmp',
     cmd = 'CmpStatus',
     dependencies = {
+      'onsails/lspkind-nvim',
       'L3MON4D3/LuaSnip',
     },
     event = 'InsertEnter',
     opts = lspone_config.cmp_opts,
     config = function(_, opts)
-      local lsp_zero = require('lsp-zero')
-      lsp_zero.extend_cmp()
+      -- local lsp_zero = require('lsp-zero')
+      -- lsp_zero.extend_cmp()
       require('cmp').setup(opts)
     end,
   },
