@@ -13,7 +13,7 @@ local function nn(lhs, rhs, desc) n(lhs, rhs, { noremap = true, desc = desc }) e
 -- Global mappings
 -- =============================================================================
 i('jk', '<esc>', { desc = 'Escape' })
-i('<C-j>', '<esc>', { desc = 'Escape' })
+-- i('<C-j>', '<esc>', { desc = 'Escape' })
 
 n('<Esc>', '<cmd>noh<cr><esc>', { desc = 'Clear hlsearch' })
 n('<leader><tab>', '<C-^>', { desc = 'Switch to last buffer' })
@@ -34,6 +34,7 @@ n('<C-j>', '<C-e>j', { desc = 'Scroll down' })
 
 -- quit previous window; useful for closing quickfix or diff windows
 n('<M-q>', '<cmd>wincmd p | q<cr>', { desc = 'Quit previous window' })
+n('<leader>q', '<cmd>wincmd p | q<cr>', { desc = 'Quit previous window' })
 
 -- delete/paste without yanking to the clipboard
 n('<leader>d', '"_d', { desc = 'Delete without yanking' })
@@ -64,6 +65,12 @@ n('<leader>w)', '<cmd>resize 1<cr>', { desc = 'minimize window' })
 -- buffer
 nn('<leader>b', ':b<space>', { desc = 'Switch buffer' })
 
+n(']g', '<cmd>lua MiniDiff.goto_hunk("next")<cr>zz', { desc = 'MiniDiff: Next hunk' })
+n('[g', '<cmd>lua MiniDiff.goto_hunk("prev")<cr>zz', { desc = 'MiniDiff: Previous hunk' })
+
+-- diff
+n('<leader>gd', '<cmd>Git diff<cr><cmd>only<cr>', { desc = 'Git diff' })
+
 -- =============================================================================
 -- Plugin mappings
 -- =============================================================================
@@ -87,7 +94,7 @@ local function fzf_grep_cword()
 end
 
 M.fzflua = {
-  { '<F1>',       '<cmd>FzfLua helptags<cr>',                  desc = 'Help tags' },
+  { '<F1>',       '<cmd>FzfLua help_tags<cr>',                  desc = 'Help tags' },
   -- { '<F4>',       '<cmd>FzfLua lsp_code_actions<cr>',          desc = 'Code Actions' },
   { '<leader>/',  fzf_live_grep,                               desc = 'Live grep (root)' },
   { '<leader>f.', '<cmd>FzfLua resume<cr>',                    desc = 'Resume last command' },
@@ -114,8 +121,8 @@ M.fzflua = {
 }
 
 M.gitsigns = {
-  { ']g',         '<cmd>Gitsigns next_hunk<cr>',       desc = 'Next hunk' },
-  { '[g',         '<cmd>Gitsigns prev_hunk<cr>',       desc = 'Previous hunk' },
+  -- { ']g',         '<cmd>Gitsigns next_hunk<cr>',       desc = 'Next hunk' },
+  -- { '[g',         '<cmd>Gitsigns prev_hunk<cr>',       desc = 'Previous hunk' },
   { '<leader>gh', '<cmd>Gitsigns stage_hunk<cr>',      desc = 'Stage hunk',      mode = { 'n', 'v' } },
   { '<leader>gu', '<cmd>Gitsigns undo_stage_hunk<cr>', desc = 'Undo stage hunk', mode = { 'n', 'v' } },
   { '<leader>gb', '<cmd>Gitsigns blame_line<cr>',      desc = 'Blame line' },
