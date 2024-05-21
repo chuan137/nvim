@@ -1,14 +1,18 @@
+local augroup = function(name)
+  return vim.api.nvim_create_augroup(name, { clear = true })
+end
+
 -- always open quickfix window automatically.
 -- this uses cwindows which will open it only if there are entries.
 vim.api.nvim_create_autocmd('QuickFixCmdPost', {
-  group = vim.api.nvim_create_augroup('AutoOpenQuickfix', { clear = true }),
+  group = augroup('AutoOpenQuickfix'),
   pattern = { '[^l]*' },
   command = 'cwindow',
 })
 
 -- Search python function definition
 vim.api.nvim_create_autocmd('FileType', {
-  group = vim.api.nvim_create_augroup('PyFuncDefinition', { clear = true }),
+  group = augroup('PyFuncDefinition'),
   pattern = 'python',
   callback = function()
     local search_func_def = function()
@@ -43,7 +47,7 @@ vim.api.nvim_create_autocmd('FileType', {
 -- clear cmdline after 3 seconds
 vim.api.nvim_create_autocmd('CmdlineLeave', {
   desc = 'clear cmdline after 3 seconds',
-  group = vim.api.nvim_create_augroup('ClearCmdlineOnLeave', { clear = true }),
+  group = augroup('ClearCmdlineOnLeave'),
   callback = function()
     vim.fn.timer_start(3000, function()
       vim.cmd('echon ""')
@@ -52,7 +56,7 @@ vim.api.nvim_create_autocmd('CmdlineLeave', {
 })
 
 vim.api.nvim_create_autocmd('BufReadPost', {
-  group = vim.api.nvim_create_augroup('SearchDefsRefs', { clear = true }),
+  group = augroup('SearchDefsRefs'),
   --   pattern = '*',
   callback = function()
     -- search <cword> using grep
