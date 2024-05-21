@@ -70,6 +70,22 @@ n('[g', '<cmd>lua MiniDiff.goto_hunk("prev")<cr>zz', { desc = 'MiniDiff: Previou
 
 -- diff
 n('<leader>gd', '<cmd>Git diff<cr><cmd>only<cr>', { desc = 'Git diff' })
+-- n('<leader>xg', '<cmd>DiffviewOpen<cr>', { desc = 'Diffview' })
+n('<leader>gx', '<cmd>DiffviewClose<cr>', { desc = 'Diffview close' })
+n('<leader>gh', '<cmd>DiffviewFileHistory %<cr>', { desc = 'Diffview file history' })
+
+-- trouble
+-- stylua: ignore start
+n('<leader>xx', function() require("trouble").toggle() end, { desc = 'Trouble' })
+n('<leader>xw', function() require("trouble").toggle("workspace_diagnostics") end, { desc = 'Workspace diagnostics' })
+n('<leader>xd', function() require("trouble").toggle("document_diagnostics") end, { desc = 'Document diagnostics' })
+n('<leader>xq', function() require("trouble").toggle("quickfix") end, { desc = 'Quickfix' })
+n('<leader>xl', function() require("trouble").toggle("loclist") end, { desc = 'Location list' })
+-- n('gR', function() require("trouble").toggle("lsp_references") end, { desc = 'LSP references' })
+-- n('<leader>xJ', function() require("trouble").open { mode = "jumps" } end, { desc = 'Jumps' })
+-- n(']x', function() require("trouble").next({ jump = true }) end, { desc = 'Next trouble' })
+-- n('[x', function() require("trouble").previous({ jump = true }) end, { desc = 'Previous trouble' })
+-- stylua: ignore end
 
 -- =============================================================================
 -- Plugin mappings
