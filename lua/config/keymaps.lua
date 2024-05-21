@@ -6,7 +6,7 @@ local map = vim.keymap.set
 local i = function(...) map("i", ...) end
 local n = function(...) map("n", ...) end
 local x = function(...) map("x", ...) end
-local function nn(lhs, rhs, desc) n(lhs, rhs, { noremap = true, desc = desc }) end
+local function nn(lhs, rhs, opts) n(lhs, rhs, { noremap = true, desc = opts.desc or nil }) end
 -- stylua: ignore end
 
 -- =============================================================================
@@ -16,15 +16,15 @@ i('jk', '<esc>', { desc = 'Escape' })
 -- i('<C-j>', '<esc>', { desc = 'Escape' })
 
 n('<Esc>', '<cmd>noh<cr><esc>', { desc = 'Clear hlsearch' })
-n('<leader><tab>', '<C-^>', { desc = 'Switch to last buffer' })
 n('<leader>w', '<c-w>', { desc = 'Window' })
+n('<C-s>', '<cmd>w<cr>', { desc = 'Save' })
 
 n('Y', 'y$', { desc = 'Yank to end of line' })
-n('n', 'nzzzv', { desc = 'Center line after search' })
-n('N', 'Nzzzv', { desc = 'Center line before search' })
 n('J', 'mzJ`z', { desc = 'Join lines without moving cursor' })
 -- n('J', 'J$', { desc = '' }) -- go to end after a join
 -- n('S', 'T hr<CR>k$', { desc = '' }) -- split (opposite of J)
+-- n('n', 'nzzzv', { desc = 'Center line after search' })
+-- n('N', 'Nzzzv', { desc = 'Center line before search' })
 
 -- Scroll up/down
 n('<C-y>', '<C-y>k', { desc = 'Scroll up' })
@@ -34,7 +34,6 @@ n('<C-j>', '<C-e>j', { desc = 'Scroll down' })
 
 -- quit previous window; useful for closing quickfix or diff windows
 n('<M-q>', '<cmd>wincmd p | q<cr>', { desc = 'Quit previous window' })
-n('<leader>q', '<cmd>wincmd p | q<cr>', { desc = 'Quit previous window' })
 
 -- delete/paste without yanking to the clipboard
 n('<leader>d', '"_d', { desc = 'Delete without yanking' })
@@ -42,28 +41,20 @@ x('<leader>d', '"_d', { desc = 'Delete without yanking' })
 x('<leader>p', '"_dP', { desc = 'Paste without yanking' })
 
 -- register
-n('gl', '`.', { desc = 'Jump to last edit' })
-
--- trouble
--- stylua: ignore start
-n('<leader>xx', function() require("trouble").toggle() end, { desc = 'Trouble' })
-n('<leader>xw', function() require("trouble").toggle("workspace_diagnostics") end, { desc = 'Workspace diagnostics' })
-n('<leader>xd', function() require("trouble").toggle("document_diagnostics") end, { desc = 'Document diagnostics' })
-n('<leader>xq', function() require("trouble").toggle("quickfix") end, { desc = 'Quickfix' })
-n('<leader>xl', function() require("trouble").toggle("loclist") end, { desc = 'Location list' })
--- n('gR', function() require("trouble").toggle("lsp_references") end, { desc = 'LSP references' })
--- n('<leader>xJ', function() require("trouble").open { mode = "jumps" } end, { desc = 'Jumps' })
--- n(']x', function() require("trouble").next({ jump = true }) end, { desc = 'Next trouble' })
--- n('[x', function() require("trouble").previous({ jump = true }) end, { desc = 'Previous trouble' })
--- stylua: ignore end
+n('g.', '`.', { desc = 'Jump to last edit' })
 
 -- window
 -- minimize window
 n('<leader>w0', '<cmd>vertical resize 1<cr>', { desc = 'minimize window vertically' })
 n('<leader>w)', '<cmd>resize 1<cr>', { desc = 'minimize window' })
 
+-- tab
+n('H', '<cmd>tabprev<cr>', { desc = 'previous tab' })
+n('L', '<cmd>tabnext<cr>', { desc = 'next tab' })
+
 -- buffer
-nn('<leader>b', ':b<space>', { desc = 'Switch buffer' })
+n(';b', ':b<space>', { desc = 'Switch buffer' })
+n('<leader><space>', '<C-^>', { desc = 'Switch to last buffer' })
 
 n(']g', '<cmd>lua MiniDiff.goto_hunk("next")<cr>zz', { desc = 'MiniDiff: Next hunk' })
 n('[g', '<cmd>lua MiniDiff.goto_hunk("prev")<cr>zz', { desc = 'MiniDiff: Previous hunk' })
@@ -72,7 +63,8 @@ n('[g', '<cmd>lua MiniDiff.goto_hunk("prev")<cr>zz', { desc = 'MiniDiff: Previou
 n('<leader>gd', '<cmd>Git diff<cr><cmd>only<cr>', { desc = 'Git diff' })
 -- n('<leader>xg', '<cmd>DiffviewOpen<cr>', { desc = 'Diffview' })
 n('<leader>gx', '<cmd>DiffviewClose<cr>', { desc = 'Diffview close' })
-n('<leader>gh', '<cmd>DiffviewFileHistory %<cr>', { desc = 'Diffview file history' })
+n('<leader>gf', '<cmd>DiffviewFileHistory %<cr>', { desc = 'Diffview file history' })
+-- n('<leader>gh', )
 
 -- trouble
 -- stylua: ignore start
@@ -91,58 +83,61 @@ n('<leader>xl', function() require("trouble").toggle("loclist") end, { desc = 'L
 -- Plugin mappings
 -- =============================================================================
 M.any_jump = {
-  { 'gj', '<cmd>AnyJump<cr>',     desc = 'AnyJump' },
+  { 'gj', '<cmd>AnyJump<cr>', desc = 'AnyJump' },
   { 'gh', '<cmd>AnyJumpBack<cr>', desc = 'AnyJumpBack' },
 }
 
 local function fzf_live_grep()
   -- require('fzf-lua').live_grep_glob {}
-  require('fzf-lua').live_grep_glob { cwd = require('lazyvim.util').root.get() }
+  require('fzf-lua').live_grep_glob({ cwd = require('lazyvim.util').root.get() })
 end
 
 local function fzf_find_files()
   -- require('fzf-lua').files {}
-  require('fzf-lua').files { cwd = require('lazyvim.util').root.get() }
+  require('fzf-lua').files({ cwd = require('lazyvim.util').root.get() })
 end
 
 local function fzf_grep_cword()
-  require('fzf-lua').grep_cword { cwd = require('lazyvim.util').root.get() }
+  require('fzf-lua').grep_cword({ cwd = require('lazyvim.util').root.get() })
+end
+
+local function fzf_old_files()
+  -- Read from ShaDa to include files that were already deleted from the buffer list.
+  vim.cmd('rshada!')
+  require('fzf-lua').oldfiles()
 end
 
 M.fzflua = {
-  { '<F1>',       '<cmd>FzfLua help_tags<cr>',                  desc = 'Help tags' },
+  -- stylua: ignore start
   -- { '<F4>',       '<cmd>FzfLua lsp_code_actions<cr>',          desc = 'Code Actions' },
+  { '<F1>',       '<cmd>FzfLua help_tags<cr>',                 desc = 'Help tags' },
+  { '<F2>',       '<cmd>FzfLua file_browser<cr>',              desc = 'File browser' },
+  { '<F3>',       '<cmd>FzfLua git_status<cr>',                desc = 'Git status' },
+  { '<C-n>',      '<cmd>FzfLua buffers<cr>',                   desc = 'Find buffers' },
   { '<leader>/',  fzf_live_grep,                               desc = 'Live grep (root)' },
   { '<leader>f.', '<cmd>FzfLua resume<cr>',                    desc = 'Resume last command' },
   { '<leader>fb', '<cmd>FzfLua buffers<cr>',                   desc = 'Find buffers' },
   { '<leader>fc', fzf_grep_cword,                              desc = 'Grep current word (root)' },
   { '<leader>fd', '<cmd>FzfLua lsp_document_diagnostics<cr>',  desc = 'Document diagnostics' },
   { '<leader>fD', '<cmd>FzfLua lsp_workspace_diagnostics<cr>', desc = 'Workspace diagnostics' },
-  { '<leader>ff', fzf_find_files,                              desc = 'Find files (root)', },
+  { '<leader>ff', fzf_find_files,                              desc = 'Find files (root)' },
   { '<leader>fg', '<cmd>FzfLua git_files<cr>',                 desc = 'Git files' },
   { '<leader>fk', '<cmd>FzfLua lsp_document_symbols<cr>',      desc = 'Document symbols' },
   { '<leader>fK', '<cmd>FzfLua lsp_workspace_symbols<cr>',     desc = 'Workspace symbols' },
+  { '<leader>fm', '<cmd>FzfLua colorschemes<cr>',              desc = 'Colorschemes' },
   { '<leader>fp', '<cmd>FzfLua commands<cr>',                  desc = 'Commands' },
-  {
-    '<leader>fo',
-    function()
-      -- Read from ShaDa to include files that were already deleted from the buffer list.
-      vim.cmd('rshada!')
-      require('fzf-lua').oldfiles()
-    end,
-    desc = 'Recently opened files',
-  },
-  { '<leader>fv', '<cmd>FzfLua grep_curbuf<cr>', desc = 'Grep current buffer' },
-  { '<leader>fx', '<cmd>FzfLua grep_cword<cr>',  desc = 'Grep current word' },
+  { '<leader>fo', fzf_old_files,                               desc = 'Recently opened files' },
+  { '<leader>fv', '<cmd>FzfLua grep_curbuf<cr>',               desc = 'Grep current buffer' },
+  { '<leader>fx', '<cmd>FzfLua grep_cword<cr>',                desc = 'Grep current word' },
 }
 
 M.gitsigns = {
+  { '<leader>gb', '<cmd>Gitsigns blame_line<cr>', desc = 'Blame line' },
+  { '<leader>go', '<cmd>Gitsigns preview_hunk<cr>', desc = 'Preview hunk' },
   -- { ']g',         '<cmd>Gitsigns next_hunk<cr>',       desc = 'Next hunk' },
   -- { '[g',         '<cmd>Gitsigns prev_hunk<cr>',       desc = 'Previous hunk' },
-  { '<leader>gh', '<cmd>Gitsigns stage_hunk<cr>',      desc = 'Stage hunk',      mode = { 'n', 'v' } },
-  { '<leader>gu', '<cmd>Gitsigns undo_stage_hunk<cr>', desc = 'Undo stage hunk', mode = { 'n', 'v' } },
-  { '<leader>gb', '<cmd>Gitsigns blame_line<cr>',      desc = 'Blame line' },
-  { '<leader>go', '<cmd>Gitsigns preview_hunk<cr>',    desc = 'Preview hunk' },
+  -- { '<leader>gh', '<cmd>Gitsigns stage_hunk<cr>', desc = 'Stage hunk', mode = { 'n', 'v' } },
+  -- { '<leader>gu', '<cmd>Gitsigns undo_stage_hunk<cr>', desc = 'Undo stage hunk', mode = { 'n', 'v' } },
 }
 
 M.neogit = {

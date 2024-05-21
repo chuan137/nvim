@@ -60,7 +60,7 @@ opt.shada = "!,'1000,f1,<1000,s100,:1000,/1000,h"
 -- UI
 opt.pumblend = 15
 opt.scrolloff = 5 -- Lines of context at the top and bottom of the screen
-opt.showtabline = 0
+opt.showtabline = 1
 opt.termguicolors = true
 
 -- wrap long lines

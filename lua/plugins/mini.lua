@@ -51,6 +51,14 @@ return {
   },
 
   {
+    'echasnovski/mini.align',
+    event = 'VeryLazy',
+    config = function()
+      require('mini.align').setup()
+    end,
+  },
+
+  {
     'echasnovski/mini.bracketed',
     event = 'VeryLazy',
     opts = { file = { suffix = '' } },
@@ -76,6 +84,15 @@ return {
   },
 
   {
+    'echasnovski/mini.diff',
+    event = 'VeryLazy',
+    -- enabled = false,
+    config = function()
+      require('mini.diff').setup()
+    end,
+  },
+
+  {
     'echasnovski/mini.files',
     event = 'VeryLazy',
     keys = {
@@ -83,7 +100,11 @@ return {
       { '<leader>e', '<cmd>lua MiniFiles.open(vim.fn.expand("%:p"))<cr>', desc = 'Open Mini Explorer' },
     },
     config = function()
-      require('mini.files').setup()
+      require('mini.files').setup({
+        mappings = {
+          go_in_plus = '<cr>',
+        },
+      })
     end,
   },
 

@@ -16,11 +16,21 @@ return {
     lazy = true,
     keys = keymaps.neogit,
     cmd = 'Neogit',
+    tag = 'v0.0.1',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'sindrets/diffview.nvim',
     },
     opts = {},
+  },
+
+  {
+    'sindrets/diffview.nvim',
+    event = 'VeryLazy',
+    opts = {
+      default_args = {
+        DiffviewOpen = { '--imply-local' },
+      },
+    },
   },
 
   {
