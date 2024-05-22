@@ -36,7 +36,6 @@ opt.diffopt = {
 -- opt.modelines = 1
 -- opt.inccommand = 'split'
 
-
 opt.clipboard = 'unnamedplus'
 opt.formatoptions = 'jcroqlnt' -- tcqj
 -- opt.formatoptions = opt.formatoptions
