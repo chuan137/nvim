@@ -6,7 +6,7 @@ return {
       { 'nvim-tree/nvim-web-devicons' },
     },
     cmd = 'FzfLua',
-    keys = require('config.keymaps').fzflua,
+    keys = require('keymaps').fzflua,
     opts = function()
       local actions = require('fzf-lua.actions')
 

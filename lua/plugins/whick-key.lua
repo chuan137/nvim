@@ -7,9 +7,8 @@ return {
     },
     config = function(_, opts)
       local wk = require('which-key')
-      local keymaps = require('config.keymaps')
       wk.setup(opts)
-      wk.register(keymaps.whichkey, { prefix = '<leader>' })
+      wk.register(require('keymaps').whichkey, { prefix = '<leader>' })
     end,
   },
 }

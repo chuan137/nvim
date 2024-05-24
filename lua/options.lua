@@ -7,13 +7,19 @@ opt.syntax = 'off'
 opt.swapfile = false
 opt.textwidth = 80
 
+-- Indentation
+opt.shiftwidth = 4
+opt.softtabstop = 4
+opt.tabstop = 4
+opt.expandtab = true
+
 -- Decrease timeout and update time
 opt.timeout = true
 opt.timeoutlen = 300
 opt.updatetime = 500
 
 -- Movement
-opt.whichwrap = o.whichwrap .. '<,>,h,l'
+o.whichwrap = o.whichwrap .. '<,>,h,l'
 
 -- Search
 opt.ignorecase = true
@@ -58,7 +64,7 @@ opt.shada = "!,'1000,f1,<1000,s100,:1000,/1000,h"
 
 -- UI
 opt.pumblend = 15
-opt.scrolloff = 5 -- Lines of context at the top and bottom of the screen
+opt.scrolloff = 10 -- Lines of context at the top and bottom of the screen
 opt.showtabline = 1
 opt.termguicolors = true
 
