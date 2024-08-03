@@ -22,7 +22,7 @@ function M.on_attach(client, bufnr)
   map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>', 'Show diagnostic')
   map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', 'Previous diagnostic')
   map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', 'Next diagnostic')
-  map('i', '<C-l>', '<cmd>lua vim.lsp.buf.signature_help()<cr>', 'Show function signature')
+  map('i', '<C-Space>', '<cmd>lua vim.lsp.buf.signature_help()<cr>', 'Show function signature')
 
   map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', 'Rename symbol')
   map('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Execute code action')
@@ -115,7 +115,8 @@ function M.cmp_opts()
   local cmp = require('cmp')
   local lspkind = require('lspkind')
   local has_luasnip, luasnip = pcall(require, 'luasnip')
-  local has_copilot, copilot_suggestion = pcall(require, 'copilot.suggestion')
+  -- local has_copilot, copilot_suggestion = pcall(require, 'copilot.suggestion')
+  local has_copilot = true
 
   local cmp_select_opts = { behavior = cmp.SelectBehavior.Replace }
 
@@ -143,9 +144,10 @@ function M.cmp_opts()
     return cmp.mapping(function(fallback)
       local col = vim.fn.col('.') - 1
 
-      if has_copilot and copilot_suggestion.is_visible() then
-        copilot_suggestion.accept()
-      elseif cmp.visible() then
+      -- if has_copilot and copilot_suggestion.is_visible() then
+      --   copilot_suggestion.accept()
+      -- elseif cmp.visible() then
+      if cmp.visible() then
         cmp.select_next_item(cmp_select_opts)
       elseif has_luasnip and luasnip.expand_or_jumpable() then
         luasnip.expand_or_jump()
@@ -184,15 +186,16 @@ function M.cmp_opts()
 
       -- Dimiss copilot suggestion or cmp menu
       ['<C-e>'] = cmp.mapping(function(fallback)
-        if has_copilot and copilot_suggestion.is_visible() then
-          copilot_suggestion.dismiss()
-        elseif not cmp.abort() then
+        -- if has_copilot and copilot_suggestion.is_visible() then
+        --   copilot_suggestion.dismiss()
+        -- elseif not cmp.abort() then
+        if not cmp.abort() then
           fallback()
         end
       end, { 'i', 's' }),
 
       -- Ctrl+Space to trigger completion menu
-      ['<C-Space>'] = cmp.mapping.complete({}),
+      -- ['<C-Space>'] = cmp.mapping.complete({}),
 
       -- scroll up and down the documentation window
       ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -201,7 +204,7 @@ function M.cmp_opts()
       -- Navigate between snippet placeholder
       -- ['<C-f>'] = cmp_action.luasnip_jump_forward(),
       -- ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-      ['<C-j>'] = luasnip_jump_forward(),
+      -- ['<C-j>'] = luasnip_jump_forward(),
       ['<C-k>'] = luasnip_jump_backward(),
 
       -- Super tab integrated with copilot, cmp and luasnip
@@ -262,8 +265,8 @@ M.copilot_opts = {
     keymap = {
       dismiss = false, -- use <c-e> to dismiss completion, integrated into nvim-cmp mapping
       accept = false, -- use <tab> to accept completion, integrated into nvim-cmp mapping
-      accept_word = false,
-      accept_line = '<C-l>',
+      accept_word = '<C-f>',
+      accept_line = false,
       next = '<M-Space>',
       prev = false,
     },
