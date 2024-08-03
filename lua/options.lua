@@ -3,9 +3,11 @@ local opt = vim.opt
 
 opt.list = true
 opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+
 opt.syntax = 'off'
 opt.swapfile = false
 opt.textwidth = 80
+opt.scrolloff = 10 -- Lines of context at the top and bottom of the screen
 
 -- Indentation
 opt.shiftwidth = 4
@@ -64,7 +66,6 @@ opt.shada = "!,'1000,f1,<1000,s100,:1000,/1000,h"
 
 -- UI
 opt.pumblend = 15
-opt.scrolloff = 10 -- Lines of context at the top and bottom of the screen
 opt.showtabline = 1
 opt.termguicolors = true
 
