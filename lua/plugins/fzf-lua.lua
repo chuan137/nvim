@@ -36,6 +36,7 @@ return {
         },
         fzf_opts = {
           ['--info'] = 'default',
+          ['--cycle'] = true,
         },
         keymap = {
           builtin = {
