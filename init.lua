@@ -12,7 +12,6 @@ require("deps")
 -- ]]
 
 
-
 -- # vim:fileencoding=utf-8:ft=lua:foldmethod=marker
 -- -- Enable Neovim's built-in loader
 -- vim.loader.enable()

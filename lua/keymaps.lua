@@ -28,6 +28,7 @@ local diagnostic_goto = function(next, severity)
     end
 end
 
+-- stylua: ignore start
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
@@ -39,7 +40,6 @@ map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 -- lsp
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function()
-        -- stylua: ignore start
         local wk = require('which-key')
         wk.add({ "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" })
         wk.add({ "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" })
@@ -52,37 +52,3 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end,
 })
 
--- lazygit
-if vim.fn.executable("lazygit") == 1 then
-    map("n", "<leader>gg", function()
-        -- Snacks.lazygit({ cwd = LazyVim.root.git() })
-        Snacks.lazygit()
-    end, { desc = "Lazygit (Root Dir)" })
-    map("n", "<leader>gG", function()
-        Snacks.lazygit()
-    end, { desc = "Lazygit (cwd)" })
-    map("n", "<leader>gf", function()
-        Snacks.picker.git_log_file()
-    end, { desc = "Git Current File History" })
-    map("n", "<leader>gl", function()
-        Snacks.picker.git_log({ cwd = LazyVim.root.git() })
-    end, { desc = "Git Log" })
-    map("n", "<leader>gL", function()
-        Snacks.picker.git_log()
-    end, { desc = "Git Log (cwd)" })
-end
-
-map("n", "<leader>gb", function()
-    Snacks.picker.git_log_line()
-end, { desc = "Git Blame Line" })
-map({ "n", "x" }, "<leader>gB", function()
-    Snacks.gitbrowse()
-end, { desc = "Git Browse (open)" })
-map({ "n", "x" }, "<leader>gY", function()
-    Snacks.gitbrowse({
-        open = function(url)
-            vim.fn.setreg("+", url)
-        end,
-        notify = false,
-    })
-end, { desc = "Git Browse (copy)" })

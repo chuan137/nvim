@@ -57,17 +57,27 @@ else
         vim.notify = require("mini.notify").make_notify()
     end)
 
-    -- later(require("mini.ai").setup)
-    -- later(require("mini.surround").setup)
-    -- later(require("mini.comment").setup)
-    -- later(require("mini.pick").setup)
-    -- later(require("mini.align").setup)
-    -- later(require("mini.basics").setup)
-    -- later(require("mini.cursorword").setup)
-    -- later(require("mini.jump").setup)
-    -- later(require("mini.pairs").setup)
-    -- later(require("mini.git").setup)
-    -- later(require("mini.extra").setup)
+    later(require("mini.ai").setup)
+    later(require("mini.surround").setup)
+    later(require("mini.comment").setup)
+    later(require("mini.pick").setup)
+    later(require("mini.align").setup)
+    later(require("mini.basics").setup)
+    later(require("mini.cursorword").setup)
+    later(require("mini.jump").setup)
+    later(require("mini.pairs").setup)
+    later(require("mini.diff").setup)
+    later(require("mini.extra").setup)
+
+    later(function()
+        require("mini.git").setup()
+
+        local rhs = '<Cmd>lua MiniGit.show_at_cursor()<CR>'
+        vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
+
+        local diff_folds = 'foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0'
+        vim.cmd('au FileType git,diff setlocal ' .. diff_folds)
+    end)
 
     later(function()
         local mini_files = require("mini.files")
@@ -96,7 +106,7 @@ else
         })
     end)
 
-    now(function()
+    later(function()
         add({
             source = "folke/snacks.nvim",
         })
@@ -115,8 +125,8 @@ else
             -- words = { enabled = true },
         })
 
-		-- stylua: ignore start
 		-- toggle options
+		-- stylua: ignore start
 		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
 		Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
 		Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
@@ -130,13 +140,34 @@ else
 		Snacks.toggle.animate():map("<leader>ua")
 		Snacks.toggle.indent():map("<leader>ug")
 		Snacks.toggle.scroll():map("<leader>uS")
-		-- Snacks.toggle.profiler():map("<leader>dpp")
-		-- Snacks.toggle.profiler_highlights():map("<leader>dph")
-        -- stylua: ignore end
+        -- Snacks.toggle.profiler():map("<leader>dpp")
+        -- Snacks.toggle.profiler_highlights():map("<leader>dph")
 
         if vim.lsp.inlay_hint then
             Snacks.toggle.inlay_hints():map("<leader>uh")
         end
+
+        local map = vim.keymap.set
+
+        local get_git_root = function()
+            local cwd = vim.fn.expand('%:p:h')
+            local root = vim.fn.systemlist("git -C " .. cwd .." rev-parse --show-toplevel")[1]
+            return root
+        end
+
+        if vim.fn.executable("lazygit") == 1 then
+            map("n", "<leader>gg", function() Snacks.lazygit( { cwd = get_git_root() }) end, { desc = "Lazygit (Root Dir)" })
+            map("n", "<leader>gG", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
+            map("n", "<leader>gf", function() Snacks.picker.git_log_file() end, { desc = "Git Current File History" })
+            map("n", "<leader>gl", function() Snacks.picker.git_log({ cwd = LazyVim.root.git() }) end, { desc = "Git Log" })
+            map("n", "<leader>gL", function() Snacks.picker.git_log() end, { desc = "Git Log (cwd)" })
+        end
+
+        map("n", "<leader>gb", function() Snacks.picker.git_log_line() end, { desc = "Git Blame Line" })
+        map({ "n", "x" }, "<leader>gB", function() Snacks.gitbrowse() end, { desc = "Git Browse (open)" })
+        map({"n", "x" }, "<leader>gY", function()
+            Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false })
+        end, { desc = "Git Browse (copy)" })
 
         -- vim.keymap.set("n", "<leader>ue", function()
         --     require("snacks").explorer.open({ focus = True })
@@ -151,6 +182,17 @@ else
         })
         require("mason").setup()
         require("mason-lspconfig").setup()
+        local lspconfig = require("lspconfig")
+        -- https://gitlab.com/thomas3081/nvim/-/blob/master/lua/config/lspconfig.lua?ref_type=heads
+        vim.lsp.config("*", {
+            root_markers = {
+                ".git",
+                "Makefile",
+                "package.json",
+                "Cargo.toml",
+                "pyproject.toml",
+            },
+        })
         vim.lsp.enable("gopls")
         vim.lsp.enable("basedpyright")
     end)
@@ -177,108 +219,109 @@ else
         end, { desc = "Format" })
     end)
 
-    -- -- ================ Treesitter ================
-    -- later(function()
-    -- 	add({
-    -- 		source = "nvim-treesitter/nvim-treesitter",
-    -- 		checkout = "master",
-    -- 		monitor = "main",
-    -- 		hooks = {
-    -- 			post_checkout = function()
-    -- 				vim.cmd("TSUpdate")
-    -- 			end,
-    -- 		},
-    -- 	})
-    -- 	require("nvim-treesitter.configs").setup({
-    -- 		ensure_installed = { "lua", "vimdoc", "go", "python" },
-    -- 		highlight = { enable = true },
-    -- 	})
-    -- end)
-    --
-    -- -- ================ Blink.cmp ================
-    -- later(function()
-    -- 	add({
-    -- 		source = "saghen/blink.cmp",
-    -- 		-- hooks = {
-    -- 		--     post_checkout = function()
-    -- 		--         local blinkpath = vim.fn.stdpath("data") .. "/site/pack/deps/opt/blink.cmp"
-    -- 		--         require('mini.notify').info("Downloading Blink.cmp to " .. blinkpath)
-    -- 		--         vim.fn.system({
-    -- 		--             "curl",
-    -- 		--             "-s",
-    -- 		--             "--create-dirs",
-    -- 		--             "--output",
-    -- 		--             vim.fn.stdpath("data") .. "/site/pack/deps/opt/blink.cmp" .. "/target/release/libblink_cmp_fuzzy.dylib",
-    -- 		--             "https://github.com/saghen/blink.cmp/releases/latest/download/aarch64-apple-darwin.dylib",
-    -- 		--         })
-    -- 		--     end,
-    -- 		-- },
-    -- 	})
-    -- 	require("blink.cmp").setup({
-    -- 		keymap = {
-    -- 			preset = "enter",
-    -- 			["<C-y"] = { "select_and_accept" },
-    -- 		},
-    -- 		appearance = {
-    -- 			nerd_font_variant = "mono",
-    -- 		},
-    -- 		completion = { documentation = { auto_show = false } },
-    -- 		sources = {
-    -- 			default = { "lsp", "path", "snippets", "buffer" },
-    -- 		},
-    -- 		fuzzy = { implementation = "prefer_rust_with_warning" },
-    -- 	})
-    -- end)
-    --
-    -- -- ================ Copilot ================
-    -- later(function()
-    -- 	add({ source = "zbirenbaum/copilot.lua" })
-    -- 	require("copilot").setup({
-    -- 		panel = {
-    -- 			enabled = false,
-    -- 		},
-    -- 		suggestion = {
-    -- 			enabled = true,
-    -- 			auto_trigger = true,
-    -- 			debounce = 75,
-    -- 			keymap = {
-    -- 				accept = "<Tab>",
-    -- 				accept_word = "<M-w>",
-    -- 				accept_line = "<M-e>",
-    -- 				dismiss = false,
-    -- 				next = "<M-]>",
-    -- 				prev = false,
-    -- 			},
-    -- 		},
-    -- 		filetypes = {
-    -- 			yaml = true,
-    -- 			markdown = true,
-    -- 			help = true,
-    -- 			gitcommit = true,
-    -- 			gitrebase = true,
-    -- 			hgcommit = true,
-    -- 			svn = true,
-    -- 			cvs = true,
-    -- 			["."] = true,
-    -- 		},
-    -- 		server_opts_overrides = {},
-    -- 	})
-    -- 	local copilot = require("copilot.suggestion")
-    -- 	vim.keymap.set("i", "<C-e>", function()
-    -- 		if copilot.is_visible() then
-    -- 			copilot.dismiss()
-    -- 		end
-    -- 	end)
-    -- end)
-    --
-    --
-    -- -- ================ Git ================
-    --
-    -- -- ================ Others ================
-    -- later(function()
-    -- 	add({ source = "kdheepak/lazygit.nvim" })
-    -- end)
-    --
+    -- ================ Treesitter ================
+    later(function()
+        add({
+            source = "nvim-treesitter/nvim-treesitter",
+            checkout = "master",
+            monitor = "main",
+            hooks = {
+                post_checkout = function()
+                    vim.cmd("TSUpdate")
+                end,
+            },
+        })
+        require("nvim-treesitter.configs").setup({
+            ensure_installed = { "lua", "vimdoc", "go", "python" },
+            highlight = { enable = true },
+        })
+    end)
+
+    -- ================ Blink.cmp ================
+    later(function()
+        add({
+            source = "saghen/blink.cmp",
+            depends = { "rafamadriz/friendly-snippets" },
+            -- hooks = {
+            --     post_checkout = function()
+            --         local blinkpath = vim.fn.stdpath("data") .. "/site/pack/deps/opt/blink.cmp"
+            --         require('mini.notify').info("Downloading Blink.cmp to " .. blinkpath)
+            --         vim.fn.system({
+            --             "curl",
+            --             "-s",
+            --             "--create-dirs",
+            --             "--output",
+            --             vim.fn.stdpath("data") .. "/site/pack/deps/opt/blink.cmp" .. "/target/release/libblink_cmp_fuzzy.dylib",
+            --             "https://github.com/saghen/blink.cmp/releases/latest/download/aarch64-apple-darwin.dylib",
+            --         })
+            --     end,
+            -- },
+        })
+        require("blink.cmp").setup({
+            keymap = {
+                preset = "enter",
+                ["<C-y"] = { "select_and_accept" },
+            },
+            appearance = {
+                nerd_font_variant = "mono",
+            },
+            completion = { documentation = { auto_show = false } },
+            sources = {
+                default = { "lsp", "path", "snippets", "buffer" },
+            },
+            fuzzy = { implementation = "prefer_rust_with_warning" },
+        })
+        vim.lsp.config(
+            "*",
+            ---@type vim.lsp.Config
+            {
+                capabilities = require("blink.cmp").get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities()),
+            }
+        )
+    end)
+
+    -- ================ Copilot ================
+    later(function()
+        add({ source = "zbirenbaum/copilot.lua" })
+        require("copilot").setup({
+            panel = {
+                enabled = false,
+            },
+            suggestion = {
+                enabled = true,
+                auto_trigger = true,
+                debounce = 75,
+                keymap = {
+                    accept = "<Tab>",
+                    accept_word = "<M-w>",
+                    accept_line = "<M-e>",
+                    dismiss = false,
+                    next = "<M-]>",
+                    prev = false,
+                },
+            },
+            filetypes = {
+                yaml = true,
+                markdown = true,
+                help = true,
+                gitcommit = true,
+                gitrebase = true,
+                hgcommit = true,
+                svn = true,
+                cvs = true,
+                ["."] = true,
+            },
+            server_opts_overrides = {},
+        })
+        local copilot = require("copilot.suggestion")
+        vim.keymap.set("i", "<C-e>", function()
+            if copilot.is_visible() then
+                copilot.dismiss()
+            end
+        end)
+    end)
+
+    -- ================ Lazy Loading ================
     -- Alternative load plugins with 'lz.n'
     --
     -- add({ source = "nvim-neorocks/lz.n" })
