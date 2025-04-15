@@ -44,18 +44,13 @@ else
     now(function()
         -- vim.cmd("colorscheme retrobox")
         add({ source = "catppuccin/nvim", name = "catppuccin" })
-        vim.cmd([[ colorscheme catppuccin-frappe ]])
+        vim.cmd([[ colorscheme catppuccin-macchiato ]])
     end)
 
     -- ================ Mini Plugins ================
     now(require("mini.icons").setup)
     now(require("mini.tabline").setup)
     now(require("mini.statusline").setup)
-
-    now(function()
-        require("mini.notify").setup()
-        vim.notify = require("mini.notify").make_notify()
-    end)
 
     later(require("mini.ai").setup)
     later(require("mini.surround").setup)
@@ -69,14 +64,19 @@ else
     later(require("mini.diff").setup)
     later(require("mini.extra").setup)
 
-    later(function()
+    now(function()
+        -- require("mini.notify").setup()
+        -- vim.notify = require("mini.notify").make_notify()
+    end)
+
+   later(function()
         require("mini.git").setup()
 
-        local rhs = '<Cmd>lua MiniGit.show_at_cursor()<CR>'
+        local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
         vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
 
-        local diff_folds = 'foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0'
-        vim.cmd('au FileType git,diff setlocal ' .. diff_folds)
+        local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
+        vim.cmd("au FileType git,diff setlocal " .. diff_folds)
     end)
 
     later(function()
@@ -124,54 +124,14 @@ else
             -- scroll = { enabled = true },
             -- words = { enabled = true },
         })
+        require("pickers")
+    end)
 
-		-- toggle options
-		-- stylua: ignore start
-		Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
-		Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
-		Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
-		Snacks.toggle.diagnostics():map("<leader>ud")
-		Snacks.toggle.line_number():map("<leader>ul")
-		Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = "Conceal Level" }):map("<leader>uc")
-		Snacks.toggle.option("showtabline", { off = 0, on = vim.o.showtabline > 0 and vim.o.showtabline or 2, name = "Tabline" }):map("<leader>uA")
-		Snacks.toggle.treesitter():map("<leader>uT")
-		Snacks.toggle.option("background", { off = "light", on = "dark" , name = "Dark Background" }):map("<leader>ub")
-		Snacks.toggle.dim():map("<leader>uD")
-		Snacks.toggle.animate():map("<leader>ua")
-		Snacks.toggle.indent():map("<leader>ug")
-		Snacks.toggle.scroll():map("<leader>uS")
-        -- Snacks.toggle.profiler():map("<leader>dpp")
-        -- Snacks.toggle.profiler_highlights():map("<leader>dph")
-
-        if vim.lsp.inlay_hint then
-            Snacks.toggle.inlay_hints():map("<leader>uh")
-        end
-
-        local map = vim.keymap.set
-
-        local get_git_root = function()
-            local cwd = vim.fn.expand('%:p:h')
-            local root = vim.fn.systemlist("git -C " .. cwd .." rev-parse --show-toplevel")[1]
-            return root
-        end
-
-        if vim.fn.executable("lazygit") == 1 then
-            map("n", "<leader>gg", function() Snacks.lazygit( { cwd = get_git_root() }) end, { desc = "Lazygit (Root Dir)" })
-            map("n", "<leader>gG", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
-            map("n", "<leader>gf", function() Snacks.picker.git_log_file() end, { desc = "Git Current File History" })
-            map("n", "<leader>gl", function() Snacks.picker.git_log({ cwd = LazyVim.root.git() }) end, { desc = "Git Log" })
-            map("n", "<leader>gL", function() Snacks.picker.git_log() end, { desc = "Git Log (cwd)" })
-        end
-
-        map("n", "<leader>gb", function() Snacks.picker.git_log_line() end, { desc = "Git Blame Line" })
-        map({ "n", "x" }, "<leader>gB", function() Snacks.gitbrowse() end, { desc = "Git Browse (open)" })
-        map({"n", "x" }, "<leader>gY", function()
-            Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false })
-        end, { desc = "Git Browse (copy)" })
-
-        -- vim.keymap.set("n", "<leader>ue", function()
-        --     require("snacks").explorer.open({ focus = True })
-        -- end, { desc = "Toggle Explorer" })
+    later(function()
+        add({
+            source = "folke/trouble.nvim",
+        })
+        require("trouble").setup()
     end)
 
     -- ================ LSP Config ================
@@ -216,7 +176,7 @@ else
         })
         vim.keymap.set({ "n", "v" }, "<leader>cf", function()
             require("conform").format({ async = true, lsp_format = "fallback" })
-        end, { desc = "Format" })
+        end, { desc = "Code Format" })
     end)
 
     -- ================ Treesitter ================
@@ -289,10 +249,10 @@ else
             },
             suggestion = {
                 enabled = true,
-                auto_trigger = true,
+                auto_trigger = false,
                 debounce = 75,
                 keymap = {
-                    accept = "<Tab>",
+                    -- accept = "<Tab>",
                     accept_word = "<M-w>",
                     accept_line = "<M-e>",
                     dismiss = false,
@@ -317,6 +277,16 @@ else
         vim.keymap.set("i", "<C-e>", function()
             if copilot.is_visible() then
                 copilot.dismiss()
+            end
+        end)
+        vim.keymap.set("i", "<C-\\>", function()
+            if not copilot.is_visible() then
+                copilot.next()
+                vim.b.completion = false
+            end
+            if copilot.is_visible() then
+                copilot.accept()
+                vim.b.completion = true
             end
         end)
     end)
