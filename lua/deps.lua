@@ -155,6 +155,8 @@ else
         })
         vim.lsp.enable("gopls")
         vim.lsp.enable("basedpyright")
+        vim.lsp.enable("ruff_lsp")
+        -- vim.lsp.enable("lua_ls")
     end)
 
     -- =============== Conform ================
@@ -202,25 +204,16 @@ else
         add({
             source = "saghen/blink.cmp",
             depends = { "rafamadriz/friendly-snippets" },
-            -- hooks = {
-            --     post_checkout = function()
-            --         local blinkpath = vim.fn.stdpath("data") .. "/site/pack/deps/opt/blink.cmp"
-            --         require('mini.notify').info("Downloading Blink.cmp to " .. blinkpath)
-            --         vim.fn.system({
-            --             "curl",
-            --             "-s",
-            --             "--create-dirs",
-            --             "--output",
-            --             vim.fn.stdpath("data") .. "/site/pack/deps/opt/blink.cmp" .. "/target/release/libblink_cmp_fuzzy.dylib",
-            --             "https://github.com/saghen/blink.cmp/releases/latest/download/aarch64-apple-darwin.dylib",
-            --         })
-            --     end,
-            -- },
+            checkout = "v1.*",
         })
         require("blink.cmp").setup({
+            enabled = function()
+                return not vim.tbl_contains({ "minifiles" }, vim.bo.filetype)
+            end, 
             keymap = {
                 preset = "enter",
-                ["<C-y"] = { "select_and_accept" },
+                -- ["<C-y>"] = { "select_and_accept", "fallback" },
+                -- ["<C-y>"] = { "select_next", "fallback" },
             },
             appearance = {
                 nerd_font_variant = "mono",
@@ -230,6 +223,9 @@ else
                 default = { "lsp", "path", "snippets", "buffer" },
             },
             fuzzy = { implementation = "prefer_rust_with_warning" },
+            signature = {
+                enabled = true,
+            },
         })
         vim.lsp.config(
             "*",
@@ -277,12 +273,14 @@ else
         vim.keymap.set("i", "<C-e>", function()
             if copilot.is_visible() then
                 copilot.dismiss()
+                vim.b.completion = true
             end
         end)
-        vim.keymap.set("i", "<C-\\>", function()
+        vim.keymap.set("i", "<C-y>", function()
             if not copilot.is_visible() then
                 copilot.next()
                 vim.b.completion = false
+                require("blink.cmp.completion.windows.menu").close()
             end
             if copilot.is_visible() then
                 copilot.accept()
