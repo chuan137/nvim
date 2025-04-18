@@ -30,9 +30,9 @@ if vim.fn.exists("g:vscode") ~= 0 then
 else
     -- Safely execute immediately
     now(function()
-        require("options")
-        require("keymaps")
-        require("commands")
+        require("config.options")
+        require("config.keymaps")
+        require("config.commands")
 
         vim.cmd("set undodir=~/.cache/vim/undodir")
         vim.cmd([[
@@ -54,30 +54,30 @@ else
 
     later(require("mini.ai").setup)
     later(require("mini.surround").setup)
-    later(require("mini.comment").setup)
-    later(require("mini.pick").setup)
-    later(require("mini.align").setup)
     later(require("mini.basics").setup)
-    later(require("mini.cursorword").setup)
-    later(require("mini.jump").setup)
-    later(require("mini.pairs").setup)
     later(require("mini.diff").setup)
-    later(require("mini.extra").setup)
+    -- later(require("mini.comment").setup)
+    -- later(require("mini.pick").setup)
+    -- later(require("mini.align").setup)
+    -- later(require("mini.cursorword").setup)
+    -- later(require("mini.jump").setup)
+    -- later(require("mini.pairs").setup)
+    -- later(require("mini.extra").setup)
 
-    now(function()
-        -- require("mini.notify").setup()
-        -- vim.notify = require("mini.notify").make_notify()
-    end)
+    -- now(function()
+    --     require("mini.notify").setup()
+    --     vim.notify = require("mini.notify").make_notify()
+    -- end)
 
-   later(function()
-        require("mini.git").setup()
-
-        local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
-        vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
-
-        local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
-        vim.cmd("au FileType git,diff setlocal " .. diff_folds)
-    end)
+    -- later(function()
+    --     require("mini.git").setup()
+    --
+    --     local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
+    --     vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
+    --
+    --     local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
+    --     vim.cmd("au FileType git,diff setlocal " .. diff_folds)
+    -- end)
 
     later(function()
         local mini_files = require("mini.files")
@@ -102,7 +102,6 @@ else
         local wk = require("which-key")
         wk.setup({
             preset = "helix",
-            -- win = { col = -1, row = 0 }
         })
     end)
 
@@ -124,14 +123,7 @@ else
             -- scroll = { enabled = true },
             -- words = { enabled = true },
         })
-        require("pickers")
-    end)
-
-    later(function()
-        add({
-            source = "folke/trouble.nvim",
-        })
-        require("trouble").setup()
+        require("config.pickers")
     end)
 
     -- ================ LSP Config ================
@@ -142,98 +134,13 @@ else
         })
         require("mason").setup()
         require("mason-lspconfig").setup()
-        local lspconfig = require("lspconfig")
-        -- https://gitlab.com/thomas3081/nvim/-/blob/master/lua/config/lspconfig.lua?ref_type=heads
-        vim.lsp.config("*", {
-            root_markers = {
-                ".git",
-                "Makefile",
-                "package.json",
-                "Cargo.toml",
-                "pyproject.toml",
-            },
-        })
+        -- local lspconfig = require("lspconfig")
+        require("config/lspconfig")
+
         vim.lsp.enable("gopls")
         vim.lsp.enable("basedpyright")
-        vim.lsp.enable("ruff_lsp")
-        -- vim.lsp.enable("lua_ls")
-    end)
-
-    -- =============== Conform ================
-    later(function()
-        add({
-            source = "stevearc/conform.nvim",
-        })
-        require("conform").setup({
-            formatters_by_ft = {
-                python = { "ruff" },
-                lua = { "stylua" },
-                json = { "jq" },
-                yaml = { "prettier" },
-                html = { "prettier" },
-                css = { "prettier" },
-                javascript = { "prettier" },
-                typescript = { "prettier" },
-            },
-        })
-        vim.keymap.set({ "n", "v" }, "<leader>cf", function()
-            require("conform").format({ async = true, lsp_format = "fallback" })
-        end, { desc = "Code Format" })
-    end)
-
-    -- ================ Treesitter ================
-    later(function()
-        add({
-            source = "nvim-treesitter/nvim-treesitter",
-            checkout = "master",
-            monitor = "main",
-            hooks = {
-                post_checkout = function()
-                    vim.cmd("TSUpdate")
-                end,
-            },
-        })
-        require("nvim-treesitter.configs").setup({
-            ensure_installed = { "lua", "vimdoc", "go", "python" },
-            highlight = { enable = true },
-        })
-    end)
-
-    -- ================ Blink.cmp ================
-    later(function()
-        add({
-            source = "saghen/blink.cmp",
-            depends = { "rafamadriz/friendly-snippets" },
-            checkout = "v1.*",
-        })
-        require("blink.cmp").setup({
-            enabled = function()
-                return not vim.tbl_contains({ "minifiles" }, vim.bo.filetype)
-            end, 
-            keymap = {
-                preset = "enter",
-                -- ["<C-y>"] = { "select_and_accept", "fallback" },
-                -- ["<C-y>"] = { "select_next", "fallback" },
-            },
-            appearance = {
-                nerd_font_variant = "mono",
-            },
-            completion = { documentation = { auto_show = false } },
-            sources = {
-                default = { "lsp", "path", "snippets", "buffer" },
-            },
-            fuzzy = { implementation = "prefer_rust_with_warning" },
-            signature = {
-                enabled = true,
-            },
-        })
-        vim.lsp.config(
-            "*",
-            ---@type vim.lsp.Config
-            {
-                capabilities = require("blink.cmp").get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities()),
-            }
-        )
+        vim.lsp.enable("ruff")
+        vim.lsp.enable("lua_ls")
     end)
 
     -- ================ Copilot ================
@@ -276,7 +183,7 @@ else
                 vim.b.completion = true
             end
         end)
-        vim.keymap.set("i", "<C-y>", function()
+        vim.keymap.set("i", "<C-\\>", function()
             if not copilot.is_visible() then
                 copilot.next()
                 vim.b.completion = false
@@ -292,8 +199,13 @@ else
     -- ================ Lazy Loading ================
     -- Alternative load plugins with 'lz.n'
     --
-    -- add({ source = "nvim-neorocks/lz.n" })
-    -- require('lz.n').load 'plugins'
+    add({ source = "nvim-neorocks/lz.n" })
+    local lz = require("lz.n")
+    lz.load("plugins.treesitter")
+    lz.load("plugins.blink")
+    require("plugins.conform")
+    require("plugins.trouble")
+
     --
     -- Example file in plugins/
     -- return {
