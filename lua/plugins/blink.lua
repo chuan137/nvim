@@ -8,7 +8,7 @@ return({
         add({ source = "rafamadriz/friendly-snippets" })
         lz.trigger_load("friendly-snippets")
     end,
-    -- event = "InsertEnter",
+    event = "InsertEnter",
     after = function()
         require("blink.cmp").setup({
             enabled = function()
