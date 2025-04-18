@@ -38,17 +38,16 @@ map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 
 -- lsp
-vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function()
-        local wk = require('which-key')
-        wk.add({ "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" })
-        wk.add({ "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" })
-        wk.add({ "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" })
-        wk.add({ "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" })
-        wk.add({ "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" })
-        wk.add({ "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" })
-        wk.add({ "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" })
-        wk.add({ "<leader>cr", vim.lsp.buf.rename, desc = "Code Rename" })
-    end,
-})
+-- vim.api.nvim_create_autocmd("LspAttach", {
+--     callback = function()
+--         wk.add({ "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" })
+--         wk.add({ "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" })
+--         wk.add({ "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" })
+--         wk.add({ "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" })
+--         wk.add({ "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" })
+--         wk.add({ "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" })
+--         wk.add({ "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" })
+--         wk.add({ "<leader>cr", vim.lsp.buf.rename, desc = "Code Rename" })
+--     end,
+-- })
 
