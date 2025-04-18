@@ -1,4 +1,4 @@
-local keymap = require("lz.n").keymap({
+local specs = {
     "trouble.nvim",
     cmd = "Trouble",
     before = function()
@@ -9,7 +9,9 @@ local keymap = require("lz.n").keymap({
     after = function()
         require("trouble").setup()
     end,
-})
+}
+
+local keymap = require("lz.n").keymap(specs)
 
 local keys = {
     { "<leader>xx", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
@@ -20,10 +22,12 @@ local keys = {
     { "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
 }
 
--- setup keympas using keymap
 for _, v in ipairs(keys) do
     local lhs = v[1]
     local rhs = v[2]
     local desc = v["desc"]
     keymap.set("n", lhs, rhs, { desc = desc })
 end
+
+return specs
+

@@ -3,8 +3,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.lazyloading = true
 
-vim.cmd([[
-    set paste
-]])
-
+-- vim.cmd([[
+--     set paste
+-- ]])
 require("deps")

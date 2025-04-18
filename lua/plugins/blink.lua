@@ -1,21 +1,26 @@
 local lz = require("lz.n")
 local add = MiniDeps.add
 
-return({
+return {
     "blink.cmp",
     before = function()
         add({ source = "saghen/blink.cmp", checkout = "v1.*" })
         add({ source = "rafamadriz/friendly-snippets" })
         lz.trigger_load("friendly-snippets")
     end,
-    event = "InsertEnter",
+    cmd = "BlinkCmp",
+    event = { "DeferredUIEnter", "InsertEnter" },
     after = function()
         require("blink.cmp").setup({
             enabled = function()
                 return not vim.tbl_contains({ "minifiles" }, vim.bo.filetype)
             end,
+            -- https://github.com/Saghen/blink.cmp/discussions/628#discussioncomment-12861317
             keymap = {
                 preset = "enter",
+                ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
+                ["<C-Space>"] = { "fallback" },
+                ["<C-k>"] = { "show_documentation", "hide_documentation", "fallback" },
             },
             appearance = {
                 nerd_font_variant = "mono",
@@ -37,4 +42,4 @@ return({
             }
         )
     end,
-})
+}

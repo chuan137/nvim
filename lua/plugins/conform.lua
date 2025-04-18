@@ -1,4 +1,4 @@
-local keymap = require("lz.n").keymap({
+local specs = {
     "conform.nvim",
     cmd = "ConformInfo",
     before = function()
@@ -20,8 +20,12 @@ local keymap = require("lz.n").keymap({
             },
         })
     end,
-})
+}
+
+local keymap = require("lz.n").keymap(specs)
 
 keymap.set({ "n", "v" }, "<leader>cf", function()
     require("conform").format({ async = true, lsp_format = "fallback" })
 end, { desc = "Code Format" })
+
+return specs

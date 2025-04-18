@@ -56,12 +56,12 @@ else
     later(require("mini.surround").setup)
     later(require("mini.basics").setup)
     later(require("mini.diff").setup)
-    -- later(require("mini.comment").setup)
+    later(require("mini.pairs").setup)
+    later(require("mini.comment").setup)
     -- later(require("mini.pick").setup)
     -- later(require("mini.align").setup)
     -- later(require("mini.cursorword").setup)
     -- later(require("mini.jump").setup)
-    -- later(require("mini.pairs").setup)
     -- later(require("mini.extra").setup)
 
     -- now(function()
@@ -94,6 +94,23 @@ else
         end, { desc = "File explorer" })
     end)
 
+    -- ================ LSP Config ================
+    now(function()
+        add({
+            source = "williamboman/mason-lspconfig.nvim",
+            depends = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
+        })
+        require("mason").setup()
+        require("mason-lspconfig").setup()
+        -- local lspconfig = require("lspconfig")
+        require("config/lspconfig")
+
+        vim.lsp.enable("gopls")
+        vim.lsp.enable("basedpyright")
+        vim.lsp.enable("ruff")
+        vim.lsp.enable("lua_ls")
+    end)
+
     -- ================ Folke ================
     later(function()
         add({
@@ -124,23 +141,6 @@ else
             -- words = { enabled = true },
         })
         require("config.pickers")
-    end)
-
-    -- ================ LSP Config ================
-    now(function()
-        add({
-            source = "williamboman/mason-lspconfig.nvim",
-            depends = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
-        })
-        require("mason").setup()
-        require("mason-lspconfig").setup()
-        -- local lspconfig = require("lspconfig")
-        require("config/lspconfig")
-
-        vim.lsp.enable("gopls")
-        vim.lsp.enable("basedpyright")
-        vim.lsp.enable("ruff")
-        vim.lsp.enable("lua_ls")
     end)
 
     -- ================ Copilot ================
@@ -177,34 +177,42 @@ else
             server_opts_overrides = {},
         })
         local copilot = require("copilot.suggestion")
+        vim.keymap.set("i", "<C-Space>", function()
+            if not copilot.is_visible() then
+                copilot.next()
+                require("blink.cmp.completion.windows.menu").close()
+                -- vim.b.completion = false
+            end
+        end)
+        vim.keymap.set("i", "<Tab>", function()
+            if copilot.is_visible() then
+                copilot.accept()
+                -- vim.b.completion = true
+            end
+        end)
         vim.keymap.set("i", "<C-e>", function()
             if copilot.is_visible() then
                 copilot.dismiss()
                 vim.b.completion = true
             end
         end)
-        vim.keymap.set("i", "<C-\\>", function()
-            if not copilot.is_visible() then
-                copilot.next()
-                vim.b.completion = false
-                require("blink.cmp.completion.windows.menu").close()
-            end
-            if copilot.is_visible() then
-                copilot.accept()
-                vim.b.completion = true
-            end
-        end)
+        -- vim.keymap.set("i", "<C-\\>", function()
+        --     if not copilot.is_visible() then
+        --         copilot.next()
+        --         vim.b.completion = false
+        --         require("blink.cmp.completion.windows.menu").close()
+        --     else
+        --         copilot.accept()
+        --         vim.b.completion = true
+        --     end
+        -- end)
     end)
 
     -- ================ Lazy Loading ================
     -- Alternative load plugins with 'lz.n'
     --
     add({ source = "nvim-neorocks/lz.n" })
-    local lz = require("lz.n")
-    lz.load("plugins.treesitter")
-    lz.load("plugins.blink")
-    require("plugins.conform")
-    require("plugins.trouble")
+    require("lz.n").load("plugins")
 
     --
     -- Example file in plugins/
