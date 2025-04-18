@@ -200,9 +200,7 @@ else
     -- Alternative load plugins with 'lz.n'
     --
     add({ source = "nvim-neorocks/lz.n" })
-    local lz = require("lz.n")
-    lz.load("plugins.treesitter")
-    lz.load("plugins.blink")
+    require("lz.n").load("pluginslz")
     require("plugins.conform")
     require("plugins.trouble")
 
