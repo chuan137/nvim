@@ -31,7 +31,6 @@ map("x", "<leader>p", [["_dP]]) -- paste WON'T copy
 -- map("v", ">", ">gv", { remap = false })
 -- map("v", "<", "<gv", { remap = false })
 
-map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 
 -- diagnostic

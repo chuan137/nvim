@@ -34,11 +34,11 @@ end
 
 if vim.fn.executable("lazygit") == 1 then
     -- stylua: ignore start
-    map("n", "<leader>gg", function() Snacks.lazygit({ cwd = get_git_root() }) end, { desc = "Lazygit (Root Dir)" })
+    -- map("n", "<leader>gg", function() Snacks.lazygit({ cwd = get_git_root() }) end, { desc = "Lazygit (Root Dir)" })
     map("n", "<leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
 end
 
-map("n", "<leader>fl", "<Cmd>lua Snacks.picker.git_log_file()<CR>", { desc = "File Logs" })
+map("n", "<leader>gf", "<Cmd>lua Snacks.picker.git_log_file()<CR>", { desc = "Git [F]ile Logs" })
 map("n", "<leader>gl", "<Cmd>lua Snacks.picker.git_log()<CR>", { desc = "Git Log" })
 map("n", "<leader>gL", "<Cmd>lua Snacks.picker.git_log_line()<CR>", { desc = "Git Log Line" })
 map({ "n", "x" }, "<leader>go", "<Cmd>lua Snacks.gitbrowse()<CR>", { desc = "Git Browse (open)" })
@@ -57,21 +57,8 @@ map("n", "<leader>ff", "<Cmd>lua Snacks.picker.git_files()<CR>", { desc = "Git F
 map("n", "<leader>fF", "<Cmd>lua Snacks.picker.files()<CR>", { desc = "Files" })
 map("n", "<leader>fg", "<Cmd>lua Snacks.picker.grep_word()<CR>", { desc = "Grep Word" })
 map("n", "<leader>fo", "<Cmd>lua Snacks.picker.grep_buffers()<CR>", { desc = "Grep Buffers" })
-map("n", "<leader>cw", function()
+map("n", "<leader>fc", function()
     Snacks.picker.grep_word({ word = vim.fn.expand("<cword>") })
 end, { desc = "Grep [C]urrent Word" })
 
 map("n", "<leader>P", "<Cmd>lua Snacks.picker.resume()<CR>", { desc = "Snacks Resume" })
---
-vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function()
-        map("n", "gd", "<Cmd>lua Snacks.picker.lsp_definitions()<CR>", { desc = "Goto Definition" })
-        map("n", "gD", "<Cmd>lua Snacks.picker.lsp_declarations()<CR>", { desc = "Goto Declaration" })
-        map("n", "gr", "<Cmd>lua Snacks.picker.lsp_references()<CR>", { nowait = true, desc = "References" })
-        map("n", "gI", "<Cmd>lua Snacks.picker.lsp_implementations()<CR>", { desc = "Goto Implementation" })
-        map("n", "gy", "<Cmd>lua Snacks.picker.lsp_type_definitions()<CR>", { desc = "Goto T[y]pe Definition" })
-        map("n", "<leader>ss", "<Cmd>lua Snacks.picker.lsp_symbols()<CR>", { desc = "LSP Symbols" })
-        map("n", "<leader>sS", "<Cmd>lua Snacks.picker.lsp_workspace_symbols()<CR>", { desc = "LSP Workspace Symbols" })
-        map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Code Rename" })
-    end,
-})
