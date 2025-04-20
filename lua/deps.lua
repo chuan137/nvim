@@ -120,6 +120,15 @@ else
         wk.setup({
             preset = "helix",
         })
+        wk.add({ "<leader>c", group = "Code.." })
+        wk.add({ "<leader>f", group = "Find.." })
+        wk.add({ "<leader>g", group = "Git.." })
+        wk.add({ "<leader>r", hidden = true })
+        wk.add({ "<leader>s", group = "Symbols.." })
+        wk.add({ "<leader>u", group = "Toggle.." })
+        wk.add({ "<leader>x", group = "Trouble.." })
+        wk.add({ "`n", hidden = true })
+        wk.add({ "`p", hidden = true })
     end)
 
     later(function()
