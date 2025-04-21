@@ -24,8 +24,8 @@ local specs = {
 
 local keymap = require("lz.n").keymap(specs)
 
-keymap.set({ "n", "v" }, "<leader>cf", function()
+keymap.set({ "n", "v" }, "<leader>f", function()
     require("conform").format({ async = true, lsp_format = "fallback" })
-end, { desc = "Code Format" })
+end, { desc = "Conform Format" })
 
 return specs

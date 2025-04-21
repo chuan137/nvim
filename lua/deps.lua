@@ -102,8 +102,8 @@ else
         })
         require("mason").setup()
         require("mason-lspconfig").setup()
-        -- local lspconfig = require("lspconfig")
-        require("config/lspconfig")
+        require("config.lsp")
+        require("config.lspattach")
 
         vim.lsp.enable("gopls")
         vim.lsp.enable("basedpyright")
@@ -120,15 +120,12 @@ else
         wk.setup({
             preset = "helix",
         })
-        wk.add({ "<leader>c", group = "Code.." })
-        wk.add({ "<leader>f", group = "Find.." })
-        wk.add({ "<leader>g", group = "Git.." })
-        wk.add({ "<leader>r", hidden = true })
-        wk.add({ "<leader>s", group = "Symbols.." })
+        wk.add({ "<leader>g", group = "Git/LSP.." })
+        -- wk.add({ "<leader>r", hidden = true })
+        wk.add({ "<leader>s", group = "Search.." })
         wk.add({ "<leader>u", group = "Toggle.." })
         wk.add({ "<leader>x", group = "Trouble.." })
-        wk.add({ "`n", hidden = true })
-        wk.add({ "`p", hidden = true })
+        wk.add({ "<leader>w", hidden = true })
     end)
 
     later(function()
