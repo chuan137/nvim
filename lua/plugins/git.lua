@@ -2,7 +2,7 @@ local add = MiniDeps.add
 
 local git_specs = {
     "vim-fugitive",
-    cmd = { "Git", "GBrowse" },
+    cmd = { "Git", "GBrowse", "Gvdiffsplit", "Gdiffsplit", "Gvsplit", "Gsplit" },
     before = function()
         add({ source = "tpope/vim-fugitive" })
     end,

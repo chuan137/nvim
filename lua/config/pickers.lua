@@ -51,14 +51,12 @@ map({ "n", "x" }, "<leader>gY", function()
     })
 end, { desc = "Git Browse (copy)" })
 
+local skey = "<leader>s"
+map("n", skey .. "f", "<Cmd>lua Snacks.picker.files()<CR>", { desc = "Files" })
+map("n", skey .. "w", "<Cmd>lua Snacks.picker.grep_word()<CR>", { desc = "Grep Word" })
+map("n", skey .. "o", "<Cmd>lua Snacks.picker.grep_buffers()<CR>", { desc = "Grep Buffers" })
+
+map("n", "<leader>/", "<Cmd>lua Snacks.picker.grep()<CR>", { desc = "Grep" })
 map("n", "<leader>,", "<Cmd>lua Snacks.picker.buffers()<CR>", { desc = "Buffers" })
 map("n", "<leader><space>", "<Cmd>lua Snacks.picker.git_files()<CR>", { desc = "Git Files" })
-map("n", "<leader>ff", "<Cmd>lua Snacks.picker.git_files()<CR>", { desc = "Git Files" })
-map("n", "<leader>fF", "<Cmd>lua Snacks.picker.files()<CR>", { desc = "Files" })
-map("n", "<leader>fg", "<Cmd>lua Snacks.picker.grep_word()<CR>", { desc = "Grep Word" })
-map("n", "<leader>fo", "<Cmd>lua Snacks.picker.grep_buffers()<CR>", { desc = "Grep Buffers" })
-map("n", "<leader>fc", function()
-    Snacks.picker.grep_word({ word = vim.fn.expand("<cword>") })
-end, { desc = "Grep [C]urrent Word" })
-
 map("n", "<leader>P", "<Cmd>lua Snacks.picker.resume()<CR>", { desc = "Snacks Resume" })

@@ -42,32 +42,35 @@ else
     end)
 
     now(function()
-        -- vim.cmd("colorscheme retrobox")
         add({ source = "catppuccin/nvim", name = "catppuccin" })
         vim.cmd([[ colorscheme catppuccin-macchiato ]])
+        -- vim.cmd("colorscheme retrobox")
+        -- vim.cmd([[
+        --     colorscheme wildcharm
+        --     set background=light
+        -- ]])
     end)
 
     -- ================ Mini Plugins ================
     now(require("mini.icons").setup)
-    now(require("mini.tabline").setup)
     now(require("mini.statusline").setup)
-
-    later(require("mini.ai").setup)
-    later(require("mini.surround").setup)
-    later(require("mini.basics").setup)
-    later(require("mini.diff").setup)
-    later(require("mini.pairs").setup)
-    later(require("mini.comment").setup)
-    -- later(require("mini.pick").setup)
-    -- later(require("mini.align").setup)
-    -- later(require("mini.cursorword").setup)
-    -- later(require("mini.jump").setup)
-    -- later(require("mini.extra").setup)
-
+    -- now(require("mini.tabline").setup)
     -- now(function()
     --     require("mini.notify").setup()
     --     vim.notify = require("mini.notify").make_notify()
     -- end)
+
+    later(require("mini.ai").setup)
+    later(require("mini.basics").setup)
+    later(require("mini.comment").setup)
+    later(require("mini.diff").setup)
+    later(require("mini.extra").setup)
+    later(require("mini.pairs").setup)
+    later(require("mini.surround").setup)
+    -- later(require("mini.align").setup)
+    -- later(require("mini.cursorword").setup)
+    -- later(require("mini.jump").setup)
+    -- later(require("mini.pick").setup)
 
     -- later(function()
     --     require("mini.git").setup()
@@ -120,8 +123,7 @@ else
         wk.setup({
             preset = "helix",
         })
-        wk.add({ "<leader>g", group = "Git/LSP.." })
-        -- wk.add({ "<leader>r", hidden = true })
+        wk.add({ "<leader>g", group = "LSP/Git.." })
         wk.add({ "<leader>s", group = "Search.." })
         wk.add({ "<leader>u", group = "Toggle.." })
         wk.add({ "<leader>x", group = "Trouble.." })
@@ -136,13 +138,13 @@ else
             indent = { enabled = true },
             input = { enabled = true },
             picker = { enabled = true },
-            notifier = { enabled = true },
             quickfile = { enabled = true },
             scope = { enabled = true },
             statuscolumn = { enabled = true },
             -- bigfile = { enabled = true },
             -- dashboard = { enabled = true },
             -- explorer = { enabled = true },
+            -- notifier = { enabled = true },
             -- scroll = { enabled = true },
             -- words = { enabled = true },
         })

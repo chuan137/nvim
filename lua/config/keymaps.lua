@@ -36,9 +36,9 @@ local diagnostic_goto = function(next, severity)
     severity = severity and vim.diagnostic.severity[severity] or nil
     return function()
         if next then
-            vim.lsp.diagnostic.goto_next({ severity = severity })
+            vim.diagnostic.goto_next({ severity = severity })
         else
-            vim.lsp.diagnostic.goto_prev({ severity = severity })
+            vim.diagnostic.goto_prev({ severity = severity })
         end
     end
 end
@@ -51,7 +51,7 @@ map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 
-map("n", "`n", "<Cmd>bnext<CR>")
-map("n", "`<Tab>", "<Cmd>bnext<CR>")
-map("n", "<leader><Tab>", "<cmd>bnext<cr>")
-map("n", "`p", "<Cmd>bprevious<CR>")
+-- map("n", "`n", "<Cmd>bnext<CR>")
+-- map("n", "`<Tab>", "<Cmd>bnext<CR>")
+-- map("n", "<leader><Tab>", "<cmd>bnext<cr>")
+-- map("n", "`p", "<Cmd>bprevious<CR>")
