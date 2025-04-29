@@ -17,10 +17,12 @@ vim.opt.signcolumn = 'yes'
 vim.opt.laststatus = 3
 vim.opt.isfname:append '@-@'
 vim.opt.updatetime = 50
-vim.opt.clipboard = 'unnamedplus'
 vim.opt.spelllang = 'en_us'
 vim.opt.spell = false
 vim.opt.termguicolors = true
+
+-- Use system clipboard
+-- vim.opt.clipboard = 'unnamedplus'
 
 -- Neovide
 if vim.g.neovide then

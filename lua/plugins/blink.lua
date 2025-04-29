@@ -1,6 +1,13 @@
 local lz = require("lz.n")
 local add = MiniDeps.add
 
+local copilot_accept = function()
+    local _, copilot = pcall(require, "copilot.suggestion")
+    if copilot and copilot.is_visible() then
+        copilot.accept()
+    end
+end
+
 return {
     "blink.cmp",
     before = function()
@@ -18,9 +25,8 @@ return {
             -- https://github.com/Saghen/blink.cmp/discussions/628#discussioncomment-12861317
             keymap = {
                 preset = "enter",
-                ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
-                ["<C-Space>"] = { "fallback" },
-                ["<C-k>"] = { "show_documentation", "hide_documentation", "fallback" },
+                ["<Tab>"] = { "select_next", "snippet_forward", copilot_accept, "fallback" },
+                ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
             },
             appearance = {
                 nerd_font_variant = "mono",

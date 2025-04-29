@@ -42,8 +42,10 @@ else
     end)
 
     now(function()
-        add({ source = "catppuccin/nvim", name = "catppuccin" })
-        vim.cmd([[ colorscheme catppuccin-macchiato ]])
+        add({ source = "binhtran432k/dracula.nvim" })
+        vim.cmd([[ colorscheme dracula-soft ]])
+        -- add({ source = "catppuccin/nvim", name = "catppuccin" })
+        -- vim.cmd([[ colorscheme catppuccin-macchiato ]])
         -- vim.cmd("colorscheme retrobox")
         -- vim.cmd([[
         --     colorscheme wildcharm
@@ -107,11 +109,11 @@ else
         require("mason-lspconfig").setup()
         require("config.lsp")
         require("config.lspattach")
-
         vim.lsp.enable("gopls")
         vim.lsp.enable("basedpyright")
         vim.lsp.enable("ruff")
         vim.lsp.enable("lua_ls")
+        vim.lsp.enable("slint_lsp")
     end)
 
     -- ================ Folke ================
@@ -140,7 +142,7 @@ else
             picker = { enabled = true },
             quickfile = { enabled = true },
             scope = { enabled = true },
-            statuscolumn = { enabled = true },
+            -- statuscolumn = { enabled = true },
             -- bigfile = { enabled = true },
             -- dashboard = { enabled = true },
             -- explorer = { enabled = true },
@@ -152,73 +154,9 @@ else
     end)
 
     -- ================ Copilot ================
-    later(function()
-        add({ source = "zbirenbaum/copilot.lua" })
-        require("copilot").setup({
-            panel = {
-                enabled = false,
-            },
-            suggestion = {
-                enabled = true,
-                auto_trigger = false,
-                debounce = 75,
-                keymap = {
-                    -- accept = "<Tab>",
-                    accept_word = "<M-w>",
-                    accept_line = "<M-e>",
-                    dismiss = false,
-                    next = "<M-]>",
-                    prev = false,
-                },
-            },
-            filetypes = {
-                yaml = true,
-                markdown = true,
-                help = true,
-                gitcommit = true,
-                gitrebase = true,
-                hgcommit = true,
-                svn = true,
-                cvs = true,
-                ["."] = true,
-            },
-            server_opts_overrides = {},
-        })
-        local copilot = require("copilot.suggestion")
-        vim.keymap.set("i", "<C-Space>", function()
-            if not copilot.is_visible() then
-                copilot.next()
-                require("blink.cmp.completion.windows.menu").close()
-                -- vim.b.completion = false
-            end
-        end)
-        vim.keymap.set("i", "<Tab>", function()
-            if copilot.is_visible() then
-                copilot.accept()
-                -- vim.b.completion = true
-            end
-        end)
-        vim.keymap.set("i", "<C-e>", function()
-            if copilot.is_visible() then
-                copilot.dismiss()
-                vim.b.completion = true
-            end
-        end)
-        -- vim.keymap.set("i", "<C-\\>", function()
-        --     if not copilot.is_visible() then
-        --         copilot.next()
-        --         vim.b.completion = false
-        --         require("blink.cmp.completion.windows.menu").close()
-        --     else
-        --         copilot.accept()
-        --         vim.b.completion = true
-        --     end
-        -- end)
-    end)
 
     -- ================ Lazy Loading ================
     -- Alternative load plugins with 'lz.n'
-    --
     add({ source = "nvim-neorocks/lz.n" })
     require("lz.n").load("plugins")
 
