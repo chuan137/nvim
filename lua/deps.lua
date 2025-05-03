@@ -143,17 +143,8 @@ else
         })
         require("mason").setup()
         require("mason-lspconfig").setup()
-        local lspconfig = require("lspconfig")
+        require("config.lspconfig")
         -- https://gitlab.com/thomas3081/nvim/-/blob/master/lua/config/lspconfig.lua?ref_type=heads
-        vim.lsp.config("*", {
-            root_markers = {
-                ".git",
-                "Makefile",
-                "package.json",
-                "Cargo.toml",
-                "pyproject.toml",
-            },
-        })
         vim.lsp.enable("gopls")
         vim.lsp.enable("basedpyright")
         vim.lsp.enable("ruff_lsp")
