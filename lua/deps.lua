@@ -30,9 +30,9 @@ if vim.fn.exists("g:vscode") ~= 0 then
 else
     -- Safely execute immediately
     now(function()
-        require("options")
-        require("keymaps")
-        require("commands")
+        require("config.options")
+        require("config.keymaps")
+        require("config.commands")
 
         vim.cmd("set undodir=~/.cache/vim/undodir")
         vim.cmd([[
@@ -42,9 +42,9 @@ else
     end)
 
     now(function()
-        -- vim.cmd("colorscheme retrobox")
         add({ source = "catppuccin/nvim", name = "catppuccin" })
         vim.cmd([[ colorscheme catppuccin-macchiato ]])
+        -- vim.cmd("colorscheme retrobox")
     end)
 
     -- ================ Mini Plugins ================
@@ -64,20 +64,19 @@ else
     later(require("mini.diff").setup)
     later(require("mini.extra").setup)
 
-    now(function()
-        -- require("mini.notify").setup()
-        -- vim.notify = require("mini.notify").make_notify()
-    end)
-
-   later(function()
-        require("mini.git").setup()
-
-        local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
-        vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
-
-        local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
-        vim.cmd("au FileType git,diff setlocal " .. diff_folds)
-    end)
+    -- now(function()
+    --     require("mini.notify").setup()
+    --     vim.notify = require("mini.notify").make_notify()
+    -- end)
+    -- later(function()
+    --      require("mini.git").setup()
+    --
+    --      local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
+    --      vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
+    --
+    --      local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
+    --      vim.cmd("au FileType git,diff setlocal " .. diff_folds)
+    --  end)
 
     later(function()
         local mini_files = require("mini.files")
@@ -93,6 +92,8 @@ else
             mini_files.open(vim.api.nvim_buf_get_name(0))
         end, { desc = "File explorer" })
     end)
+
+    later(require("plugins.blink").setup)
 
     -- ================ Folke ================
     later(function()
@@ -114,17 +115,17 @@ else
             indent = { enabled = true },
             input = { enabled = true },
             picker = { enabled = true },
-            notifier = { enabled = true },
             quickfile = { enabled = true },
             scope = { enabled = true },
             statuscolumn = { enabled = true },
+            -- notifier = { enabled = true },
             -- bigfile = { enabled = true },
             -- dashboard = { enabled = true },
             -- explorer = { enabled = true },
             -- scroll = { enabled = true },
             -- words = { enabled = true },
         })
-        require("pickers")
+        require("config.pickers")
     end)
 
     later(function()
@@ -156,7 +157,7 @@ else
         vim.lsp.enable("gopls")
         vim.lsp.enable("basedpyright")
         vim.lsp.enable("ruff_lsp")
-        -- vim.lsp.enable("lua_ls")
+        vim.lsp.enable("lua_ls")
     end)
 
     -- =============== Conform ================
@@ -199,45 +200,9 @@ else
         })
     end)
 
-    -- ================ Blink.cmp ================
-    later(function()
-        add({
-            source = "saghen/blink.cmp",
-            depends = { "rafamadriz/friendly-snippets" },
-            checkout = "v1.*",
-        })
-        require("blink.cmp").setup({
-            enabled = function()
-                return not vim.tbl_contains({ "minifiles" }, vim.bo.filetype)
-            end, 
-            keymap = {
-                preset = "enter",
-                -- ["<C-y>"] = { "select_and_accept", "fallback" },
-                -- ["<C-y>"] = { "select_next", "fallback" },
-            },
-            appearance = {
-                nerd_font_variant = "mono",
-            },
-            completion = { documentation = { auto_show = false } },
-            sources = {
-                default = { "lsp", "path", "snippets", "buffer" },
-            },
-            fuzzy = { implementation = "prefer_rust_with_warning" },
-            signature = {
-                enabled = true,
-            },
-        })
-        vim.lsp.config(
-            "*",
-            ---@type vim.lsp.Config
-            {
-                capabilities = require("blink.cmp").get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities()),
-            }
-        )
-    end)
 
     -- ================ Copilot ================
-    later(function()
+    now(function()
         add({ source = "zbirenbaum/copilot.lua" })
         require("copilot").setup({
             panel = {
@@ -288,6 +253,7 @@ else
             end
         end)
     end)
+
 
     -- ================ Lazy Loading ================
     -- Alternative load plugins with 'lz.n'
