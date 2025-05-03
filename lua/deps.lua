@@ -93,48 +93,6 @@ else
         end, { desc = "File explorer" })
     end)
 
-    later(require("plugins.blink").setup)
-
-    -- ================ Folke ================
-    later(function()
-        add({
-            source = "folke/which-key.nvim",
-        })
-        local wk = require("which-key")
-        wk.setup({
-            preset = "helix",
-            -- win = { col = -1, row = 0 }
-        })
-    end)
-
-    later(function()
-        add({
-            source = "folke/snacks.nvim",
-        })
-        require("snacks").setup({
-            indent = { enabled = true },
-            input = { enabled = true },
-            picker = { enabled = true },
-            quickfile = { enabled = true },
-            scope = { enabled = true },
-            statuscolumn = { enabled = true },
-            words = { enabled = true },
-            -- notifier = { enabled = true },
-            -- bigfile = { enabled = true },
-            -- dashboard = { enabled = true },
-            -- explorer = { enabled = true },
-            -- scroll = { enabled = true },
-        })
-        require("config.pickers")
-    end)
-
-    later(function()
-        add({
-            source = "folke/trouble.nvim",
-        })
-        require("trouble").setup()
-    end)
-
     -- ================ LSP Config ================
     now(function()
         add({
@@ -191,60 +149,14 @@ else
         })
     end)
 
-
-    -- ================ Copilot ================
-    now(function()
-        add({ source = "zbirenbaum/copilot.lua" })
-        require("copilot").setup({
-            panel = {
-                enabled = false,
-            },
-            suggestion = {
-                enabled = true,
-                auto_trigger = false,
-                debounce = 75,
-                keymap = {
-                    -- accept = "<Tab>",
-                    accept_word = "<M-w>",
-                    accept_line = "<M-e>",
-                    dismiss = false,
-                    next = "<M-]>",
-                    prev = false,
-                },
-            },
-            filetypes = {
-                yaml = true,
-                markdown = true,
-                help = true,
-                gitcommit = true,
-                gitrebase = true,
-                hgcommit = true,
-                svn = true,
-                cvs = true,
-                ["."] = true,
-            },
-            server_opts_overrides = {},
-        })
-        local copilot = require("copilot.suggestion")
-        vim.keymap.set("i", "<C-e>", function()
-            if copilot.is_visible() then
-                copilot.dismiss()
-                vim.b.completion = true
-            end
-        end)
-        vim.keymap.set("i", "<C-y>", function()
-            if not copilot.is_visible() then
-                copilot.next()
-                vim.b.completion = false
-                require("blink.cmp.completion.windows.menu").close()
-            end
-            if copilot.is_visible() then
-                copilot.accept()
-                vim.b.completion = true
-            end
-        end)
-    end)
-
+    later(require("plugins.snacks").setup)
+    later(require("plugins.blink").setup)
+    later(require("plugins.which-key").setup)
+    later(require("plugins.copilot").setup)
+    -- later(function()
+    --     add({ source = "folke/trouble.nvim" })
+    --     require("trouble").setup()
+    -- end)
 
     -- ================ Lazy Loading ================
     -- Alternative load plugins with 'lz.n'
