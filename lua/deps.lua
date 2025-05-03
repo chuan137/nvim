@@ -157,8 +157,10 @@ else
 
     -- ================ Lazy Loading ================
     -- Alternative load plugins with 'lz.n'
-    add({ source = "nvim-neorocks/lz.n" })
-    require("lz.n").load("plugins")
+    now(function()
+        add({ source = "nvim-neorocks/lz.n" })
+        require("lz.n").load("plugins")
+    end)
 
     --
     -- Example file in plugins/
