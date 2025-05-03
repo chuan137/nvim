@@ -11,7 +11,7 @@ end
 return {
     "blink.cmp",
     before = function()
-        add({ source = "saghen/blink.cmp", checkout = "v1.*" })
+        add({ source = "saghen/blink.cmp", checkout = "v1.2.0" })
         add({ source = "rafamadriz/friendly-snippets" })
         lz.trigger_load("friendly-snippets")
     end,
