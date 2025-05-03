@@ -20,8 +20,14 @@ map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 
 -- copy paste
-map("x", "<leader>p", [["_dP]]) -- paste WON'T copy
 map("n", "<leader>up", "<cmd>set paste!<cr>", { desc = "Toggle Paste" })
+
+-- system clipboard
+map({ "n", "v" }, "<leader>y", '"+y', { desc = "Copy to system clipboard" })
+map("n", "<leader>Y", '"+Y', { desc = "Copy Line to system clipboard" })
+map({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste clipboard after selection" })
+map({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste clipboard before selection" })
+-- map("x", "<leader>p", [["_dP]]) -- paste WON'T copy
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
