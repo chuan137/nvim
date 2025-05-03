@@ -62,19 +62,6 @@ map("n", "<leader>cw", function()
 end, { desc = "Grep [C]urrent Word" })
 
 map("n", "<leader>P", "<Cmd>lua Snacks.picker.resume()<CR>", { desc = "Snacks Resume" })
---
-vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function()
-        map("n", "gd", "<Cmd>lua Snacks.picker.lsp_definitions()<CR>", { desc = "Goto Definition" })
-        map("n", "gD", "<Cmd>lua Snacks.picker.lsp_declarations()<CR>", { desc = "Goto Declaration" })
-        map("n", "gr", "<Cmd>lua Snacks.picker.lsp_references()<CR>", { nowait = true, desc = "References" })
-        map("n", "gI", "<Cmd>lua Snacks.picker.lsp_implementations()<CR>", { desc = "Goto Implementation" })
-        map("n", "gy", "<Cmd>lua Snacks.picker.lsp_type_definitions()<CR>", { desc = "Goto T[y]pe Definition" })
-        map("n", "<leader>ss", "<Cmd>lua Snacks.picker.lsp_symbols()<CR>", { desc = "LSP Symbols" })
-        map("n", "<leader>sS", "<Cmd>lua Snacks.picker.lsp_workspace_symbols()<CR>", { desc = "LSP Workspace Symbols" })
-        map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Code Rename" })
-    end,
-})
 
 -- stylua: ignore start
 map("n", "<C-l>", function() Snacks.words.jump(1, true) end, { desc = "Jump to next word" })
