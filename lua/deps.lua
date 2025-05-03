@@ -151,13 +151,10 @@ else
 
     later(require("plugins.snacks").setup)
     later(require("plugins.blink").setup)
-    later(require("plugins.which-key").setup)
     later(require("plugins.copilot").setup)
     later(require("plugins.git").setup)
-    -- later(function()
-    --     add({ source = "folke/trouble.nvim" })
-    --     require("trouble").setup()
-    -- end)
+    later(require("plugins.which-key").setup)
+    later(require("plugins.trouble").setup)
 
     -- ================ Lazy Loading ================
     -- Alternative load plugins with 'lz.n'
