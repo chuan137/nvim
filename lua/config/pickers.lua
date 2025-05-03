@@ -75,3 +75,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Code Rename" })
     end,
 })
+
+-- stylua: ignore start
+map("n", "<C-l>", function() Snacks.words.jump(1, true) end, { desc = "Jump to next word" })
+map("n", "<C-h>", function() Snacks.words.jump(-1, true) end, { desc = "Jump to next word" })
+-- stylua: ignore end

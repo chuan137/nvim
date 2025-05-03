@@ -58,7 +58,6 @@ else
     later(require("mini.pick").setup)
     later(require("mini.align").setup)
     later(require("mini.basics").setup)
-    later(require("mini.cursorword").setup)
     later(require("mini.jump").setup)
     later(require("mini.pairs").setup)
     later(require("mini.diff").setup)
@@ -118,12 +117,12 @@ else
             quickfile = { enabled = true },
             scope = { enabled = true },
             statuscolumn = { enabled = true },
+            words = { enabled = true },
             -- notifier = { enabled = true },
             -- bigfile = { enabled = true },
             -- dashboard = { enabled = true },
             -- explorer = { enabled = true },
             -- scroll = { enabled = true },
-            -- words = { enabled = true },
         })
         require("config.pickers")
     end)
