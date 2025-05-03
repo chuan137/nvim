@@ -52,6 +52,11 @@ else
     now(require("mini.tabline").setup)
     now(require("mini.statusline").setup)
 
+    now(function()
+        require("mini.notify").setup()
+        vim.notify = require("mini.notify").make_notify()
+    end)
+
     later(require("mini.ai").setup)
     later(require("mini.surround").setup)
     later(require("mini.comment").setup)
@@ -63,19 +68,15 @@ else
     later(require("mini.diff").setup)
     later(require("mini.extra").setup)
 
-    -- now(function()
-    --     require("mini.notify").setup()
-    --     vim.notify = require("mini.notify").make_notify()
-    -- end)
-    -- later(function()
-    --      require("mini.git").setup()
-    --
-    --      local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
-    --      vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
-    --
-    --      local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
-    --      vim.cmd("au FileType git,diff setlocal " .. diff_folds)
-    --  end)
+    later(function()
+         require("mini.git").setup()
+
+         local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
+         vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
+
+         local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
+         vim.cmd("au FileType git,diff setlocal " .. diff_folds)
+     end)
 
     later(function()
         local mini_files = require("mini.files")
