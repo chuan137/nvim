@@ -69,14 +69,14 @@ else
     later(require("mini.extra").setup)
 
     later(function()
-         require("mini.git").setup()
+        require("mini.git").setup()
 
-         local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
-         vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
+        local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
+        vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
 
-         local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
-         vim.cmd("au FileType git,diff setlocal " .. diff_folds)
-     end)
+        local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
+        vim.cmd("au FileType git,diff setlocal " .. diff_folds)
+    end)
 
     later(function()
         local mini_files = require("mini.files")
@@ -162,19 +162,21 @@ else
     -- ================ Lazy Loading ================
     -- Alternative load plugins with 'lz.n'
     --
-    -- add({ source = "nvim-neorocks/lz.n" })
-    -- require('lz.n').load 'plugins'
+    -- now(function()
+    --     add({ source = "nvim-neorocks/lz.n" })
+    --     require("lz.n").load("plugins/lzn")
+    -- end)
     --
-    -- Example file in plugins/
+    -- Example file in plugins/lzn
     -- return {
-    --     'which-key.nvim',
-    -- 	before = function()
-    -- 		deps.add({
-    --             source = 'folke/which-key.nvim',
-    -- 		})
-    -- 	end,
+    --     "which-key.nvim",
+    --     before = function()
+    --         deps.add({
+    --             source = "folke/which-key.nvim",
+    --         })
+    --     end,
     --     after = function()
-    --         require('which-key').setup()
+    --         require("which-key").setup()
     --     end,
     -- }
 end
