@@ -33,12 +33,6 @@ else
         require("config.options")
         require("config.keymaps")
         require("config.commands")
-
-        vim.cmd("set undodir=~/.cache/vim/undodir")
-        vim.cmd([[
-            let g:loaded_netrw       = 1
-            let g:loaded_netrwPlugin = 1
-        ]]) -- disable netrw
     end)
 
     now(function()
@@ -91,6 +85,10 @@ else
             end
             mini_files.open(vim.api.nvim_buf_get_name(0))
         end, { desc = "File explorer" })
+        vim.cmd([[
+            let g:loaded_netrw       = 1
+            let g:loaded_netrwPlugin = 1
+        ]]) -- disable netrw
     end)
 
     -- ================ LSP Config ================
