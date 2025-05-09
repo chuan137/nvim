@@ -23,6 +23,9 @@ vim.opt.spelllang = "en_us"
 vim.opt.spell = false
 vim.opt.termguicolors = true
 
+-- Use :set list to view the spaces
+vim.o.listchars = 'tab:·┈,trail:￮,multispace:￮,lead: ,extends:▶,precedes:◀,nbsp:‿'
+
 -- Neovide
 if vim.g.neovide then
     vim.o.guifont = "JetBrains Mono Nerd Font:h14"
