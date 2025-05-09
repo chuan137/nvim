@@ -163,16 +163,14 @@ else
     later(require("plugins.git").setup)
     later(require("plugins.which-key").setup)
     later(require("plugins.trouble").setup)
-    later(require("plugins.obsidian").setup)
 
     -- ================ Lazy Loading ================
     -- Alternative load plugins with 'lz.n'
-    --
-    -- now(function()
-    --     add({ source = "nvim-neorocks/lz.n" })
-    --     require("lz.n").load("plugins/lzn")
-    -- end)
-    --
+    now(function()
+        add({ source = "nvim-neorocks/lz.n" })
+        require("lz.n").load("plugins/lzn")
+    end)
+
     -- Example file in plugins/lzn
     -- return {
     --     "which-key.nvim",
