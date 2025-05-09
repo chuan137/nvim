@@ -8,8 +8,11 @@ map({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 map("n", "<leader>w", "<C-w>")
 map("n", "<leader><Tab>", "<cmd>bnext<cr>")
 
-map("n", "<leader>rp", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>") -- Replace all instance of current word in file
-map("v", "<leader>rp", ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>") -- Replace all instance of current word in file
+-- Change colorscheme hue
+map("n", "<leader>ch", "<Cmd>colorscheme randomhue<CR>", { desc = "Colorscheme Random[h]ue" })
+
+-- map("n", "<leader>rp", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>") -- Replace all instance of current word in file
+-- map("v", "<leader>rp", ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>") -- Replace all instance of current word in file
 
 -- move current line up/down
 map("n", "<M-j>", ":m .+1<CR>==")
@@ -20,7 +23,7 @@ map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
 
 -- copy paste
-map("n", "<leader>up", "<cmd>set paste!<cr>", { desc = "Toggle Paste" })
+-- map("n", "<leader>up", "<cmd>set paste!<cr>", { desc = "Toggle Paste" })
 
 -- system clipboard
 map({ "n", "v" }, "<leader>y", '"+y', { desc = "Copy to system clipboard" })
@@ -30,11 +33,13 @@ map({ "n", "v" }, "<leader>P", '"+P', { desc = "Paste clipboard before selection
 -- map("x", "<leader>p", [["_dP]]) -- paste WON'T copy
 
 -- diagnostic
+map("n", "gl", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
+
 local diagnostic_goto = function(next, severity)
-    local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+    local count = next and 1 or -1
     severity = severity and vim.diagnostic.severity[severity] or nil
     return function()
-        go({ severity = severity })
+        vim.diagnostic.jump({ count = count, float = true, severity = severity })
     end
 end
 
@@ -44,6 +49,3 @@ map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
-
--- stylua: ignore start
-map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })

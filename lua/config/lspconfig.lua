@@ -1,5 +1,14 @@
--- https://gitlab.com/thomas3081/nvim/-/blob/master/lua/config/lspconfig.lua?ref_type=heads
+vim.lsp.config("*", {
+    capabilities = {
+        textDocument = {
+            semanticTokens = {
+                multilineTokenSupport = true,
+            },
+        },
+    },
+})
 
+-- https://gitlab.com/thomas3081/nvim/-/blob/master/lua/config/lspconfig.lua?ref_type=heads
 vim.lsp.config("ruff", {
     on_attach = function(client)
         client.server_capabilities.hoverProvider = false
@@ -87,26 +96,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         -- map("gD", vim.lsp.buf.declaration, "Goto Declaration")
         map("gd", "<Cmd>lua Snacks.picker.lsp_definitions()<CR>", "Goto Definition")
-        map("gI", "<Cmd>lua Snacks.picker.lsp_implementations()<CR>", "Goto Implementation")
+        map("gD", "<Cmd>lua Snacks.picker.lsp_declarations()<CR>", "Goto Declaration")
         map("gy", "<Cmd>lua Snacks.picker.lsp_type_definitions()<CR>", "Goto T[y]pe Definition")
-        map("gr", "<Cmd>lua Snacks.picker.lsp_references()<CR>", "References", { nowait = true })
-        map("<leader>cs", "<Cmd>lua Snacks.picker.lsp_symbols()<CR>", "LSP Symbols")
-        map("<leader>cS", "<Cmd>lua Snacks.picker.lsp_workspace_symbols()<CR>", "LSP Workspace Symbols")
-        map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
-        map("<leader>cr", vim.lsp.buf.rename, "Code Rename")
+        map("gri", "<Cmd>lua Snacks.picker.lsp_implementations()<CR>", "Goto Implementation")
+        map("grr", "<Cmd>lua Snacks.picker.lsp_references()<CR>", "References", { nowait = true })
+        map("gk", "<Cmd>lua Snacks.picker.lsp_symbols()<CR>", "LSP Symbols")
+        map("grk", "<Cmd>lua Snacks.picker.lsp_workspace_symbols()<CR>", "LSP Workspace Symbols")
 
+        -- map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
+        -- map("<leader>cr", vim.lsp.buf.rename, "Code Rename")
     end,
 })
-
--- vim.api.nvim_create_autocmd("LspAttach", {
---     callback = function()
---         map("n", "gd", "<Cmd>lua Snacks.picker.lsp_definitions()<CR>", { desc = "Goto Definition" })
---         map("n", "gD", "<Cmd>lua Snacks.picker.lsp_declarations()<CR>", { desc = "Goto Declaration" })
---         map("n", "gr", "<Cmd>lua Snacks.picker.lsp_references()<CR>", { nowait = true, desc = "References" })
---         map("n", "gI", "<Cmd>lua Snacks.picker.lsp_implementations()<CR>", { desc = "Goto Implementation" })
---         map("n", "gy", "<Cmd>lua Snacks.picker.lsp_type_definitions()<CR>", { desc = "Goto T[y]pe Definition" })
---         map("n", "<leader>ss", "<Cmd>lua Snacks.picker.lsp_symbols()<CR>", { desc = "LSP Symbols" })
---         map("n", "<leader>sS", "<Cmd>lua Snacks.picker.lsp_workspace_symbols()<CR>", { desc = "LSP Workspace Symbols" })
---         map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Code Rename" })
---     end,
--- })

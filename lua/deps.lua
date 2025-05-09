@@ -124,7 +124,7 @@ else
                 typescript = { "prettier" },
             },
         })
-        vim.keymap.set({ "n", "v" }, "<leader>cf", function()
+        vim.keymap.set({ "n", "v" }, "<leader>f", function()
             require("conform").format({ async = true, lsp_format = "fallback" })
         end, { desc = "Code Format" })
     end)
