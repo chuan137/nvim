@@ -13,6 +13,14 @@ vim.lsp.config("ruff", {
     on_attach = function(client)
         client.server_capabilities.hoverProvider = false
     end,
+    init_options = {
+        settings = {
+            logLevel = "debug",
+            lint = {
+                select = { "E", "F" },
+            },
+        },
+    },
 })
 
 vim.lsp.config(
@@ -107,3 +115,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
         -- map("<leader>cr", vim.lsp.buf.rename, "Code Rename")
     end,
 })
+
+-- https://gitlab.com/thomas3081/nvim/-/blob/master/lua/config/lspconfig.lua?ref_type=heads
+vim.lsp.enable("gopls")
+vim.lsp.enable("basedpyright")
+vim.lsp.enable("ruff")
+vim.lsp.enable("lua_ls")
+vim.lsp.enable("yamlls")
