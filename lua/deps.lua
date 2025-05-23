@@ -37,8 +37,9 @@ else
 
     now(function()
         add({ source = "catppuccin/nvim", name = "catppuccin" })
-        vim.cmd([[ colorscheme catppuccin-macchiato ]])
+        -- vim.cmd([[ colorscheme catppuccin-latte ]])
         -- vim.cmd("colorscheme retrobox")
+        vim.cmd("colorscheme randomhue")
     end)
 
     -- ================ Mini Plugins ================
@@ -46,10 +47,10 @@ else
     now(require("mini.tabline").setup)
     now(require("mini.statusline").setup)
 
-    now(function()
-        require("mini.notify").setup()
-        vim.notify = require("mini.notify").make_notify()
-    end)
+    -- now(function()
+    --     require("mini.notify").setup()
+    --     vim.notify = require("mini.notify").make_notify()
+    -- end)
 
     later(require("mini.ai").setup)
     later(require("mini.surround").setup)
@@ -59,10 +60,10 @@ else
     later(require("mini.basics").setup)
     later(require("mini.jump").setup)
     later(require("mini.pairs").setup)
-    later(require("mini.diff").setup)
-    later(require("mini.extra").setup)
+    -- later(require("mini.extra").setup)
 
     later(function()
+        require("mini.diff").setup()
         require("mini.git").setup()
 
         local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
@@ -92,6 +93,11 @@ else
             let g:loaded_netrw       = 1
             let g:loaded_netrwPlugin = 1
         ]]) -- disable netrw
+    end)
+
+    later(function()
+        require("mini.misc").setup()
+        MiniMisc.setup_auto_root()
     end)
 
     -- ================ LSP Config ================
