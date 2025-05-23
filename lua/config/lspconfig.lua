@@ -1,3 +1,11 @@
+-- https://gitlab.com/thomas3081/nvim/-/blob/master/lua/config/lspconfig.lua?ref_type=heads
+vim.lsp.enable("gopls")
+vim.lsp.enable("basedpyright")
+vim.lsp.enable("ruff")
+vim.lsp.enable("lua_ls")
+-- vim.lsp.enable("yamlls")
+vim.lsp.enable("helm_ls")
+
 vim.lsp.config("*", {
     capabilities = {
         textDocument = {
@@ -116,9 +124,3 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end,
 })
 
--- https://gitlab.com/thomas3081/nvim/-/blob/master/lua/config/lspconfig.lua?ref_type=heads
-vim.lsp.enable("gopls")
-vim.lsp.enable("basedpyright")
-vim.lsp.enable("ruff")
-vim.lsp.enable("lua_ls")
-vim.lsp.enable("yamlls")

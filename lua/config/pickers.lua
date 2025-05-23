@@ -46,11 +46,10 @@ map("n", "<leader>,", "<Cmd>lua Snacks.picker.buffers()<CR>", { desc = "Buffers"
 map("n", "<leader>/", "<Cmd>lua Snacks.picker.grep()<CR>", { desc = "Grep" })
 map("n", "<leader><cr>", "<Cmd>lua Snacks.picker.resume()<CR>", { desc = "Snacks Resume" })
 map("n", "<leader><space>", "<Cmd>lua Snacks.picker.git_files()<CR>", { desc = "Git Files" })
-map("n", "<leader>sf", "<Cmd>lua Snacks.picker.git_files()<CR>", { desc = "Git Files" })
-map("n", "<leader>sF", "<Cmd>lua Snacks.picker.files()<CR>", { desc = "Files" })
+map("n", "<leader>sf", "<Cmd>lua Snacks.picker.files()<CR>", { desc = "Files" })
 map("n", "<leader>sw", "<Cmd>lua Snacks.picker.grep_word()<CR>", { desc = "Grep Word" })
-map("n", "<leader>se", "<Cmd>lua Snacks.picker.grep_buffers()<CR>", { desc = "Grep Buffers" })
-map("n", "<leader>sr", "<Cmd>lua Snacks.picker.recent()<CR>", { desc = "Grep Buffers" })
+map("n", "<leader>sr", "<Cmd>lua Snacks.picker.recent()<CR>", { desc = "Recent file" })
+map("n", "<leader>ss", "<Cmd>lua Snacks.picker.grep_buffers()<CR>", { desc = "Grep Buffers" })
 
 -- stylua: ignore start
 map("n", "<C-l>", function() Snacks.words.jump(1, true) end, { desc = "Jump to next word" })

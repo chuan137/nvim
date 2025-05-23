@@ -70,6 +70,9 @@ else
 
         local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
         vim.cmd("au FileType git,diff setlocal " .. diff_folds)
+
+        rhs = "<Cmd>lua MiniDiff.toggle_overlay()<CR>"
+        vim.keymap.set("n", "<leader>gv", rhs, { desc = "Git diff o[v]erlay" })
     end)
 
     later(function()
