@@ -23,6 +23,9 @@ M.setup = function()
     })
 
     require("CopilotChat").setup()
+
+    local rhs = "<Cmd>CopilotChatToggle<CR>"
+    vim.keymap.set("n", "<leader>ci", rhs, { desc = "CopilotChat Toggle" })
 end
 
 return M

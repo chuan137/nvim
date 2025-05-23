@@ -40,7 +40,7 @@ M.setup = function()
             vim.b.completion = true
         end
     end)
-    vim.keymap.set("i", "<C-h>", function()
+    vim.keymap.set("i", "<M-i>", function()
         if not copilot.is_visible() then
             require("blink.cmp.completion.windows.menu").close()
             -- vim.b.completion = false
