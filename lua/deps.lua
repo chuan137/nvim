@@ -25,166 +25,95 @@ if vim.fn.exists("g:vscode") ~= 0 then
     now(function()
         -- Vim in VSCode
     end)
-    later(require("mini.ai").setup)
-    later(require("mini.surround").setup)
-else
-    -- Safely execute immediately
-    now(function()
-        require("config.options")
-        require("config.keymaps")
-        require("config.commands")
-    end)
-
-    now(function()
-        add({ source = "catppuccin/nvim", name = "catppuccin" })
-        -- vim.cmd([[ colorscheme catppuccin-latte ]])
-        -- vim.cmd("colorscheme retrobox")
-        vim.cmd("colorscheme randomhue")
-    end)
-
-    -- ================ Mini Plugins ================
-    now(require("mini.icons").setup)
-    now(require("mini.tabline").setup)
-    now(require("mini.statusline").setup)
-
-    -- now(function()
-    --     require("mini.notify").setup()
-    --     vim.notify = require("mini.notify").make_notify()
-    -- end)
 
     later(require("mini.ai").setup)
-    later(require("mini.surround").setup)
     later(require("mini.comment").setup)
-    later(require("mini.pick").setup)
-    later(require("mini.align").setup)
-    later(require("mini.basics").setup)
-    later(require("mini.jump").setup)
-    later(require("mini.pairs").setup)
-    -- later(require("mini.extra").setup)
-
-    later(function()
-        require("mini.diff").setup()
-        require("mini.git").setup()
-
-        local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
-        vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
-
-        local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
-        vim.cmd("au FileType git,diff setlocal " .. diff_folds)
-
-        rhs = "<Cmd>lua MiniDiff.toggle_overlay()<CR>"
-        vim.keymap.set("n", "<leader>gv", rhs, { desc = "Git diff o[v]erlay" })
-    end)
-
-    later(function()
-        local mini_files = require("mini.files")
-        mini_files.setup({
-            mappings = {
-                go_in_plus = "<cr>",
-            },
-        })
-        vim.keymap.set("n", "<leader>e", function()
-            if mini_files.close() then
-                return
-            end
-            mini_files.open(vim.api.nvim_buf_get_name(0))
-        end, { desc = "File explorer" })
-        vim.cmd([[
-            let g:loaded_netrw       = 1
-            let g:loaded_netrwPlugin = 1
-        ]]) -- disable netrw
-    end)
-
-    later(function()
-        require("mini.misc").setup()
-        MiniMisc.setup_auto_root()
-    end)
-
-    -- ================ LSP Config ================
-    now(function()
-        add({
-            source = "williamboman/mason-lspconfig.nvim",
-            depends = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
-        })
-        require("mason").setup()
-        require("mason-lspconfig").setup()
-        require("config.lspconfig")
-    end)
-
-    -- =============== Conform ================
-    later(function()
-        add({
-            source = "stevearc/conform.nvim",
-        })
-        require("conform").setup({
-            formatters_by_ft = {
-                python = { "ruff_fix", "ruff_format" },
-                lua = { "stylua" },
-                json = { "jq" },
-                yaml = { "prettier" },
-                html = { "prettier" },
-                css = { "prettier" },
-                javascript = { "prettier" },
-                typescript = { "prettier" },
-            },
-        })
-        vim.keymap.set({ "n", "v" }, "<leader>f", function()
-            require("conform").format({ async = true, lsp_format = "fallback" })
-        end, { desc = "Code Format" })
-    end)
-
-    -- ================ Treesitter ================
-    later(function()
-        add({
-            source = "nvim-treesitter/nvim-treesitter",
-            checkout = "master",
-            monitor = "main",
-            hooks = {
-                post_checkout = function()
-                    vim.cmd("TSUpdate")
-                end,
-            },
-        })
-        require("nvim-treesitter.configs").setup({
-            ensure_installed = { "lua", "vimdoc", "go", "python" },
-            highlight = { enable = true },
-        })
-        -- use <C-L> in insert mode to jump to end of current treesitter node
-        -- https://github.com/santhosh-tekuri/dotfiles/blob/master/nvim/lua/insjump.lua
-        vim.keymap.set("i", "<C-L>", function()
-            local node = vim.treesitter.get_node()
-            if node ~= nil then
-                local row, col = node:end_()
-                pcall(vim.api.nvim_win_set_cursor, 0, { row + 1, col })
-            end
-        end, { desc = "insjump" })
-    end)
-
-    later(require("plugins.snacks").setup)
-    later(require("plugins.blink").setup)
-    later(require("plugins.copilot").setup)
-    later(require("plugins.copilotchat").setup)
-    later(require("plugins.git").setup)
-    later(require("plugins.which-key").setup)
-    later(require("plugins.trouble").setup)
-
-    -- ================ Lazy Loading ================
-    -- Alternative load plugins with 'lz.n'
-    now(function()
-        add({ source = "nvim-neorocks/lz.n" })
-        require("lz.n").load("plugins/lzn")
-    end)
-
-    -- Example file in plugins/lzn
-    -- return {
-    --     "which-key.nvim",
-    --     before = function()
-    --         deps.add({
-    --             source = "folke/which-key.nvim",
-    --         })
-    --     end,
-    --     after = function()
-    --         require("which-key").setup()
-    --     end,
-    -- }
+    later(require("mini.surround").setup)
+    return
 end
+
+vim.cmd("colorscheme retrobox")
+vim.cmd([[
+        let g:loaded_netrw       = 1
+        let g:loaded_netrwPlugin = 1
+    ]]) -- disable netrw
+
+now(function()
+    require("config.options")
+    require("config.keymaps")
+    require("config.commands")
+end)
+
+now(require("plugins.lsp"))
+later(require("plugins.conform"))
+later(require("plugins.treesitter"))
+
+now(require("mini.statusline").setup)
+now(require("mini.icons").setup)
+now(require("mini.tabline").setup)
+-- now(require("plugins.notify"))
+
+later(require("mini.ai").setup)
+later(require("mini.comment").setup)
+later(require("mini.surround").setup)
+later(require("plugins.minifiles"))
+
+later(function()
+    require("mini.misc").setup()
+    MiniMisc.setup_auto_root()
+end)
+
+-- ======= Continue for more =======================================
+
+if vim.g.minimal then
+    return
+end
+
+now(function()
+    -- add({ source = "catppuccin/nvim", name = "catppuccin" })
+    -- vim.cmd([[ colorscheme catppuccin-latte ]])
+    -- vim.cmd("colorscheme retrobox")
+    vim.cmd("colorscheme randomhue")
+end)
+
+-- ================ Mini Plugins ================
+
+later(require("mini.align").setup)
+later(require("mini.basics").setup)
+later(require("mini.jump").setup)
+later(require("mini.pairs").setup)
+-- later(require("mini.pick").setup)
+-- later(require("mini.extra").setup)
+
+later(function()
+end)
+
+-- =============== Conform ================
+
+later(require("plugins.blink"))
+later(require("plugins.copilot"))
+later(require("plugins.copilotchat"))
+later(require("plugins.git"))
+later(require("plugins.snacks"))
+later(require("plugins.trouble"))
+later(require("plugins.which-key"))
+
+-- ================ Lazy Loading ================
+-- Alternative load plugins with 'lz.n'
+now(function()
+    add({ source = "nvim-neorocks/lz.n" })
+    require("lz.n").load("plugins/lzn")
+end)
+
+-- Example file in plugins/lzn
+-- return {
+--     "which-key.nvim",
+--     before = function()
+--         deps.add({
+--             source = "folke/which-key.nvim",
+--         })
+--     end,
+--     after = function()
+--         require("which-key").setup()
+--     end,
+-- }

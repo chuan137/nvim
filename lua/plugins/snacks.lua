@@ -1,8 +1,5 @@
-local M = {}
-local add = MiniDeps.add
-
-M.setup = function()
-    add({ source = "folke/snacks.nvim" })
+return function()
+    MiniDeps.add({ source = "folke/snacks.nvim" })
     require("snacks").setup({
         indent = { enabled = true },
         input = { enabled = true },
@@ -19,5 +16,3 @@ M.setup = function()
     })
     require("config.pickers")
 end
-
-return M

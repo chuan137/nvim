@@ -1,6 +1,4 @@
-local M = {}
-
-M.setup = function()
+return function()
     MiniDeps.add({
         source = "CopilotC-Nvim/CopilotChat.nvim",
         depends = {
@@ -27,5 +25,3 @@ M.setup = function()
     local rhs = "<Cmd>CopilotChatToggle<CR>"
     vim.keymap.set("n", "<leader>ci", rhs, { desc = "CopilotChat Toggle" })
 end
-
-return M

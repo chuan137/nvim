@@ -1,7 +1,6 @@
-local M = {}
 local add = MiniDeps.add
 
-M.setup = function()
+return function()
     add({ source = "zbirenbaum/copilot.lua" })
     require("copilot").setup({
         panel = {
@@ -51,5 +50,3 @@ M.setup = function()
         end
     end)
 end
-
-return M

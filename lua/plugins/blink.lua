@@ -1,6 +1,4 @@
-local M = {}
-
-M.setup = function()
+return function()
     MiniDeps.add({
         source = "saghen/blink.cmp",
         depends = { "rafamadriz/friendly-snippets" },
@@ -12,6 +10,8 @@ M.setup = function()
         end,
         keymap = {
             preset = "enter",
+            -- activate blink
+
             -- ["<C-y>"] = { "select_and_accept", "fallback" },
             -- ["<C-y>"] = { "select_next", "fallback" },
         },
@@ -35,5 +35,3 @@ M.setup = function()
         }
     )
 end
-
-return M

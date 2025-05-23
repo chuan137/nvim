@@ -1,8 +1,5 @@
-local add = MiniDeps.add
-local M = {}
-
-M.setup = function()
-    add({ source = "folke/trouble.nvim" })
+return function()
+    MiniDeps.add({ source = "folke/trouble.nvim" })
     require("trouble").setup()
 
     local map = function(lhs, rhs, desc)
@@ -16,5 +13,3 @@ M.setup = function()
     -- { "<leader>cs", "<cmd>Trouble symbols toggle<cr>", desc = "Symbols (Trouble)" },
     -- { "<leader>cS", "<cmd>Trouble lsp toggle<cr>", desc = "LSP references/definitions/... (Trouble)" },
 end
-
-return M
