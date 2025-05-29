@@ -32,7 +32,10 @@ if vim.fn.exists("g:vscode") ~= 0 then
     return
 end
 
-vim.cmd("colorscheme retrobox")
+vim.cmd([[
+        set background=light
+        colorscheme randomhue
+    ]])
 vim.cmd([[
         let g:loaded_netrw       = 1
         let g:loaded_netrwPlugin = 1
@@ -72,8 +75,10 @@ end
 now(function()
     -- add({ source = "catppuccin/nvim", name = "catppuccin" })
     -- vim.cmd([[ colorscheme catppuccin-latte ]])
-    -- vim.cmd("colorscheme retrobox")
-    vim.cmd("colorscheme randomhue")
+    vim.cmd([[
+        set background=dark
+        colorscheme retrobox
+        ]])
 end)
 
 -- ================ Mini Plugins ================
