@@ -39,9 +39,9 @@ vim.cmd([[
     ]]) -- disable netrw
 
 now(function()
-    require("config.options")
-    require("config.keymaps")
-    require("config.commands")
+    require("options")
+    require("keymaps")
+    require("autocmds")
 end)
 
 now(require("plugins.lsp"))
