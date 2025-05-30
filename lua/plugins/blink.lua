@@ -2,7 +2,7 @@ return function()
     MiniDeps.add({
         source = "saghen/blink.cmp",
         depends = { "rafamadriz/friendly-snippets" },
-        checkout = "v1.2.0",
+        checkout = "v1.3.0",
     })
     require("blink.cmp").setup({
         enabled = function()
@@ -27,11 +27,8 @@ return function()
             enabled = true,
         },
     })
-    vim.lsp.config(
-        "*",
-        ---@type vim.lsp.Config
-        {
-            capabilities = require("blink.cmp").get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities()),
-        }
-    )
+    -- vim.lsp.config("*", {
+    --     capabilities = require("blink.cmp").get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities()),
+    --     -- capabilities = require("blink.cmp").get_lsp_capabilities(nil, true),
+    -- })
 end
