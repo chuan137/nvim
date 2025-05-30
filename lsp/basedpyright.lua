@@ -5,6 +5,9 @@ return {
             disableOrganizeImports = true,
             analysis = {
                 typeCheckingMode = "standard",
+                inlayHints = {
+                    variableTypes = true,
+                },
             },
         },
         python = {

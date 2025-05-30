@@ -1,1 +1,7 @@
-return {}
+return {
+    settings = {
+        gopls = {
+            semanticTokens = true,
+        },
+    },
+}
