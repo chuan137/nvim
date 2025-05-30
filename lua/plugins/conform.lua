@@ -14,7 +14,7 @@ return function()
             typescript = { "prettier" },
         },
     })
-    vim.keymap.set({ "n", "v" }, "<leader>f", function()
+    vim.keymap.set({ "n", "v" }, "<leader>cf", function()
         require("conform").format({ async = true, lsp_format = "fallback" })
     end, { desc = "Code Format" })
 end

@@ -33,6 +33,9 @@ return function()
     vim.api.nvim_create_autocmd("LspAttach", {
         group = lspgroup,
         callback = function(event)
+            -- get client from event
+            -- local client = vim.lsp.get_client_by_id(event.data.client_id)
+
             -- Helper function for creating LSP keybindings
             local map = function(keys, func, desc, specs)
                 local mode = specs and specs.mode or "n"
