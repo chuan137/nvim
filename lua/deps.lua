@@ -47,19 +47,19 @@ now(function()
     require("autocmds")
 end)
 
-now(require("plugins.lsp"))
-later(require("plugins.conform"))
-later(require("plugins.treesitter"))
-
-now(require("mini.statusline").setup)
 now(require("mini.icons").setup)
-now(require("mini.tabline").setup)
--- now(require("plugins.notify"))
+now(require("mini.statusline").setup)
 
+later(require("mini.basics").setup)
 later(require("mini.ai").setup)
 later(require("mini.comment").setup)
 later(require("mini.surround").setup)
 later(require("plugins.minifiles"))
+
+now(require("plugins.lsp"))
+later(require("plugins.conform"))
+later(require("plugins.snacks"))
+later(require("plugins.blink"))
 
 later(function()
     require("mini.misc").setup()
@@ -73,33 +73,30 @@ if vim.g.minimal then
 end
 
 now(function()
-    -- add({ source = "catppuccin/nvim", name = "catppuccin" })
-    -- vim.cmd([[ colorscheme catppuccin-latte ]])
     vim.cmd([[
         set background=dark
         colorscheme retrobox
         ]])
 end)
 
--- ================ Mini Plugins ================
-
-later(require("mini.align").setup)
-later(require("mini.basics").setup)
-later(require("mini.jump").setup)
-later(require("mini.pairs").setup)
--- later(require("mini.pick").setup)
--- later(require("mini.extra").setup)
-
 later(function()
+    add({ source = "catppuccin/nvim", name = "catppuccin" })
+    -- vim.cmd([[ colorscheme catppuccin-latte ]])
 end)
 
--- =============== Conform ================
+-- now(require("plugins.mininotify"))
+now(require("mini.tabline").setup)
 
-later(require("plugins.blink"))
+-- later(require("mini.extra").setup)
+-- later(require("mini.pick").setup)
+later(require("mini.align").setup)
+later(require("mini.jump").setup)
+later(require("mini.pairs").setup)
 later(require("plugins.copilot"))
 later(require("plugins.copilotchat"))
+later(require("plugins.dap"))
 later(require("plugins.git"))
-later(require("plugins.snacks"))
+later(require("plugins.treesitter"))
 later(require("plugins.trouble"))
 later(require("plugins.which-key"))
 
