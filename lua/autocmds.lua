@@ -36,14 +36,17 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+local copilot_installed, _ = pcall(require, "copilot.suggestion")
 local togle_copilot_suggestion = vim.api.nvim_create_augroup("chuan137/toggle_copilot_suggestion", {})
 vim.api.nvim_create_autocmd("User", {
     group = togle_copilot_suggestion,
     desc = "Dismiss copilot suggestion on blink completion menu open",
     pattern = "BlinkCmpMenuOpen",
     callback = function()
-        require("copilot.suggestion").dismiss()
-        vim.b.copilot_suggestion_hidden = true
+        if copilot_installed then
+            require("copilot.suggestion").dismiss()
+            vim.b.copilot_suggestion_hidden = true
+        end
     end,
 })
 vim.api.nvim_create_autocmd("User", {
