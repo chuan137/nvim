@@ -33,7 +33,7 @@ if vim.fn.exists("g:vscode") ~= 0 then
 end
 
 vim.cmd([[
-        set background=light
+        set background=dark
         colorscheme randomhue
     ]])
 vim.cmd([[
@@ -49,28 +49,27 @@ end)
 
 now(require("mini.icons").setup)
 now(require("mini.statusline").setup)
-
-later(require("mini.basics").setup)
-later(require("mini.ai").setup)
-later(require("mini.comment").setup)
-later(require("mini.surround").setup)
-later(require("plugins.minifiles"))
-
 now(require("plugins.lsp"))
-later(require("plugins.conform"))
-later(require("plugins.snacks"))
+
+later(require("mini.ai").setup)
+later(require("mini.basics").setup)
+later(require("mini.comment").setup)
+later(require("mini.pairs").setup)
 later(require("plugins.blink"))
+later(require("plugins.conform"))
+later(require("plugins.minifiles"))
+later(require("plugins.snacks"))
 
 later(function()
     require("mini.misc").setup()
     MiniMisc.setup_auto_root()
 end)
 
--- ======= Continue for more =======================================
-
 if vim.g.minimal then
     return
 end
+
+-- ======= Continue for more =======================================
 
 now(function()
     vim.cmd([[
@@ -91,7 +90,7 @@ now(require("mini.tabline").setup)
 -- later(require("mini.pick").setup)
 later(require("mini.align").setup)
 later(require("mini.jump").setup)
-later(require("mini.pairs").setup)
+later(require("mini.surround").setup)
 later(require("plugins.copilot"))
 later(require("plugins.copilotchat"))
 later(require("plugins.dap"))
