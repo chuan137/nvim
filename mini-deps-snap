@@ -1,0 +1,22 @@
+return {
+  ["CopilotChat.nvim"] = "16d897fd43d07e3b54478ccdb2f8a16e4df4f45a",
+  ["blink.cmp"] = "54cbaac2064fe6198ec55b636b53cc8c9791ead3",
+  catppuccin = "1bf070129c0b6f77cc23f6a2212dcdc868308c52",
+  ["conform.nvim"] = "6feb2f28f9a9385e401857b21eeac3c1b66dd628",
+  ["copilot.lua"] = "5f726c8e6bbcd7461ee0b870d4e6c8a973b55b64",
+  ["friendly-snippets"] = "572f5660cf05f8cd8834e096d7b4c921ba18e175",
+  ["lz.n"] = "6984e04b8dfdecedd61687271947725bc86f66d5",
+  ["mason-lspconfig.nvim"] = "67da97f8c2fd12d05427bb485ce07ee6418e0a51",
+  ["mason.nvim"] = "8024d64e1330b86044fed4c8494ef3dcd483a67c",
+  ["mini.nvim"] = "25c8959b3fcf0461271a21dd204e6f3cd1cd7806",
+  ["nvim-dap"] = "b0f983507e3702f073bfe1516846e58b56d4e42f",
+  ["nvim-dap-go"] = "8763ced35b19c8dc526e04a70ab07c34e11ad064",
+  ["nvim-dap-view"] = "186c9580895f8552a6e0eff8087e643a824dac2d",
+  ["nvim-lspconfig"] = "b8e7957bde4cbb3cb25a13a62548f7c273b026e9",
+  ["nvim-treesitter"] = "42fc28ba918343ebfd5565147a42a26580579482",
+  ["plenary.nvim"] = "857c5ac632080dba10aae49dba902ce3abf91b35",
+  ["snacks.nvim"] = "bc0630e43be5699bb94dadc302c0d21615421d93",
+  ["trouble.nvim"] = "85bedb7eb7fa331a2ccbecb9202d8abba64d37b3",
+  ["vim-fugitive"] = "4a745ea72fa93bb15dd077109afbb3d1809383f2",
+  ["which-key.nvim"] = "370ec46f710e058c9c1646273e6b225acf47cbed"
+}
