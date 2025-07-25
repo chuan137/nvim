@@ -1,7 +1,7 @@
 local function fugitive()
     MiniDeps.add({ source = "tpope/vim-fugitive" })
     vim.keymap.set("n", "<leader>gc", "<Cmd>Git commit<CR>", { desc = "Git Commit" })
-    vim.keymap.set("n", "<leader>gb", "<Cmd>Git blame<CR>", { desc = "Git blame" })
+    vim.keymap.set("n", "gb", "<Cmd>Git blame<CR>", { desc = "Git blame" })
 end
 
 local function mini_diff()
