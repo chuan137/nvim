@@ -1,12 +1,11 @@
 local map = vim.keymap.set
 
 map("n", "Q", "@q")
-map("n", "n", "nzzzv")
-map("n", "N", "Nzzzv")
+-- map("n", "n", "nzzzv")
+-- map("n", "N", "Nzzzv")
 
 map({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 map("n", "<leader>w", "<C-w>")
-map("n", "<leader><Tab>", "<cmd>bnext<cr>")
 
 -- Change colorscheme hue
 map("n", "<leader>ch", "<Cmd>colorscheme randomhue<CR>", { desc = "Colorscheme Random[h]ue" })
@@ -19,8 +18,8 @@ map("n", "<M-j>", ":m .+1<CR>==")
 map("n", "<M-k>", ":m .-2<CR>==")
 
 -- move selected lines up/down
-map("v", "J", ":m '>+1<CR>gv=gv")
-map("v", "K", ":m '<-2<CR>gv=gv")
+map("v", "<M-j>", ":m '>+1<CR>gv=gv")
+map("v", "<M-k>", ":m '<-2<CR>gv=gv")
 
 -- copy paste
 map("n", "<leader>up", "<cmd>set paste!<cr>", { desc = "Toggle Paste" })

@@ -28,18 +28,11 @@ if vim.fn.exists("g:vscode") ~= 0 then
     later(require("mini.ai").setup)
     later(require("mini.surround").setup)
 else
-    -- Safely execute immediately
-    now(function()
-        require("config.options")
-        require("config.keymaps")
-        require("config.commands")
-
-        vim.cmd("set undodir=~/.cache/vim/undodir")
-        vim.cmd([[
-            let g:loaded_netrw       = 1
-            let g:loaded_netrwPlugin = 1
-        ]]) -- disable netrw
-    end)
+    vim.cmd("set undodir=~/.cache/vim/undodir")
+    vim.cmd([[
+        let g:loaded_netrw       = 1
+        let g:loaded_netrwPlugin = 1
+    ]]) -- disable netrw
 
     now(function()
         add({ source = "catppuccin/nvim", name = "catppuccin" })
@@ -47,20 +40,19 @@ else
         -- vim.cmd("colorscheme retrobox")
     end)
 
-    -- ================ Mini Plugins ================
-    now(require("mini.icons").setup)
-    now(require("mini.tabline").setup)
-    now(require("mini.statusline").setup)
-
     now(function()
-        require("mini.notify").setup()
-        vim.notify = require("mini.notify").make_notify()
+        require("options")
+        require("keymaps")
+        require("autocmds")
     end)
+
+    now(require("mini.icons").setup)
+    -- now(require("mini.tabline").setup)
+    now(require("mini.statusline").setup)
 
     later(require("mini.ai").setup)
     later(require("mini.surround").setup)
     later(require("mini.comment").setup)
-    later(require("mini.pick").setup)
     later(require("mini.align").setup)
     later(require("mini.basics").setup)
     later(require("mini.jump").setup)
@@ -68,13 +60,8 @@ else
     later(require("mini.extra").setup)
 
     later(function()
-        require("mini.git").setup()
-
-        local rhs = "<Cmd>lua MiniGit.show_at_cursor()<CR>"
-        vim.keymap.set({ "n", "x" }, "<leader>gs", rhs, { desc = "Git Show" })
-
-        local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
-        vim.cmd("au FileType git,diff setlocal " .. diff_folds)
+        require("mini.notify").setup()
+        vim.notify = require("mini.notify").make_notify()
     end)
 
     later(function()
@@ -92,67 +79,26 @@ else
         end, { desc = "File explorer" })
     end)
 
-    -- ================ LSP Config ================
-    now(function()
-        add({
-            source = "williamboman/mason-lspconfig.nvim",
-            depends = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
-        })
-        require("mason").setup()
-        require("mason-lspconfig").setup()
-        require("config.lspconfig")
-        -- https://gitlab.com/thomas3081/nvim/-/blob/master/lua/config/lspconfig.lua?ref_type=heads
-        vim.lsp.enable("gopls")
-        vim.lsp.enable("basedpyright")
-        vim.lsp.enable("ruff_lsp")
-        vim.lsp.enable("lua_ls")
-    end)
+    now(require("plugins.lsp"))
+    now(require("plugins.dropbar"))
+    now(require("plugins.snacks"))
 
-    -- =============== Conform ================
+    later(require("plugins.conform"))
+    later(require("plugins.treesitter"))
+    later(require("plugins.blink"))
+    later(require("plugins.which-key"))
+    later(require("plugins.copilot"))
+    later(require("plugins.git"))
+
     later(function()
-        add({
-            source = "stevearc/conform.nvim",
-        })
-        require("conform").setup({
-            formatters_by_ft = {
-                python = { "ruff" },
-                lua = { "stylua" },
-                json = { "jq" },
-                yaml = { "prettier" },
-                html = { "prettier" },
-                css = { "prettier" },
-                javascript = { "prettier" },
-                typescript = { "prettier" },
-            },
-        })
-        vim.keymap.set({ "n", "v" }, "<leader>cf", function()
-            require("conform").format({ async = true, lsp_format = "fallback" })
-        end, { desc = "Code Format" })
+        add("christoomey/vim-tmux-navigator")
+        vim.keymap.set("n", "<c-h>", "<cmd>TmuxNavigateLeft<cr>")
+        vim.keymap.set("n", "<c-j>", "<cmd>TmuxNavigateDown<cr>")
+        vim.keymap.set("n", "<c-k>", "<cmd>TmuxNavigateUp<cr>")
+        vim.keymap.set("n", "<c-l>", "<cmd>TmuxNavigateRight<cr>")
+        vim.keymap.set("n", "<c-\\>", "<cmd>TmuxNavigatePrevious<cr>")
     end)
 
-    -- ================ Treesitter ================
-    later(function()
-        add({
-            source = "nvim-treesitter/nvim-treesitter",
-            checkout = "master",
-            monitor = "main",
-            hooks = {
-                post_checkout = function()
-                    vim.cmd("TSUpdate")
-                end,
-            },
-        })
-        require("nvim-treesitter.configs").setup({
-            ensure_installed = { "lua", "vimdoc", "go", "python" },
-            highlight = { enable = true },
-        })
-    end)
-
-    later(require("plugins.snacks").setup)
-    later(require("plugins.blink").setup)
-    later(require("plugins.which-key").setup)
-    later(require("plugins.copilot").setup)
-    later(require("plugins.git").setup)
     -- later(function()
     --     add({ source = "folke/trouble.nvim" })
     --     require("trouble").setup()
