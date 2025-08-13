@@ -13,7 +13,7 @@ vim.opt.undofile = true
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.termguicolors = true
-vim.opt.scrolloff = 8
+vim.opt.scrolloff = 6
 vim.opt.signcolumn = "yes"
 vim.opt.laststatus = 3
 vim.opt.isfname:append("@-@")
