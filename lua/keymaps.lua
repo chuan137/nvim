@@ -4,8 +4,15 @@ map("n", "Q", "@q")
 -- map("n", "n", "nzzzv")
 -- map("n", "N", "Nzzzv")
 
+map("i", "jk", "<Esc>", { desc = "Exit Insert Mode with [jk]", silent = true, noremap = true })
+
 map({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
+
+-- Window management
 map("n", "<leader>w", "<C-w>")
+
+-- Buffer management
+map("n", "<leader><backspace>", "<Cmd>bd<CR>", { desc = "Close Buffer" })
 
 -- Change colorscheme hue
 map("n", "<leader>ch", "<Cmd>colorscheme randomhue<CR>", { desc = "Colorscheme Random[h]ue" })
