@@ -7,12 +7,24 @@ return function()
         quickfile = { enabled = true },
         scope = { enabled = true },
         words = { enabled = true },
-        -- statuscolumn = { enabled = true },
+        terminal = { enabled = true },
+        statuscolumn = { enabled = true },
         -- notifier = { enabled = true },
         -- bigfile = { enabled = true },
         -- dashboard = { enabled = true },
         -- explorer = { enabled = true },
         -- scroll = { enabled = true },
+
+        gitbrowse = {
+            url_patterns = {
+                ["github%.corp"] = {
+                    branch = "/tree/{branch}",
+                    file = "/blob/{branch}/{file}#L{line_start}-L{line_end}",
+                    permalink = "/blob/{commit}/{file}#L{line_start}-L{line_end}",
+                    commit = "/commit/{commit}",
+                },
+            },
+        },
     })
 
     -- toggle options
@@ -39,14 +51,6 @@ return function()
         Snacks.toggle.inlay_hints():map("<leader>uh")
     end
 
-    -- key maps
-    local map = vim.keymap.set
-
-    if vim.fn.executable("lazygit") == 1 then
-        -- stylua: ignore start
-        map("n", "<leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
-    end
-
     local yank_git_url = function()
         Snacks.gitbrowse({
             open = function(url)
@@ -56,26 +60,49 @@ return function()
         })
     end
 
-    map("n", "<leader>gl", "<Cmd>lua Snacks.picker.git_log_file()<CR>", { desc = "Git File Logs" })
-    map("n", "<leader>gL", "<Cmd>lua Snacks.picker.git_log_line()<CR>", { desc = "Git Log Line" })
-    map("n", "<leader>gh", "<Cmd>lua Snacks.picker.git_log()<CR>", { desc = "Git Log" })
-    map({ "n", "x" }, "<leader>go", "<Cmd>lua Snacks.gitbrowse()<CR>", { desc = "Git Browse (open)" })
-    map({ "n", "x" }, "<leader>gY", yank_git_url, { desc = "Git Browse (copy)" })
+    local keys = {
+        -- stylua: ignore start
+        --  top pickers 
+        { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
+        { "<leader><cr>", function() Snacks.picker.resume() end, desc = "Resume Picker" },
+        { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
+        { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
+        { "<leader>?", function() Snacks.picker.grep({cwd = vim.fn.expand('%:p:h')}) end,  desc = "Grep Cwd" },
+        { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
+        { "<leader>o", function() Snacks.picker.recent() end, desc = "Recent" },
+        { "<leader>k", function() Snacks.picker.grep_word() end, desc = "Grep Word", mode = { "n", "x" } },
+        { "<leader>K", function() Snacks.picker.grep_word({cwd = vim.fn.expand('%:p:h')}) end, desc = "Grep Word Cwd" },
+        -- { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
+        -- { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+        -- find
+        { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
+        { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+        { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+        { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
+        -- { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
+        { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
+        -- Grep
+        { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
+        { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
+        { "<leader>sg", function() Snacks.picker.grep() end, desc = "Grep" },
+        { "<leader>sw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
+        -- git
+        { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
+        { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
+        { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
+        { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
+        { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
+        { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },
+        { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
+        { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit (cwd)" },
+        { "<leader>go", function() Snacks.gitbrowse() end, desc = "Git Browse (open)" },
+        { "<leader>gy", function() yank_git_url() end, desc = "Git Browse (copy)",  mode = {"n", "x" } },
+        -- others
+        { "<leader><backspace>", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
+        { "<c-_>", function() Snacks.terminal() end, desc = "Toggle Terminal", mode = {"n", "t"} },
+        { "]]", function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
+        { "[[", function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
+    }
 
-    map("n", "<leader>?", "<Cmd>lua Snacks.picker.grep({cwd = vim.fn.expand('%:p:h')})<CR>", { desc = "Grep Cwd" })
-    map("n", "<leader>/", "<Cmd>lua Snacks.picker.grep()<CR>", { desc = "Grep" })
-    map("n", "<leader>o", "<Cmd>lua Snacks.picker.recent()<CR>", { desc = "Recent file" })
-    map("n", "<leader>u", "<Cmd>lua Snacks.picker.buffers()<CR>", { desc = "Buffers" })
-
-    map("n", "<leader><cr>", "<Cmd>lua Snacks.picker.resume()<CR>", { desc = "Resume Picker" })
-    map("n", "<leader><space>", "<Cmd>lua Snacks.picker.git_files()<CR>", { desc = "Git Files" })
-    map("n", "<leader>ff", "<Cmd>lua Snacks.picker.files()<CR>", { desc = "Files" })
-    map("n", "<leader>fj", "<Cmd>lua Snacks.picker.grep_word()<CR>", { desc = "Grep Word" })
-    map("n", "<leader>fk", "<Cmd>lua Snacks.picker.grep_word({cwd = vim.fn.expand('%:p:h')})<CR>", { desc = "Grep Word Cwd" })
-    map("n", "<leader>f/", "<Cmd>lua Snacks.picker.grep_buffers()<CR>", { desc = "Grep Buffers" })
-
-    -- stylua: ignore start
-    map("n", "<C-l>", function() Snacks.words.jump(1, true) end, { desc = "Jump to next word" })
-    map("n", "<C-h>", function() Snacks.words.jump(-1, true) end, { desc = "Jump to next word" })
-    -- stylua: ignore end
+    require("utils").register_keys(keys)
 end
