@@ -1,14 +1,18 @@
 return {
     settings = {
         basedpyright = {
-            -- Using Ruff's import organizer
-            disableOrganizeImports = true,
             analysis = {
-                typeCheckingMode = "standard",
+                diagnosticMode = "openFilesOnly",
+                diagnosticSeverityOverrides = {
+                    reportUnusedImport = "none",
+                },
                 inlayHints = {
+                    callArgumentNames = true,
                     variableTypes = true,
                 },
+                typeCheckingMode = "standard",
             },
+            disableOrganizeImports = true,
         },
         python = {
             analysis = {

@@ -36,14 +36,12 @@ return function()
             -- get client from event
             -- local client = vim.lsp.get_client_by_id(event.data.client_id)
 
-            -- Helper function for creating LSP keybindings
             local map = function(keys, func, desc, specs)
                 local mode = specs and specs.mode or "n"
                 local nowait = specs and specs.nowait == true or false
                 vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "[LSP] " .. desc, nowait = nowait })
             end
 
-            -- settings for the LSP framework
             map("K", function()
                 vim.lsp.buf.hover({ border = "rounded" })
             end, "LSP Hover with rounded look")
