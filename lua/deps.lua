@@ -46,10 +46,9 @@ else
         require("autocmds")
     end)
 
+    -- Load and configure `mini.*` plugins
     now(require("mini.icons").setup)
-    -- now(require("mini.tabline").setup)
     now(require("mini.statusline").setup)
-
     later(require("mini.ai").setup)
     later(require("mini.surround").setup)
     later(require("mini.comment").setup)
@@ -79,49 +78,47 @@ else
         end, { desc = "File explorer" })
     end)
 
-    now(require("plugins.lsp"))
-    now(require("plugins.dropbar"))
-    now(require("plugins.snacks"))
+    -- Load plugins in lua/plugins/*.lua, except files starting with "_"
+    -- Plugins listed in `plugin_immediate` are loaded during startup
+    local plugins = vim.fn.globpath(vim.fn.stdpath("config") .. "/lua/plugins", "*.lua", false, true)
 
-    later(require("plugins.conform"))
-    later(require("plugins.treesitter"))
-    later(require("plugins.blink"))
-    later(require("plugins.which-key"))
-    later(require("plugins.copilot"))
-    later(require("plugins.git"))
+    local plugin_immediate = {
+        "lsp",
+        "snacks",
+        "copilot",
+        -- "blink",
+    }
 
-    later(function()
-        add("christoomey/vim-tmux-navigator")
-        vim.keymap.set("n", "<c-h>", "<cmd>TmuxNavigateLeft<cr>")
-        vim.keymap.set("n", "<c-j>", "<cmd>TmuxNavigateDown<cr>")
-        vim.keymap.set("n", "<c-k>", "<cmd>TmuxNavigateUp<cr>")
-        vim.keymap.set("n", "<c-l>", "<cmd>TmuxNavigateRight<cr>")
-        vim.keymap.set("n", "<c-\\>", "<cmd>TmuxNavigatePrevious<cr>")
-    end)
+    for _, plugin in ipairs(plugins) do
+        local plugin_name = plugin:match("plugins/(.+)%.lua$")
+        if plugin_name then
+            if plugin_name:sub(1, 1) == "_" then
+                goto continue
+            end
+            if vim.tbl_contains(plugin_immediate, plugin_name) then
+                now(require("plugins." .. plugin_name))
+            else
+                later(require("plugins." .. plugin_name))
+            end
+        end
+        ::continue::
+    end
 
-    -- later(function()
-    --     add({ source = "folke/trouble.nvim" })
-    --     require("trouble").setup()
-    -- end)
-
-    -- ================ Lazy Loading ================
-    -- Alternative load plugins with 'lz.n'
-
+    -- Alternative lazy load plugins with 'lz.n'
+    -- Example file in plugins/lzn
+    --   return {
+    --       "which-key.nvim",
+    --       before = function()
+    --           MiniDeps.add({
+    --               source = "folke/which-key.nvim",
+    --           })
+    --       end,
+    --       after = function()
+    --           require("which-key").setup()
+    --       end,
+    --   }
     now(function()
         add({ source = "nvim-neorocks/lz.n" })
         require("lz.n").load("plugins/lzn")
     end)
-    --
-    -- Example file in plugins/lzn
-    -- return {
-    --     "which-key.nvim",
-    --     before = function()
-    --         deps.add({
-    --             source = "folke/which-key.nvim",
-    --         })
-    --     end,
-    --     after = function()
-    --         require("which-key").setup()
-    --     end,
-    -- }
 end
