@@ -46,7 +46,10 @@ else
         require("autocmds")
     end)
 
+    -- ///////////////////////////////////////////////////////////////////////
+
     -- Load and configure `mini.*` plugins
+
     now(require("mini.icons").setup)
     now(require("mini.statusline").setup)
     later(require("mini.ai").setup)
@@ -78,34 +81,60 @@ else
         end, { desc = "File explorer" })
     end)
 
+    -- ///////////////////////////////////////////////////////////////////////
+
     -- Load plugins in lua/plugins/*.lua, except files starting with "_"
     -- Plugins listed in `plugin_immediate` are loaded during startup
+
     local plugins = vim.fn.globpath(vim.fn.stdpath("config") .. "/lua/plugins", "*.lua", false, true)
 
     local plugin_immediate = {
         "lsp",
         "snacks",
         "copilot",
+        "project",
         -- "blink",
     }
+
+    local load_plugin = function(loader, plugin_name)
+        -- If the plugin file returns a table with `setup` function, call it
+        -- Otherwise, call the returned value directly
+        local plugin = require("plugins." .. plugin_name)
+        if type(plugin) == "table" and type(plugin.setup) == "function" then
+            loader(plugin.setup)
+        else
+            loader(plugin)
+        end
+    end
 
     for _, plugin in ipairs(plugins) do
         local plugin_name = plugin:match("plugins/(.+)%.lua$")
         if plugin_name then
+            -- Skip files starting with "_"
             if plugin_name:sub(1, 1) == "_" then
                 goto continue
             end
+
+            -- Load the plugin now if it's in `plugin_immediate`, otherwise later
             if vim.tbl_contains(plugin_immediate, plugin_name) then
-                now(require("plugins." .. plugin_name))
+                load_plugin(now, plugin_name)
             else
-                later(require("plugins." .. plugin_name))
+                load_plugin(later, plugin_name)
             end
         end
         ::continue::
     end
 
-    -- Alternative lazy load plugins with 'lz.n'
-    -- Example file in plugins/lzn
+    -- ///////////////////////////////////////////////////////////////////////
+
+    -- Alternative lazy load plugins in plugins/lzn/*.lua with 'lz.n'
+
+    now(function()
+        add({ source = "nvim-neorocks/lz.n" })
+        require("lz.n").load("plugins/lzn")
+    end)
+
+    -- Example file in plugins/lzn/which_key.lua:
     --   return {
     --       "which-key.nvim",
     --       before = function()
@@ -117,8 +146,4 @@ else
     --           require("which-key").setup()
     --       end,
     --   }
-    now(function()
-        add({ source = "nvim-neorocks/lz.n" })
-        require("lz.n").load("plugins/lzn")
-    end)
 end
