@@ -1,11 +1,64 @@
 return function()
     MiniDeps.add({
-        source = "williamboman/mason-lspconfig.nvim",
-        depends = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
+        source = "neovim/nvim-lspconfig",
     })
 
-    require("mason").setup()
-    require("mason-lspconfig").setup()
+    -- Function to install LSP servers
+    local function install_lsp_servers()
+        local servers = {
+            gopls = "go install golang.org/x/tools/gopls@latest",
+            basedpyright = "npm install -g basedpyright",
+            ruff = "brew install ruff", -- ruff includes built-in LSP server
+            lua_ls = "brew install lua-language-server",
+            yamlls = "npm install -g yaml-language-server",
+            helm_ls = "brew install helm-ls",
+        }
+
+        vim.ui.select(vim.tbl_keys(servers), {
+            prompt = "Select LSP server to install:",
+        }, function(choice)
+            if not choice then
+                return
+            end
+
+            local cmd = servers[choice]
+            vim.notify("Installing " .. choice .. "...", vim.log.levels.INFO)
+
+            vim.fn.jobstart(cmd, {
+                on_exit = function(_, exit_code)
+                    if exit_code == 0 then
+                        vim.notify(choice .. " installed successfully!", vim.log.levels.INFO)
+                    else
+                        vim.notify("Failed to install " .. choice .. " (exit code: " .. exit_code .. ")",
+                            vim.log.levels.ERROR)
+                    end
+                end,
+                on_stdout = function(_, data)
+                    if data then
+                        for _, line in ipairs(data) do
+                            if line ~= "" then
+                                vim.notify(line, vim.log.levels.INFO)
+                            end
+                        end
+                    end
+                end,
+                on_stderr = function(_, data)
+                    if data then
+                        for _, line in ipairs(data) do
+                            if line ~= "" then
+                                vim.notify(line, vim.log.levels.WARN)
+                            end
+                        end
+                    end
+                end,
+            })
+        end)
+    end
+
+    -- Create a user command to install LSP servers
+    vim.api.nvim_create_user_command("LspInstall", install_lsp_servers, {
+        desc = "Install LSP servers manually",
+    })
 
     local capabilities = {
         textDocument = {
@@ -19,7 +72,8 @@ return function()
     -- require("plugins.blink")
     -- vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities(capabilities) })
 
-    -- https://gitlab.com/thomas3081/nvim/-/blob/master/lua/config/lspconfig.lua?ref_type=heads
+    -- Enable LSP servers (must be manually installed)
+    -- Install via :LspInstall command defined above
     vim.lsp.enable("gopls")
     vim.lsp.enable("basedpyright")
     vim.lsp.enable("ruff")
@@ -29,7 +83,7 @@ return function()
 
     -- Ref: https://github.com/theopn/dotfiles/blob/main/nvim/.config/nvim/lua/theovim/lsp.lua
     -- Configuring keymaps and autocmd for LSP buffers
-    local lspgroup = vim.api.nvim_create_augroup("MyLspAttach", { clear = true })
+    local lspgroup = vim.api.nvim_create_augroup("nvim.plugins.lsp", { clear = true })
     vim.api.nvim_create_autocmd("LspAttach", {
         group = lspgroup,
         callback = function(event)
