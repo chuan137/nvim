@@ -14,9 +14,9 @@ return function()
         highlight = { enable = true },
     })
 
-    -- use <C-L> in insert mode to jump to end of current treesitter node
+    -- use <C-o> in insert mode to jump to end of current treesitter node
     -- https://github.com/santhosh-tekuri/dotfiles/blob/master/nvim/lua/insjump.lua
-    vim.keymap.set("i", "<C-L>", function()
+    vim.keymap.set("i", "<C-o>", function()
         local node = vim.treesitter.get_node()
         if node ~= nil then
             local row, col = node:end_()

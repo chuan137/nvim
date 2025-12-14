@@ -65,13 +65,7 @@ return function()
         --  top pickers 
         { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
         { "<leader><cr>", function() Snacks.picker.resume() end, desc = "Resume Picker" },
-        { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
         { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
-        { "<leader>?", function() Snacks.picker.grep({cwd = vim.fn.expand('%:p:h')}) end,  desc = "Grep Cwd" },
-        { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
-        { "<leader>o", function() Snacks.picker.recent() end, desc = "Recent" },
-        { "<leader>k", function() Snacks.picker.grep_word() end, desc = "Grep Word", mode = { "n", "x" } },
-        { "<leader>K", function() Snacks.picker.grep_word({cwd = vim.fn.expand('%:p:h')}) end, desc = "Grep Word Cwd" },
         -- { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
         -- { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
         -- find
@@ -79,15 +73,18 @@ return function()
         { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
         { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
         { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
-        -- { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
+        { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
         { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
+        { "<leader>f<space>", function() Snacks.picker.grep_word({cwd = require("plugins.project").get_current_project_path()}) end, desc = "Grep Word", mode = { "n", "x" } },
+        { "<leader>fw", function() Snacks.picker.grep_word({cwd = vim.fn.expand('%:p:h')}) end, desc = "Grep Word (Cwd)", mode= { "n", "x" } },
+        { "<leader>f:", function() Snacks.picker.command_history() end, desc = "Command History" },
         -- Grep
         { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
         { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
-        { "<leader>sg", function() Snacks.picker.grep() end, desc = "Grep" },
+        { "<leader>sg", function() Snacks.picker.grep({cwd = vim.fn.expand('%:p:h')}) end,  desc = "Grep Cwd" },
         { "<leader>sw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
         -- git
-        { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
+        { "<leader>gB", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
         { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
         { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
@@ -98,11 +95,14 @@ return function()
         { "<leader>go", function() Snacks.gitbrowse() end, desc = "Git Browse (open)" },
         { "<leader>gy", function() yank_git_url() end, desc = "Git Browse (copy)",  mode = {"n", "x" } },
         -- others
-        { "<leader><backspace>", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
+        -- { "<leader><backspace>", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
         { "<c-_>", function() Snacks.terminal() end, desc = "Toggle Terminal", mode = {"n", "t"} },
         { "]]", function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
         { "[[", function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
     }
 
     require("utils").register_keys(keys)
+
+    MiniDeps.add({ source = "ibhagwan/fzf-lua"})
+    require("fzf-lua").setup({})
 end

@@ -10,7 +10,7 @@ return function()
                 -- "make tiktoken",
                 local cmd = { "make", "tiktoken" }
                 local cwd = vim.fn.stdpath("data") .. "/site/pack/deps/opt/CopilotChat.nvim"
-                vim.notify("make tiktoken in " .. cwd, vim.log.levels.INFO)
+                -- vim.notify("make tiktoken in " .. cwd, vim.log.levels.INFO)
                 vim.system(cmd, { cwd = cwd }, function(o)
                     if o.code > 0 then
                         vim.notify("CopilotChat.nvim: failed to build: " .. o.stderr, vim.log.levels.ERROR)

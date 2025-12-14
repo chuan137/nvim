@@ -3,28 +3,26 @@ local add = MiniDeps.add
 return function()
     add({ source = "zbirenbaum/copilot.lua" })
     require("copilot").setup({
-        panel = {
-            enabled = false,
-        },
+        panel = { enabled = false },
         suggestion = {
-            enabled = true,
-            auto_trigger = false,
+            auto_trigger = true,
+            hide_during_completion = true,
             debounce = 75,
             keymap = {
-                -- accept = "<Tab>",
+                accept = "<C-l>",
                 accept_word = "<M-w>",
-                accept_line = "<M-e>",
-                dismiss = false,
+                accept_line = "<M-l>",
                 next = "<M-]>",
-                prev = false,
+                prev = "<M-[>",
+                dismiss = "<C-/>",
             },
         },
         filetypes = {
             yaml = true,
             markdown = true,
-            help = true,
+            help = false,
             gitcommit = true,
-            gitrebase = true,
+            gitrebase = false,
             hgcommit = true,
             svn = true,
             cvs = true,
@@ -32,21 +30,32 @@ return function()
         },
         server_opts_overrides = {},
     })
-    local copilot = require("copilot.suggestion")
-    vim.keymap.set("i", "<C-e>", function()
-        if copilot.is_visible() then
-            copilot.dismiss()
-            vim.b.completion = true
-        end
-    end)
-    vim.keymap.set("i", "<M-i>", function()
-        if not copilot.is_visible() then
-            require("blink.cmp.completion.windows.menu").close()
-            -- vim.b.completion = false
-            copilot.next()
-        else
-            -- vim.b.completion = true
-            copilot.accept()
-        end
-    end)
+
+    -- local copilot = require("copilot.suggestion")
+    --
+    -- vim.keymap.set("i", "<C-e>", function()
+    --     if copilot.is_visible() then
+    --         return
+    --         -- copilot.accept()
+    --     else
+    --         vim.b.copilot_suggestion_hidden = false
+    --         copilot.next()
+    --     end
+    -- end)
+    --
+    -- vim.api.nvim_create_autocmd("User", {
+    --     pattern = "BlinkCmpMenuOpen",
+    --     callback = function()
+    --         vim.b.copilot_suggestion_hidden = true
+    --         copilot.dismiss()
+    --     end,
+    -- })
+    --
+    -- vim.api.nvim_create_autocmd("User", {
+    --     pattern = "BlinkCmpMenuClose",
+    --     callback = function()
+    --         vim.b.copilot_suggestion_hidden = false
+    --         copilot.next()
+    --     end,
+    -- })
 end

@@ -16,7 +16,7 @@ return function()
         { "<leader>Y", hidden = true },
         { "<leader>w", hidden = true },
         { "<leader>/", icon = "" },
-        { "<leader>?", icon = "" },
-        { "<leader><cr>", icon = MiniIcons.get('os', 'macos') },
+        { "<leader>,", icon = "󰈔" },
+        { "<leader><cr>", icon = MiniIcons.get("os", "macos") },
     })
 end
