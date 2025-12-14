@@ -106,7 +106,4 @@ return function()
     }
 
     require("utils").register_keys(keys)
-
-    MiniDeps.add({ source = "ibhagwan/fzf-lua" })
-    require("fzf-lua").setup({})
 end
