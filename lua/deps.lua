@@ -84,21 +84,19 @@ else
     -- ///////////////////////////////////////////////////////////////////////
 
     -- Load plugins in lua/plugins/*.lua, except files starting with "_"
-    -- Plugins listed in `plugin_immediate` are loaded during startup
-
-    local plugins = vim.fn.globpath(vim.fn.stdpath("config") .. "/lua/plugins", "*.lua", false, true)
+    -- Plugins listed in `plugin_immediate` are loaded during startup with "now" in order
+    -- All other plugins are loaded with "later"
 
     local plugin_immediate = {
+        "blink",
         "lsp",
         "snacks",
         "copilot",
         "project",
-        -- "blink",
     }
 
     local load_plugin = function(loader, plugin_name)
-        -- If the plugin file returns a table with `setup` function, call it
-        -- Otherwise, call the returned value directly
+        -- Call `plugin.setup()` if available
         local plugin = require("plugins." .. plugin_name)
         if type(plugin) == "table" and type(plugin.setup) == "function" then
             loader(plugin.setup)
@@ -107,21 +105,19 @@ else
         end
     end
 
+    -- Load immediate plugins first, in the defined order
+    for _, plugin_name in ipairs(plugin_immediate) do
+        load_plugin(now, plugin_name)
+    end
+
+    -- Load all other plugins later (Skip files starting with "_")
+    local plugins = vim.fn.globpath(vim.fn.stdpath("config") .. "/lua/plugins", "*.lua", false, true)
     for _, plugin in ipairs(plugins) do
         local plugin_name = plugin:match("plugins/(.+)%.lua$")
-        if plugin_name then
-            -- Skip files starting with "_"
-            if plugin_name:sub(1, 1) == "_" then
-                goto continue
-            end
-
-            -- Load the plugin now if it's in `plugin_immediate`, otherwise later
-            if vim.tbl_contains(plugin_immediate, plugin_name) then
-                load_plugin(now, plugin_name)
-            else
-                load_plugin(later, plugin_name)
-            end
+        if plugin_name:sub(1, 1) == "_" or vim.tbl_contains(plugin_immediate, plugin_name) then
+            goto continue
         end
+        load_plugin(later, plugin_name)
         ::continue::
     end
 

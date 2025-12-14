@@ -67,10 +67,8 @@ return function()
             },
         },
     }
-    vim.lsp.config("*", { capabilities = capabilities })
-
-    -- require("plugins.blink")
-    -- vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities(capabilities) })
+    -- vim.lsp.config("*", { capabilities = capabilities })
+    vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities(capabilities) })
 
     -- Enable LSP servers (must be manually installed)
     -- Install via :LspInstall command defined above
