@@ -12,6 +12,7 @@ return function()
             lua_ls = "brew install lua-language-server",
             yamlls = "npm install -g yaml-language-server",
             helm_ls = "brew install helm-ls",
+            stylua = "brew install stylua",
         }
 
         vim.ui.select(vim.tbl_keys(servers), {

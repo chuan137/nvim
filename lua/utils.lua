@@ -28,11 +28,13 @@ M.register_keys = function(keys)
         opts.silent = key.silent ~= false
         opts.noremap = key.noremap ~= false
 
-        if type(rhs) == "function" then
-            vim.keymap.set(mode, lhs, rhs, opts)
-        else
-            vim.keymap.set(mode, lhs, "<Cmd>" .. rhs .. "<CR>", opts)
-        end
+        vim.keymap.set(mode, lhs, rhs, opts)
+
+        -- if type(rhs) == "function" then
+        --     vim.keymap.set(mode, lhs, rhs, opts)
+        -- else
+        --     vim.keymap.set(mode, lhs, "<Cmd>" .. rhs .. "<CR>", opts)
+        -- end
     end
 end
 
