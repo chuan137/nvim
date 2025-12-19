@@ -83,43 +83,70 @@ else
 
     -- ///////////////////////////////////////////////////////////////////////
 
-    -- Load plugins in lua/plugins/*.lua, except files starting with "_"
-    -- Plugins listed in `plugin_immediate` are loaded during startup with "now" in order
-    -- All other plugins are loaded with "later"
+    -- Plugin loading behavior:
+    --   • Loads plugins from lua/plugins/*.lua
+    --   • Ignores files starting with "_"
+    --   • Plugins in `plugin_immediate` load immediately at startup ("now"), in order
+    --   • All other plugins load lazily ("later")
+    --   • Uses a compiled plugins cache for faster startup
 
     local plugin_immediate = {
         -- "blink",
         "lsp",
         "snacks",
-        "copilot",
+        -- "copilot",
         "project",
     }
 
+    -- Try to load compiled plugins
+    local compiler = require("plugins-compiler")
+    local compiled_plugins = compiler.load_compiled()
+
     local load_plugin = function(loader, plugin_name)
-        -- Call `plugin.setup()` if available
-        local plugin = require("plugins." .. plugin_name)
-        if type(plugin) == "table" and type(plugin.setup) == "function" then
-            loader(plugin.setup)
+        -- If we have compiled plugins, use them
+        if compiled_plugins and compiled_plugins[plugin_name] then
+            loader(compiled_plugins[plugin_name])
         else
-            loader(plugin)
+            -- Fallback to requiring individual plugin files
+            local plugin = require("plugins." .. plugin_name)
+            if type(plugin) == "table" and type(plugin.setup) == "function" then
+                loader(plugin.setup)
+            else
+                loader(plugin)
+            end
         end
     end
 
-    -- Load immediate plugins first, in the defined order
+    -- Load plugins listed in `plugin_immediate` immediately at startup, preserving their order
     for _, plugin_name in ipairs(plugin_immediate) do
         load_plugin(now, plugin_name)
     end
 
-    -- Load all other plugins later (Skip files starting with "_")
-    local plugins = vim.fn.globpath(vim.fn.stdpath("config") .. "/lua/plugins", "*.lua", false, true)
-    for _, plugin in ipairs(plugins) do
-        local plugin_name = plugin:match("plugins/(.+)%.lua$")
-        if plugin_name:sub(1, 1) == "_" or vim.tbl_contains(plugin_immediate, plugin_name) then
-            goto continue
+    -- Load all other plugins lazily (ignores files starting with "_")
+    if compiled_plugins then
+        -- Use compiled plugins list
+        for plugin_name, _ in pairs(compiled_plugins) do
+            if not vim.tbl_contains(plugin_immediate, plugin_name) then
+                load_plugin(later, plugin_name)
+            end
         end
-        load_plugin(later, plugin_name)
-        ::continue::
+    else
+        -- Fallback to scanning directory
+        local plugins = vim.fn.globpath(vim.fn.stdpath("config") .. "/lua/plugins", "*.lua", false, true)
+        for _, plugin in ipairs(plugins) do
+            local plugin_name = plugin:match("plugins/(.+)%.lua$")
+            if plugin_name:sub(1, 1) == "_" or vim.tbl_contains(plugin_immediate, plugin_name) then
+                goto continue
+            end
+            load_plugin(later, plugin_name)
+            ::continue::
+        end
     end
+
+    -- Create command to force recompile plugins
+    vim.api.nvim_create_user_command("PluginsRecompile", function()
+        compiler.force_recompile()
+    end, { desc = "Force recompile plugin cache" })
 
     -- ///////////////////////////////////////////////////////////////////////
 

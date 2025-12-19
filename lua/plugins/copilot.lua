@@ -1,7 +1,5 @@
-local add = MiniDeps.add
-
 return function()
-    add({ source = "zbirenbaum/copilot.lua" })
+    MiniDeps.add({ source = "zbirenbaum/copilot.lua" })
     require("copilot").setup({
         panel = { enabled = false },
         suggestion = {
