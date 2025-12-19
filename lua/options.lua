@@ -18,16 +18,21 @@ vim.opt.signcolumn = "yes"
 vim.opt.laststatus = 3
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
-vim.opt.clipboard = 'unnamedplus'
+vim.opt.clipboard = "unnamedplus"
 vim.opt.spelllang = "en_us"
 vim.opt.spell = false
 vim.opt.termguicolors = true
 
 -- Use :set list to view the spaces
-vim.o.listchars = 'tab:·┈,trail:￮,multispace:￮,lead: ,extends:▶,precedes:◀,nbsp:‿'
+vim.o.listchars = "tab:·┈,trail:￮,multispace:￮,lead: ,extends:▶,precedes:◀,nbsp:‿"
 
 -- Neovide
 if vim.g.neovide then
     vim.o.guifont = "JetBrains Mono Nerd Font:h14"
     vim.g.neovide_cursor_vfx_mode = "railgun"
 end
+
+-- vim.opt.complete = ".,o" -- use buffer and omnifunc
+-- vim.opt.completeopt = "fuzzy,menuone,noselect" -- add 'popup' for docs (sometimes)
+-- vim.opt.autocomplete = true
+-- vim.opt.pumheight = 7

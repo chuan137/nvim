@@ -18,7 +18,7 @@ return function()
         { "<leader>w", hidden = true },
         { "<leader>/", icon = "" },
         { "<leader>g/", icon = "" },
-        { "<leader>g]", icon = "" },
+        { "<leader>g^", icon = "" },
         { "<leader><cr>", icon = MiniIcons.get("os", "macos") },
         { "<leader>b", icon = MiniIcons.get("default", "file")},  -- buffer
         { "<leader>;", icon = MiniIcons.get("lsp", "property")},  -- symbols

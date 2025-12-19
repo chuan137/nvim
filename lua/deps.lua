@@ -88,7 +88,7 @@ else
     -- All other plugins are loaded with "later"
 
     local plugin_immediate = {
-        "blink",
+        -- "blink",
         "lsp",
         "snacks",
         "copilot",

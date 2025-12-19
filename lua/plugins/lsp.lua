@@ -30,8 +30,10 @@ return function()
                     if exit_code == 0 then
                         vim.notify(choice .. " installed successfully!", vim.log.levels.INFO)
                     else
-                        vim.notify("Failed to install " .. choice .. " (exit code: " .. exit_code .. ")",
-                            vim.log.levels.ERROR)
+                        vim.notify(
+                            "Failed to install " .. choice .. " (exit code: " .. exit_code .. ")",
+                            vim.log.levels.ERROR
+                        )
                     end
                 end,
                 on_stdout = function(_, data)
@@ -68,8 +70,14 @@ return function()
             },
         },
     }
-    -- vim.lsp.config("*", { capabilities = capabilities })
-    vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities(capabilities) })
+
+    -- if blin.cmp is installed, enhance capabilities
+    pcall(function()
+        local blink_cmp = require("blink.cmp")
+        capabilities = blink_cmp.get_lsp_capabilities(capabilities)
+    end)
+
+    vim.lsp.config("*", { capabilities = capabilities })
 
     -- Enable LSP servers (must be manually installed)
     -- Install via :LspInstall command defined above
@@ -80,6 +88,9 @@ return function()
     vim.lsp.enable("yamlls")
     vim.lsp.enable("helm_ls")
 
+    vim.opt.completeopt = "menu,menuone,noselect"
+    vim.opt.pumheight = 7
+
     -- Ref: https://github.com/theopn/dotfiles/blob/main/nvim/.config/nvim/lua/theovim/lsp.lua
     -- Configuring keymaps and autocmd for LSP buffers
     local lspgroup = vim.api.nvim_create_augroup("nvim.plugins.lsp", { clear = true })
@@ -88,6 +99,33 @@ return function()
         callback = function(event)
             -- get client from event
             -- local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+            vim.lsp.completion.enable(true, event.data.client_id, event.buf, {
+                -- Optional formating of items
+                convert = function(item)
+                    -- Remove leading misc chars for abbr name,
+                    -- and cap field to 25 chars
+                    --local abbr = item.label
+                    --abbr = abbr:match("[%w_.]+.*") or abbr
+                    --abbr = #abbr > 25 and abbr:sub(1, 24) .. "…" or abbr
+                    --
+                    -- Remove return value
+                    --local menu = ""
+
+                    -- Only show abbr name, remove leading misc chars (bullets etc.),
+                    -- and cap field to 15 chars
+                    local abbr = item.label
+                    abbr = abbr:gsub("%b()", ""):gsub("%b{}", "")
+                    abbr = abbr:match("[%w_.]+.*") or abbr
+                    abbr = #abbr > 15 and abbr:sub(1, 14) .. "…" or abbr
+
+                    -- Cap return value field to 15 chars
+                    local menu = item.detail or ""
+                    menu = #menu > 15 and menu:sub(1, 14) .. "…" or menu
+
+                    return { abbr = abbr, menu = menu }
+                end,
+            })
 
             local map = function(keys, func, desc, specs)
                 local mode = specs and specs.mode or "n"

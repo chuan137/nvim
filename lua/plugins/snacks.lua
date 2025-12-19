@@ -63,16 +63,18 @@ return function()
     local keys = {
         -- stylua: ignore start
         -- Search keymaps
-        { "/",                    function() Snacks.picker.lines() end,                                     desc = "Buffer Lines" }, -- replace default search
         { "/",                    "<esc>/\\%V",                                                             desc = "Search in visual selection",  mode = "x" },
         { "[/",                   "[<c-i>",                                                                 desc = "Search first occ. of word" },
-        { "<leader>/",            function() Snacks.picker.grep() end,                                      desc = "Search in workspace" },
-        { "<leader>g/",           function() Snacks.picker.grep_word() end,                                 desc = "Grep Word under Cursor" },
-        { "<leader>g]",           function() Snacks.picker.grep_word({ cwd = vim.fn.expand("%:p:h") }) end, desc = "Grep Word under Cursor (Cwd)" },
+        { "g/",                   function() Snacks.picker.lines() end,                                     desc = "Buffer Lines" },
+        { "<leader>/",            function() Snacks.picker.grep() end,                                      desc = "Search in Workspace" },
+        { "<leader>^",            function() Snacks.picker.grep({ cwd = vim.fn.expand("%:p:h") }) end,      desc = "Search in Cwd" },
+        { "<leader>g/",           function() Snacks.picker.grep_word() end,                                 desc = "Grep Word" },
+        { "<leader>g^",           function() Snacks.picker.grep_word({ cwd = vim.fn.expand("%:p:h") }) end, desc = "Grep Word in Cwd" },
 
         --  top pickers
         { "<leader><space>",      function() Snacks.picker.smart() end,                                     desc = "Smart Find Files" },
         { "<leader><cr>",         function() Snacks.picker.resume() end,                                    desc = "Resume Picker" },
+        { "<leader>p",            function() Snacks.picker.pickers() end,                                   desc = "Snack Pickers" },
 
         -- buffer pickers
         { "<leader>bb",           function() Snacks.picker.buffers() end,                                   desc = "Buffers" },
