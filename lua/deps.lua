@@ -40,18 +40,13 @@ else
         -- vim.cmd("colorscheme retrobox")
     end)
 
-    now(function()
-        require("options")
-        require("keymaps")
-        require("autocmds")
-    end)
-
     -- ///////////////////////////////////////////////////////////////////////
-
     -- Load and configure `mini.*` plugins
+    -- ///////////////////////////////////////////////////////////////////////
 
     now(require("mini.icons").setup)
     now(require("mini.statusline").setup)
+
     later(require("mini.ai").setup)
     later(require("mini.surround").setup)
     later(require("mini.comment").setup)
@@ -82,13 +77,12 @@ else
     end)
 
     -- ///////////////////////////////////////////////////////////////////////
-
-    -- Plugin loading behavior:
-    --   • Loads plugins from lua/plugins/*.lua
+    -- Load other plugins from lua/plugins/*.lua:
     --   • Ignores files starting with "_"
     --   • Plugins in `plugin_immediate` load immediately at startup ("now"), in order
     --   • All other plugins load lazily ("later")
     --   • Uses a compiled plugins cache for faster startup
+    -- ///////////////////////////////////////////////////////////////////////
 
     local plugin_immediate = {
         -- "blink",
@@ -149,9 +143,8 @@ else
     end, { desc = "Force recompile plugin cache" })
 
     -- ///////////////////////////////////////////////////////////////////////
-
     -- Alternative lazy load plugins in plugins/lzn/*.lua with 'lz.n'
-
+    -- ///////////////////////////////////////////////////////////////////////
     now(function()
         add({ source = "nvim-neorocks/lz.n" })
         require("lz.n").load("plugins/lzn")
