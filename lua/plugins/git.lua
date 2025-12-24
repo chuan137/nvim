@@ -17,4 +17,15 @@ return function()
     --
     -- local diff_folds = "foldmethod=expr foldexpr=v:lua.MiniGit.diff_foldexpr() foldlevel=0"
     -- vim.cmd("au FileType git,diff setlocal " .. diff_folds)
+
+    -- diffview.nvim
+    MiniDeps.add({ source = "sindrets/diffview.nvim", name = "diffview" })
+
+    vim.keymap.set("n", "<leader>gx", function()
+        if next(require("diffview.lib").views) == nil then
+            vim.cmd("DiffviewOpen")
+        else
+            vim.cmd("DiffviewClose")
+        end
+    end, { desc = "Git Diffview Toggle" })
 end
