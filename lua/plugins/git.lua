@@ -21,11 +21,25 @@ return function()
     -- diffview.nvim
     MiniDeps.add({ source = "sindrets/diffview.nvim", name = "diffview" })
 
-    vim.keymap.set("n", "<leader>gx", function()
+    local function toggle_diffview(cmd)
         if next(require("diffview.lib").views) == nil then
-            vim.cmd("DiffviewOpen")
+            vim.cmd(cmd)
         else
             vim.cmd("DiffviewClose")
         end
-    end, { desc = "Git Diffview Toggle" })
+    end
+
+    vim.keymap.set("n", "<leader>gd", function()
+        toggle_diffview("DiffviewOpen")
+    end, { desc = "Git Diffview Index" })
+
+    vim.keymap.set("n", "<leader>gD", function()
+        toggle_diffview("DiffviewOpen master..HEAD")
+    end, { desc = "Git Diffview master" })
+
+    vim.keymap.set("n", "<leader>gf", function()
+        toggle_diffview("DiffviewFileHistory %")
+    end, { desc = "Git Diffview master" })
+
+    vim.keymap.set("n", "gq", "<Cmd>DiffviewClose<CR>", { desc = "Git Diffview Close" })
 end

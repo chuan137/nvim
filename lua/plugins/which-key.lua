@@ -17,10 +17,14 @@ return function()
         { "<leader>Y", hidden = true },
         { "<leader>w", hidden = true },
         { "<leader>/", icon = "" },
+        { "<leader>@", icon = "" },
         { "<leader>g/", icon = "" },
-        { "<leader>g^", icon = "" },
-        { "<leader><cr>", icon = MiniIcons.get("os", "macos") },
+        { "<leader>g@", icon = "" },
         { "<leader>b", icon = MiniIcons.get("default", "file")},  -- buffer
-        { "<leader>;", icon = MiniIcons.get("lsp", "property")},  -- symbols
+        { "<leader>]", icon = MiniIcons.get("default", "file")},  -- buffer
+        { "<leader>,", icon = MiniIcons.get("lsp", "keyword")},  -- symbols
+        { "<leader>[,", icon = MiniIcons.get("lsp", "keyword")},  -- symbols
+        { "<leader>],", icon = MiniIcons.get("lsp", "keyword")},  -- symbols
+        { "<leader><cr>", icon = MiniIcons.get("os", "computer") },
     })
 end
