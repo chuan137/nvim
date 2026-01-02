@@ -13,6 +13,7 @@ return function()
             yamlls = "npm install -g yaml-language-server",
             helm_ls = "brew install helm-ls",
             stylua = "brew install stylua",
+            jsonnet_ls = "go install github.com/grafana/jsoonet-lsp-server@latest",
         }
 
         vim.ui.select(vim.tbl_keys(servers), {
@@ -87,6 +88,7 @@ return function()
     vim.lsp.enable("lua_ls")
     vim.lsp.enable("yamlls")
     vim.lsp.enable("helm_ls")
+    vim.lsp.enable("jsonnet_ls")
 
     vim.opt.completeopt = "menu,menuone,noselect"
     vim.opt.pumheight = 7

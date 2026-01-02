@@ -9,6 +9,8 @@
 -- }
 
 return function()
+
+
     MiniDeps.add({
         source = "MeanderingProgrammer/render-markdown.nvim",
         depends = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" },
@@ -30,9 +32,9 @@ return function()
     })
 
     -- if Snacks is installed, add markdown rendering to Snacks preview
-    -- Snacks.toggle({
-    --     name = "Render Markdown",
-    --     get = require("render-markdown").get,
-    --     set = require("render-markdown").set,
-    -- }):map("<leader>um")
+    Snacks.toggle({
+        name = "Render Markdown",
+        get = require("render-markdown").get,
+        set = require("render-markdown").set,
+    }):map("<leader>um")
 end

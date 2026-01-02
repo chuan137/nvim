@@ -1,4 +1,4 @@
--- Disable the built-in module loader for faster startup (Neovim 0.9+)
+-- Enable the built-in module loader for faster startup (Neovim 0.9+)
 if vim.loader then
     vim.loader.enable()
 end
