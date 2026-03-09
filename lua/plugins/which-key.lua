@@ -5,6 +5,11 @@ return function()
         preset = "helix",
         -- win = { col = -1, row = 0 }
     })
+
+    local icon_file = MiniIcons.get("lsp", "file")
+    local icon_key = MiniIcons.get("lsp", "key")
+    local icon_search = ""
+
     wk.add({
         { "<leader>c", group = "Code" },
         { "<leader>f", group = "Find" },
@@ -16,15 +21,17 @@ return function()
         { "<leader>y", hidden = true },
         { "<leader>Y", hidden = true },
         { "<leader>w", hidden = true },
-        { "<leader>/", icon = "" },
-        { "<leader>@", icon = "" },
-        { "<leader>g/", icon = "" },
-        { "<leader>g@", icon = "" },
-        { "<leader>b", icon = MiniIcons.get("default", "file")},  -- buffer
-        { "<leader>]", icon = MiniIcons.get("default", "file")},  -- buffer
-        { "<leader>,", icon = MiniIcons.get("lsp", "keyword")},  -- symbols
-        { "<leader>[,", icon = MiniIcons.get("lsp", "keyword")},  -- symbols
-        { "<leader>],", icon = MiniIcons.get("lsp", "keyword")},  -- symbols
-        { "<leader><cr>", icon = MiniIcons.get("os", "computer") },
+
+        { "g/", icon = icon_search },
+        { "g^", icon = icon_search },
+        { "<leader>,", icon = icon_key },
+        { "<leader>/", icon = icon_search },
+        { "<leader>^", icon = icon_search },
+        { "<leader>?", icon = icon_search },
+        { "<leader>b", icon = icon_file },
+        { "<leader><space>", icon = icon_file },
+        { "<leader><backspace>", icon = icon_file },
+        { "<leader><cr>", icon = icon_file },
+        { "<leader>@", icon = icon_file },
     })
 end

@@ -34,12 +34,12 @@ return function()
     end, { desc = "Git Diffview Index" })
 
     vim.keymap.set("n", "<leader>gD", function()
-        toggle_diffview("DiffviewOpen master..HEAD")
+        toggle_diffview("DiffviewOpen main..HEAD")
     end, { desc = "Git Diffview master" })
 
     vim.keymap.set("n", "<leader>gf", function()
         toggle_diffview("DiffviewFileHistory %")
-    end, { desc = "Git Diffview master" })
+    end, { desc = "Git Diffview File" })
 
-    vim.keymap.set("n", "gq", "<Cmd>DiffviewClose<CR>", { desc = "Git Diffview Close" })
+    vim.keymap.set("n", "<leader>gq", "<Cmd>DiffviewClose<CR>", { desc = "Git Diffview Close" })
 end

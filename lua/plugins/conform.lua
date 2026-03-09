@@ -37,4 +37,6 @@ return function()
         range = true,
         desc = "Format code using LSP (supports visual selection)",
     })
+
+    vim.keymap.set("n", "<leader>cc", "v%:LspFormat<CR>", { desc = "Code Format Current Block" })
 end

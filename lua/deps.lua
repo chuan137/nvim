@@ -47,6 +47,12 @@ else
     now(require("mini.icons").setup)
     now(require("mini.statusline").setup)
 
+    -- load immediately so we can use it for notifications in other plugins
+    now(function()
+        require("mini.notify").setup()
+        vim.notify = require("mini.notify").make_notify()
+    end)
+
     later(require("mini.ai").setup)
     later(require("mini.surround").setup)
     later(require("mini.comment").setup)
@@ -55,11 +61,6 @@ else
     later(require("mini.jump").setup)
     later(require("mini.pairs").setup)
     later(require("mini.extra").setup)
-
-    later(function()
-        require("mini.notify").setup()
-        vim.notify = require("mini.notify").make_notify()
-    end)
 
     later(function()
         local mini_files = require("mini.files")
