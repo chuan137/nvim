@@ -91,3 +91,18 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEn
 --         vim.fn.setreg("+", vim.fn.getreg("0"))
 --     end,
 -- })
+
+vim.api.nvim_create_user_command('CdCurrent', function()
+    local dir = vim.fn.expand('%:p:h')
+    if dir ~= "" then
+        -- find the nearest .git directory and set that as the CWD
+        local git_dir = vim.fn.finddir('.git', dir .. ';')
+        if git_dir ~= "" then
+            dir = vim.fn.fnamemodify(git_dir, ':h')
+        end
+        vim.api.nvim_set_current_dir(dir)
+        print("CWD changed to: " .. dir)
+    else
+        print("Buffer has no file path.")
+    end
+end, { desc = "Change CWD to current buffer's directory" })
