@@ -11,6 +11,6 @@ vim.g.maplocalleader = " "
 vim.g.lazyloading = true
 
 require("options")
+require("commands")
 require("keymaps")
-require("autocmds")
 require("deps")
