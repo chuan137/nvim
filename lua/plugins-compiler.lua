@@ -60,6 +60,29 @@ local function write_hash(hash)
     end
 end
 
+local function extract_returned_function(content)
+    local start_pattern = "return%s+function%s*%(%s*%)"
+    local start_pos, return_end = content:find(start_pattern)
+    if not start_pos then
+        return nil
+    end
+
+    local body_start = return_end + 1
+    if content:sub(body_start, body_start) == "\n" then
+        body_start = body_start + 1
+    end
+
+    local end_start = content:match("()end%s*$")
+    if not end_start then
+        return nil
+    end
+
+    return {
+        prelude = vim.trim(content:sub(1, start_pos - 1)),
+        body = content:sub(body_start, end_start - 1),
+    }
+end
+
 -- Compile all plugin files into a single file
 function M.compile()
     local plugins_dir = vim.fn.stdpath("config") .. "/lua/plugins"
@@ -90,24 +113,16 @@ function M.compile()
                 local content = f:read("*all")
                 f:close()
 
-                -- Extract the function body (remove the outer return function() ... end)
-                -- Find the first occurrence of "return function()" and the last "end"
-                local start_pattern = "return%s+function%s*%(%s*%)"
-                local start_pos = content:find(start_pattern)
+                -- Preserve any top-level helpers before `return function()`, then
+                -- inline the returned function body into the compiled plugin.
+                local returned_function = extract_returned_function(content)
 
-                if start_pos then
-                    -- Find where the function body starts (after the opening parenthesis)
-                    local body_start = content:find("\n", start_pos)
-                    if body_start then
-                        -- Find the last "end" before end of file
-                        local reversed = content:reverse()
-                        local end_pos = reversed:find("dne")
-                        if end_pos then
-                            local actual_end = #content - end_pos - 2
-                            local body = content:sub(body_start + 1, actual_end - 1)
-                            table.insert(output, body)
-                        end
+                if returned_function then
+                    if returned_function.prelude ~= "" then
+                        table.insert(output, returned_function.prelude)
+                        table.insert(output, "")
                     end
+                    table.insert(output, returned_function.body)
                 else
                     -- If pattern doesn't match, include the whole content wrapped
                     table.insert(output, "    return function()")
