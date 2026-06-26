@@ -92,13 +92,13 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEn
 --     end,
 -- })
 
-vim.api.nvim_create_user_command('CdCurrent', function()
-    local dir = vim.fn.expand('%:p:h')
+vim.api.nvim_create_user_command("CdCurrent", function()
+    local dir = vim.fn.expand("%:p:h")
     if dir ~= "" then
         -- find the nearest .git directory and set that as the CWD
-        local git_dir = vim.fn.finddir('.git', dir .. ';')
+        local git_dir = vim.fn.finddir(".git", dir .. ";")
         if git_dir ~= "" then
-            dir = vim.fn.fnamemodify(git_dir, ':h')
+            dir = vim.fn.fnamemodify(git_dir, ":h")
         end
         vim.api.nvim_set_current_dir(dir)
         print("CWD changed to: " .. dir)
@@ -106,3 +106,44 @@ vim.api.nvim_create_user_command('CdCurrent', function()
         print("Buffer has no file path.")
     end
 end, { desc = "Change CWD to current buffer's directory" })
+
+local function get_project_relative_path()
+    local filepath = vim.fn.expand("%:p")
+    local filedir = vim.fn.fnamemodify(filepath, ":h")
+    local git_root = vim.fn.systemlist({ "git", "-C", filedir, "rev-parse", "--show-toplevel" })[1]
+
+    if vim.v.shell_error == 0 and git_root and git_root ~= "" then
+        return vim.fs.relpath(git_root, filepath) or filepath
+    end
+
+    return vim.fn.expand("%")
+end
+
+local function get_ai_location(opts)
+    local filepath = get_project_relative_path()
+    local start_line = opts.line1
+    local end_line = opts.line2
+
+    return start_line == end_line and filepath .. ":" .. start_line or filepath .. ":" .. start_line .. "-" .. end_line
+end
+
+vim.api.nvim_create_user_command("YankAI", function(opts)
+    local location = get_ai_location(opts)
+    local lines = vim.fn.getline(opts.line1, opts.line2)
+    local code = table.concat(lines, "\n")
+
+    vim.fn.setreg("+", location .. "\n\n" .. code)
+    print("📋 " .. location)
+end, { range = true })
+
+vim.api.nvim_create_user_command("YankAIPath", function(opts)
+    local location = get_ai_location(opts)
+
+    vim.fn.setreg("+", location)
+    print("📋 " .. location)
+end, { range = true })
+
+vim.keymap.set("n", "<leader>gY", ":YankAI<CR>", { desc = "Yank code context for AI" })
+vim.keymap.set("v", "<leader>gY", ":YankAI<CR>", { desc = "Yank code context for AI" })
+vim.keymap.set("n", "<leader>gP", ":YankAIPath<CR>", { desc = "Yank path context for AI" })
+vim.keymap.set("v", "<leader>gP", ":YankAIPath<CR>", { desc = "Yank path context for AI" })
