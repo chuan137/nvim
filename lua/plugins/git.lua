@@ -19,7 +19,11 @@ return function()
     -- vim.cmd("au FileType git,diff setlocal " .. diff_folds)
 
     -- diffview.nvim
-    MiniDeps.add({ source = "sindrets/diffview.nvim", name = "diffview" })
+    MiniDeps.add({
+        source = "sindrets/diffview.nvim",
+        name = "diffview",
+        depends = { "nvim-tree/nvim-web-devicons" },
+    })
 
     local function toggle_diffview(cmd)
         if next(require("diffview.lib").views) == nil then
