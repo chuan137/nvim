@@ -86,11 +86,12 @@ else
     -- ///////////////////////////////////////////////////////////////////////
 
     local plugin_immediate = {
-        -- "blink",
         "lsp",
         "snacks",
-        -- "copilot",
         "project",
+
+        -- lazy loading on FILETYPE from the plugin spec files
+        'markdown',
     }
 
     -- Try to load compiled plugins

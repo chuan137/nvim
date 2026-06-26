@@ -13,25 +13,6 @@ return function()
     -- Need this to disable the markdown preview by default.
     vim.g.render_markdown_config = { enabled = false }
 
-    MiniDeps.add({
-        source = "MeanderingProgrammer/render-markdown.nvim",
-        depends = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" },
-    })
-
-    -- if Snacks is installed, add markdown rendering to Snacks preview
-    if pcall(require, "snacks") then
-        Snacks.toggle({
-            name = "Render Markdown",
-            get = require("render-markdown").get,
-            set = require("render-markdown").set,
-        }):map("<leader>um")
-    end
-
-    MiniDeps.add({
-        source = "selimacerbas/markdown-preview.nvim",
-        depends = { "selimacerbas/live-server.nvim" },
-    })
-
     -- Create autocommand to lazy load markdown configs only for markdown filetypes
     local markdown_loaded = false
 
@@ -43,6 +24,16 @@ return function()
 
         -- notify
         vim.notify("Loading markdown plugin...", vim.log.levels.INFO, { title = "Markdown" })
+
+        MiniDeps.add({
+            source = "selimacerbas/markdown-preview.nvim",
+            depends = { "selimacerbas/live-server.nvim" },
+        })
+
+        MiniDeps.add({
+            source = "MeanderingProgrammer/render-markdown.nvim",
+            depends = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" },
+        })
 
         require("render-markdown").setup({
             enabled = false,
@@ -59,6 +50,15 @@ return function()
                 enabled = true,
             },
         })
+
+        -- if Snacks is installed, add markdown rendering to Snacks preview
+        if pcall(require, "snacks") then
+            Snacks.toggle({
+                name = "Render Markdown",
+                get = require("render-markdown").get,
+                set = require("render-markdown").set,
+            }):map("<leader>um")
+        end
 
         require("markdown_preview").setup({
             -- all optional; sane defaults shown
