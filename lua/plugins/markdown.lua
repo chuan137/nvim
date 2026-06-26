@@ -9,6 +9,10 @@
 -- }
 
 return function()
+    -- The plugin loader reads this global before our explicit setup may run.
+    -- Need this to disable the markdown preview by default.
+    vim.g.render_markdown_config = { enabled = false }
+
     MiniDeps.add({
         source = "MeanderingProgrammer/render-markdown.nvim",
         depends = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" },
@@ -28,7 +32,7 @@ return function()
         depends = { "selimacerbas/live-server.nvim" },
     })
 
-    -- Create autocommand to lazy load markdown plugin only for markdown filetypes
+    -- Create autocommand to lazy load markdown configs only for markdown filetypes
     local markdown_loaded = false
 
     local function load_markdown_plugin()
