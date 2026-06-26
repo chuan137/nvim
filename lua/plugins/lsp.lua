@@ -8,7 +8,9 @@ return function()
 
     require("mason").setup({})
     require("mason-lspconfig").setup({
-        -- automatic_enable = false,
+        automatic_enable = {
+            exclude = { "copilot" },
+        },
         ensure_installed = {
             "gopls",
             "basedpyright",
@@ -35,15 +37,6 @@ return function()
     end)
 
     vim.lsp.config("*", { capabilities = capabilities })
-
-    -- Mason will automatically enable installed servers, so no need to manually enable them here.
-    -- vim.lsp.enable("gopls")
-    -- vim.lsp.enable("basedpyright")
-    -- vim.lsp.enable("ruff")
-    -- vim.lsp.enable("lua_ls")
-    -- vim.lsp.enable("yamlls")
-    -- vim.lsp.enable("helm_ls")
-    -- vim.lsp.enable("jsonnet_ls")
 
     vim.opt.completeopt = "menu,menuone,noselect"
     vim.opt.pumheight = 7
