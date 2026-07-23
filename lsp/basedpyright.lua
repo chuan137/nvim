@@ -10,7 +10,7 @@ return {
                     callArgumentNames = true,
                     variableTypes = true,
                 },
-                typeCheckingMode = "standard",
+                typeCheckingMode = "basic",
             },
             disableOrganizeImports = true,
         },

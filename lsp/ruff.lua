@@ -4,9 +4,11 @@ return {
     end,
     init_options = {
         settings = {
+            lineLength = 120,
             logLevel = "debug",
             lint = {
                 select = { "E", "F" },
+                ignore = { "E722" },
             },
         },
     },
