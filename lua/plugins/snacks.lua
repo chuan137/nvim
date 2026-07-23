@@ -80,16 +80,16 @@ return function()
         -- Search keymaps
         -- { "<C-/>",                "<Esc>/\\%V",                                                           desc = "Search in selection", mode = "x" },
         -- { "[/",                   "[<c-i>",                                                               desc = "Search word 1st occ." },
-        { "<leader>/",            function() picker_grep() end,                                           desc = "Search" },
-        { "<leader>?",            function() Snacks.picker.grep_word() end,                               desc = "Search <cur> Word",        mode = { "n", "x" } },
-        { "g/",                   function() picker_grep(vim.fn.expand("%:p:h")) end,                     desc = "Search in Cwd" },
-        { "g?",                   function() picker_grep_word(vim.fn.expand("%:p:h")) end,                desc = "Search <cur> Word in Cwd", mode = { "n", "x" } },
+        { "g/",                   function() picker_grep() end,                                           desc = "Search",                   mode = { "n", "x" } },
+        { "g?",                   function() picker_grep(vim.fn.expand("%:p:h")) end,                     desc = "Search in Cwd" },
+        { "<leader>/",            function() picker_grep_word() end,                                      desc = "Search <cur> Word" },
+        { "<leader>?",            function() picker_grep_word(vim.fn.expand("%:p:h")) end,                desc = "Search <cur> Word in Cwd", mode = { "n", "x" } },
         { "<leader>f/",           function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
 
         --  top pickers
         { "<leader>^",            function() Snacks.picker.pickers() end,                                 desc = "Snack Pickers" },
         { "<leader>P",            function() Snacks.picker.command_history() end,                         desc = "Command History" },
-        { "<leader><backspace>",  function() Snacks.picker.resume() end,                                  desc = "Resume Picker" },
+        -- { "<leader><backspace>",  function() Snacks.picker.resume() end,                                  desc = "Resume Picker" },
         -- buffer pickers
         { "<leader>bb",           function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
         { "<leader><space>",      function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
@@ -97,7 +97,6 @@ return function()
 
         -- find
         { "<leader>s",            function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
-
         { "<leader>q",            function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
         { "<leader><cr>",         function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
         { "<leader>ff",           function() Snacks.picker.files() end,                                   desc = "Find Files" },
@@ -112,14 +111,14 @@ return function()
         { "<leader>gL",           function() Snacks.picker.git_log_line() end,                            desc = "Git Log Line" },
         { "<leader>gs",           function() Snacks.picker.git_status() end,                              desc = "Git Status" },
         { "<leader>gS",           function() Snacks.picker.git_stash() end,                               desc = "Git Stash" },
-        { "<leader>gg",           function() Snacks.lazygit() end,                                        desc = "Lazygit (cwd)" },
-        { "<leader>go",           function() Snacks.gitbrowse() end,                                      desc = "Git Browse (open)",   mode = { "n", "x" } },
-        { "<leader>gy",           function() yank_git_url() end,                                          desc = "Git Browse (copy)",   mode = { "n", "x" } },
+        -- { "<leader>gg",           function() Snacks.lazygit() end,                                        desc = "Lazygit (cwd)" },
+        { "<leader>go",           function() Snacks.gitbrowse() end,                                      desc = "Git Browse (open)",        mode = { "n", "x" } },
+        { "<leader>gO",           function() yank_git_url() end,                                          desc = "Git Browse (copy)",        mode = { "n", "x" } },
 
         -- others
-        { "<C-_>",                function() Snacks.terminal() end,                                       desc = "Toggle Terminal",     mode = { "n", "t" } },
-        { "]]",                   function() Snacks.words.jump(vim.v.count1) end,                         desc = "Next Reference",      mode = { "n", "t" } },
-        { "[[",                   function() Snacks.words.jump(-vim.v.count1) end,                        desc = "Prev Reference",      mode = { "n", "t" } },
+        { "<C-_>",                function() Snacks.terminal() end,                                       desc = "Toggle Terminal",          mode = { "n", "t" } },
+        { "]]",                   function() Snacks.words.jump(vim.v.count1) end,                         desc = "Next Reference",           mode = { "n", "t" } },
+        { "[[",                   function() Snacks.words.jump(-vim.v.count1) end,                        desc = "Prev Reference",           mode = { "n", "t" } },
     }
     require("utils").register_keys(keys)
 end

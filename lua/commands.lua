@@ -107,6 +107,38 @@ vim.api.nvim_create_user_command("CdCurrent", function()
     end
 end, { desc = "Change CWD to current buffer's directory" })
 
+vim.api.nvim_create_user_command("TmuxLazyGit", function()
+    if not vim.env.TMUX then
+        vim.notify("TmuxLazyGit requires running inside tmux", vim.log.levels.ERROR)
+        return
+    end
+
+    if vim.fn.executable("tmux") == 0 then
+        vim.notify("tmux executable not found", vim.log.levels.ERROR)
+        return
+    end
+
+    if vim.fn.executable("lazygit") == 0 then
+        vim.notify("lazygit executable not found", vim.log.levels.ERROR)
+        return
+    end
+
+    local dir = vim.fn.expand("%:p:h")
+    if dir == "" then
+        dir = vim.fn.getcwd()
+    end
+
+    local git_root = vim.fn.systemlist({ "git", "-C", dir, "rev-parse", "--show-toplevel" })[1]
+    if vim.v.shell_error ~= 0 or not git_root or git_root == "" then
+        vim.notify("No Git repository found for " .. dir, vim.log.levels.ERROR)
+        return
+    end
+
+    vim.fn.jobstart({ "tmux", "display-popup", "-d", git_root, "-w", "90%", "-h", "90%", "-E", "lazygit" })
+end, { desc = "Open lazygit in a tmux popup at the current Git root" })
+
+vim.keymap.set("n", "<leader>gg", ":TmuxLazyGit<CR>", { desc = "LazyGit tmux popup"})
+
 local function get_project_relative_path()
     local filepath = vim.fn.expand("%:p")
     local filedir = vim.fn.fnamemodify(filepath, ":h")
@@ -145,5 +177,5 @@ end, { range = true })
 
 vim.keymap.set("n", "<leader>gY", ":YankAI<CR>", { desc = "Yank code context for AI" })
 vim.keymap.set("v", "<leader>gY", ":YankAI<CR>", { desc = "Yank code context for AI" })
-vim.keymap.set("n", "<leader>gP", ":YankAIPath<CR>", { desc = "Yank path context for AI" })
-vim.keymap.set("v", "<leader>gP", ":YankAIPath<CR>", { desc = "Yank path context for AI" })
+vim.keymap.set("n", "<leader>gy", ":YankAIPath<CR>", { desc = "Yank path context for AI" })
+vim.keymap.set("v", "<leader>gy", ":YankAIPath<CR>", { desc = "Yank path context for AI" })

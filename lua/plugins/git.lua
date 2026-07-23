@@ -27,6 +27,7 @@ local function configCodeDiff()
     vim.keymap.set("n", "<leader>gD", "<Cmd>CodeDiff main...<CR>", { desc = "Git CodeDiff main" })
     vim.keymap.set("n", "<leader>gf", "<Cmd>CodeDiff file HEAD<CR>", { desc = "Git CodeDiff File" })
     vim.keymap.set("n", "<leader>gh", "<Cmd>CodeDiff history<CR>", { desc = "Git CodeDiff History" })
+    vim.keymap.set("n", "<leader>gx", "<Cmd>CodeDiff HEAD~<CR>", { desc = "Git CodeDiff last" })
 end
 
 local function configDiffView()

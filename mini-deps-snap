@@ -15,6 +15,7 @@ return {
   ["plenary.nvim"] = "b9fd5226c2f76c951fc8ed5923d85e4de065e509",
   ["previous-buffer.nvim"] = "50cbdc1755b245624f1299612fd2ff020aa1553c",
   ["render-markdown.nvim"] = "6a744f0d14fd1d0fa8e3f446ac7825ec1e351d55",
+  ["sidekick.nvim"] = "208e1c5b8170c01fd1d07df0139322a76479b235",
   ["snacks.nvim"] = "dec29f55666f8f4545835636077a86b150faf630",
   ["vim-fugitive"] = "61b51c09b7c9ce04e821f6cf76ea4f6f903e3cf4",
   ["vim-startuptime"] = "b6f0d93f6b8cf6eee0b4c94450198ba2d6a05ff6",

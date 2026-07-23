@@ -9,6 +9,7 @@ return function()
             end,
         },
     })
+
     require("nvim-treesitter.configs").setup({
         ensure_installed = { "lua", "vimdoc", "go", "python" },
         highlight = { enable = true },
@@ -23,4 +24,14 @@ return function()
             pcall(vim.api.nvim_win_set_cursor, 0, { row + 1, col })
         end
     end, { desc = "insjump" })
+
+    -- MiniDeps.add({
+    --     source = "nvim-treesitter/nvim-treesitter-context",
+    -- })
+    --
+    -- require("treesitter-context").setup()
+    --
+    -- vim.keymap.set("n", "[c", function()
+    --     require("treesitter-context").go_to_context(vim.v.count1)
+    -- end, { silent = true, desc = "Jump to upper context" })
 end
