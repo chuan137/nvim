@@ -77,28 +77,28 @@ return function()
 
     local keys = {
         -- stylua: ignore start
+        -- Disable the LspFormat and instead `gqvi{` to format
         -- Search keymaps
         -- { "<C-/>",                "<Esc>/\\%V",                                                           desc = "Search in selection", mode = "x" },
-        -- { "[/",                   "[<c-i>",                                                               desc = "Search word 1st occ." },
-        { "g/",                   function() picker_grep() end,                                           desc = "Search",                   mode = { "n", "x" } },
-        { "g?",                   function() picker_grep(vim.fn.expand("%:p:h")) end,                     desc = "Search in Cwd" },
-        { "<leader>/",            function() picker_grep_word() end,                                      desc = "Search <cur> Word" },
-        { "<leader>?",            function() picker_grep_word(vim.fn.expand("%:p:h")) end,                desc = "Search <cur> Word in Cwd", mode = { "n", "x" } },
-        { "<leader>f/",           function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
+        { "[/",                   "[<c-i>",                                                               desc = "Search word 1st occ." },
+        { "g/",                   function() picker_grep_word() end,                                      desc = "Search <cur> Word" },
+        { "g?",                   function() picker_grep_word(vim.fn.expand("%:p:h")) end,                desc = "Search <cur> Word in Cwd", mode = { "n", "x" } },
+        { "<leader>/",            function() picker_grep() end,                                           desc = "Search" },
+        { "<leader>?",            function() picker_grep(vim.fn.expand("%:p:h")) end,                     desc = "Search in Cwd",            mode = { "n", "x" } },
 
         --  top pickers
         { "<leader>^",            function() Snacks.picker.pickers() end,                                 desc = "Snack Pickers" },
         { "<leader>P",            function() Snacks.picker.command_history() end,                         desc = "Command History" },
-        -- { "<leader><backspace>",  function() Snacks.picker.resume() end,                                  desc = "Resume Picker" },
+        { "<leader>uu",           function() Snacks.picker.resume() end,                                  desc = "Resume Picker" },
+
         -- buffer pickers
         { "<leader>bb",           function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
         { "<leader><space>",      function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
         { "<leader>b<backspace>", function() Snacks.bufdelete() end,                                      desc = "Delete Buffer" },
+        { "<leader>b/",           function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
 
         -- find
-        { "<leader>s",            function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
         { "<leader>q",            function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
-        { "<leader><cr>",         function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
         { "<leader>ff",           function() Snacks.picker.files() end,                                   desc = "Find Files" },
         { "<leader>fg",           function() Snacks.picker.git_files() end,                               desc = "Find Git Files" },
         { "<leader>fP",           function() Snacks.picker.projects() end,                                desc = "Projects" },
@@ -108,10 +108,10 @@ return function()
         -- git
         { "<leader>gB",           function() Snacks.picker.git_branches() end,                            desc = "Git Branches" },
         { "<leader>gl",           function() Snacks.picker.git_log() end,                                 desc = "Git Log" },
-        { "<leader>gL",           function() Snacks.picker.git_log_line() end,                            desc = "Git Log Line" },
+        { "<leader>gL",           function() Snacks.picker.git_log_file() end,                           desc = "Git Log File" },
+        { "<leader>gk",           function() Snacks.picker.git_log_line() end,                           desc = "Git Log Line" },
         { "<leader>gs",           function() Snacks.picker.git_status() end,                              desc = "Git Status" },
         { "<leader>gS",           function() Snacks.picker.git_stash() end,                               desc = "Git Stash" },
-        -- { "<leader>gg",           function() Snacks.lazygit() end,                                        desc = "Lazygit (cwd)" },
         { "<leader>go",           function() Snacks.gitbrowse() end,                                      desc = "Git Browse (open)",        mode = { "n", "x" } },
         { "<leader>gO",           function() yank_git_url() end,                                          desc = "Git Browse (copy)",        mode = { "n", "x" } },
 

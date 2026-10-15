@@ -27,7 +27,24 @@ local function configCodeDiff()
     vim.keymap.set("n", "<leader>gD", "<Cmd>CodeDiff main...<CR>", { desc = "Git CodeDiff main" })
     vim.keymap.set("n", "<leader>gf", "<Cmd>CodeDiff file HEAD<CR>", { desc = "Git CodeDiff File" })
     vim.keymap.set("n", "<leader>gh", "<Cmd>CodeDiff history<CR>", { desc = "Git CodeDiff History" })
-    vim.keymap.set("n", "<leader>gx", "<Cmd>CodeDiff HEAD~<CR>", { desc = "Git CodeDiff last" })
+    vim.keymap.set("n", "<leader>gp", "<Cmd>CodeDiff HEAD~<CR>", { desc = "Git CodeDiff previous" })
+    vim.keymap.set("n", "<leader>ge", function()
+        local lifecycle = require("codediff.ui.lifecycle")
+        local tabpage = vim.api.nvim_get_current_tabpage()
+        local history = lifecycle.get_explorer(tabpage)
+        if not history or not history.tree then
+            vim.notify("No codediff history panel open", vim.log.levels.WARN)
+            return
+        end
+        local node = history.tree:get_node()
+        if not node or not node.data or node.data.type ~= "commit" then
+            vim.notify("No commit selected", vim.log.levels.WARN)
+            return
+        end
+        local hash = node.data.hash
+        vim.cmd("tabnew")
+        vim.api.nvim_cmd({ cmd = "CodeDiff", args = { hash .. "^", hash } }, {})
+    end, { desc = "Git CodeDiff enter commit" })
 end
 
 local function configDiffView()
@@ -67,7 +84,25 @@ return function()
     vim.keymap.set("n", "<leader>gb", "<Cmd>Git blame<CR>", { desc = "Git blame" })
 
     -- mini.diff
-    require("mini.diff").setup()
+    require("mini.diff").setup({
+        mappings = {
+            -- Apply hunks inside a visual/operator region
+            apply = "gh",
+
+            -- Reset hunks inside a visual/operator region
+            reset = "gH",
+
+            -- Hunk range textobject to be used inside operator
+            -- Works also in Visual mode if mapping differs from apply and reset
+            textobject = "gh",
+
+            -- Go to hunk range in corresponding direction
+            goto_first = "[C",
+            goto_prev = "[c",
+            goto_next = "]c",
+            goto_last = "]C",
+        },
+    })
     local rhs = "<Cmd>lua MiniDiff.toggle_overlay()<CR>"
     vim.keymap.set("n", "<leader>gv", rhs, { desc = "Git diff o[v]erlay" })
 
